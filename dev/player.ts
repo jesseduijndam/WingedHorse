@@ -65,7 +65,7 @@ class Player {
         this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
         this.check = true
         console.log("move choise making")
-        this.action = this.playscreen.dragon.moveChoice()
+        this.action = this.playscreen.dragon.moveChoice(this.game)
       }
       if (this.action == "attack") {
         let number = 0

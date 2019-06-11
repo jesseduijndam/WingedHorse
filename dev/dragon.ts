@@ -2,6 +2,7 @@ class Dragon {
 
   dragon: HTMLElement
   active: boolean
+  private diff : number
   private x: number
   private y: number
   private scale: number
@@ -17,11 +18,17 @@ class Dragon {
     this.y = y 
     this.scale = scale
   }
-  moveChoice(){
+  moveChoice(g: Game){
     console.log("move choise made");
-    
+    this.game = g
+    if (this.game.power == 1) {
+      this.diff = 3
+    }else{
+      this.diff = 5
+    }
     let random = Math.floor(Math.random() * 10)
-    if (random > 5) {
+
+    if (random < this.diff) {
       console.log("attack");
       this.x += 50
       this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`

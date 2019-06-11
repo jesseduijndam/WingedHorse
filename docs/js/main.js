@@ -10,10 +10,17 @@ var Dragon = (function () {
         this.y = y;
         this.scale = scale;
     }
-    Dragon.prototype.moveChoice = function () {
+    Dragon.prototype.moveChoice = function (g) {
         console.log("move choise made");
+        this.game = g;
+        if (this.game.power == 1) {
+            this.diff = 3;
+        }
+        else {
+            this.diff = 5;
+        }
         var random = Math.floor(Math.random() * 10);
-        if (random > 5) {
+        if (random < this.diff) {
             console.log("attack");
             this.x += 50;
             this.dragon.style.transform = "translate(" + this.x + "px, " + this.y + "px) scale(" + this.scale + ")";
@@ -201,7 +208,7 @@ var Player = (function () {
                 this.player.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
                 this.check = true;
                 console.log("move choise making");
-                this.action = this.playscreen.dragon.moveChoice();
+                this.action = this.playscreen.dragon.moveChoice(this.game);
             }
             if (this.action == "attack") {
                 var number = 0;
@@ -339,22 +346,29 @@ var playscreen = (function () {
     playscreen.prototype.die = function () {
         var _this = this;
         if (this.player.die == false) {
-            this.player.canrun = false;
-            console.log("ik ben dood");
-            this.eindScore = this.game.score;
-            console.log(this.eindScore);
-            this.dragon.delete();
-            this.player.delete();
-            this.player.nummerdelete();
-            var eyes = new Eyes(250, 150, 1);
-            this.newGame = document.createElement("newGame");
-            document.body.appendChild(this.newGame);
-            this.newGame.innerHTML = "NEW GAME";
-            this.game.score = 0;
-            this.newGame.addEventListener("click", function () { return _this.game.startScreen(); });
+            if (this.game.health == 1) {
+                this.game.health = 0;
+                this.naarDeShop();
+            }
+            else {
+                this.player.canrun = false;
+                console.log("ik ben dood");
+                this.eindScore = this.game.score;
+                console.log(this.eindScore);
+                this.dragon.delete();
+                this.player.delete();
+                this.player.nummerdelete();
+                var eyes = new Eyes(250, 150, 1);
+                this.newGame = document.createElement("newGame");
+                document.body.appendChild(this.newGame);
+                this.newGame.innerHTML = "NEW GAME";
+                this.game.score = 0;
+                this.newGame.addEventListener("click", function () { return _this.game.startScreen(); });
+            }
         }
     };
     playscreen.prototype.naarDeShop = function () {
+        this.game.power = 0;
         this.dragon.delete();
         this.player.delete();
         this.player.nummerdelete();
@@ -392,7 +406,7 @@ var Shop = (function () {
     };
     Shop.prototype.kooptHealth = function () {
         if (this.game.health == 0) {
-            if (this.game.score - this.waardeHealth > 0) {
+            if (this.game.score - this.waardeHealth >= 0) {
                 this.game.health = this.game.health + 1;
                 this.game.score = this.game.score - this.waardeHealth;
                 this.updateScore(this.game.score);
@@ -409,7 +423,7 @@ var Shop = (function () {
     };
     Shop.prototype.kooptPowerUp = function () {
         if (this.game.power == 0) {
-            if (this.game.score - this.waardePower > 0) {
+            if (this.game.score - this.waardePower >= 0) {
                 this.game.power = this.game.power + 1;
                 this.game.score = this.game.score - this.waardePower;
                 this.updateScore(this.game.score);
