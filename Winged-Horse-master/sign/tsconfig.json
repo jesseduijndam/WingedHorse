@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "sourceMap": true,
+        "watch": true,
+        "outFile": "docs/js/main.js"
+    },
+    "exclude": [
+        "docs",
+        "readme.txt"
+    ]
+}

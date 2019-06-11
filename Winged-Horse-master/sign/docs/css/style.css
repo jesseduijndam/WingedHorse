@@ -1,0 +1,26 @@
+body {
+    background-color: #70CF51;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow:hidden;
+    margin:0px; padding:0px;
+}
+
+sign, bord {
+    position: absolute;
+    display: block;
+    margin:0px; padding:0px;
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+}
+
+sign {
+    background-image: url(../images/shop\ sign.png);
+    width:902px; height:278px;
+    background-size: cover;
+}
+
+bord {
+    background-image: url(../images/bord2.png);
+    width:683px; height:195px;
+    background-size: cover;
+}
