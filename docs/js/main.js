@@ -1,16 +1,51 @@
 "use strict";
-var Dragon = (function () {
-    function Dragon(x, y, scale) {
+class Circle extends HTMLElement {
+    constructor(joystick) {
+        super();
+        this.speed = 3;
+        this.x = 0;
+        this.y = 0;
+        this.joystick = joystick;
+        this.style.backgroundColor = "red";
+        this.style.width = "100px";
+        this.style.height = "100px";
+        this.style.borderRadius = "50px";
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this);
+        document.addEventListener(joystick.ButtonEvents[0], () => this.changeColor());
+    }
+    changeColor() {
+        let color = Math.random() * 360;
+        this.style.filter = "hue-rotate(" + color + "deg)";
+    }
+    update() {
+        if (this.joystick.Left)
+            this.x -= this.speed;
+        if (this.joystick.Right)
+            this.x += this.speed;
+        if (this.joystick.Up)
+            this.y -= this.speed;
+        if (this.joystick.Down)
+            this.y += this.speed;
+        this.draw();
+    }
+    draw() {
+        this.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    }
+}
+window.customElements.define("circle-component", Circle);
+class Dragon {
+    constructor(x, y, scale) {
         this.dragon = document.createElement("dragon");
         document.body.appendChild(this.dragon);
         this.dragon.id = "drake";
-        this.dragon.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+        this.dragon.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
         console.log("dragon created");
         this.x = x;
         this.y = y;
         this.scale = scale;
     }
-    Dragon.prototype.moveChoice = function (g) {
+    moveChoice(g) {
         console.log("move choise made");
         this.game = g;
         if (this.game.power == 1) {
@@ -19,86 +54,95 @@ var Dragon = (function () {
         else {
             this.diff = 5;
         }
-        var random = Math.floor(Math.random() * 10);
+        let random = Math.floor(Math.random() * 10);
         if (random < this.diff) {
             console.log("attack");
             this.x += 50;
-            this.dragon.style.transform = "translate(" + this.x + "px, " + this.y + "px) scale(" + this.scale + ")";
+            this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
             return "attack";
         }
         else {
             console.log("tame");
             this.x -= 50;
-            this.dragon.style.transform = "translate(" + this.x + "px, " + this.y + "px) scale(" + this.scale + ")";
+            this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
             return "tame";
         }
-    };
-    Dragon.prototype.onHit = function () {
+    }
+    onHit() {
         console.log("AUW!!!!");
-        this.dragon.style.transform = "translate(" + this.x + "px, " + this.y + "px) scale(" + this.scale + ")";
-    };
-    Dragon.prototype.onTame = function (playscreen, g) {
+        this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
+    }
+    onTame(playscreen, g) {
         this.playscreen = playscreen;
         this.game = g;
         this.game.score += 100;
         this.playscreen.naarDeShop();
         console.log("Ik ben getamed");
-    };
-    Dragon.prototype.delete = function () {
-        var elm = document.getElementById("drake");
+    }
+    delete() {
+        let elm = document.getElementById("drake");
         if (elm != undefined) {
             elm.remove();
         }
-    };
-    return Dragon;
-}());
-var Eyes = (function () {
-    function Eyes(x, y, scale) {
+    }
+}
+class Eyes {
+    constructor(x, y, scale) {
         this.eyes = document.createElement("eyes");
         document.body.appendChild(this.eyes);
-        this.eyes.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+        this.eyes.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
     }
-    return Eyes;
-}());
-var Game = (function () {
-    function Game() {
+}
+class Game {
+    constructor() {
         this.score = 0;
         this.health = 0;
         this.power = 0;
+        this.arcade = new Arcade(this);
+        this.joystickListener = (e) => this.initJoystick(e);
+        document.addEventListener("joystickcreated", this.joystickListener);
         this.currentscreen = new StartScreen(this);
         this.gameLoop();
     }
-    Game.prototype.gameLoop = function () {
-        var _this = this;
+    gameLoop() {
         this.currentscreen.update();
-        requestAnimationFrame(function () { return _this.gameLoop(); });
-    };
-    Game.prototype.startScreen = function () {
+        for (this.joystick of this.arcade.Joysticks) {
+            this.joystick.update();
+            if (this.joystick.Right)
+                console.log('RIGHT');
+            if (this.joystick.Up)
+                console.log('UP');
+            if (this.joystick.Down)
+                console.log('Down');
+        }
+        requestAnimationFrame(() => this.gameLoop());
+    }
+    startScreen() {
         document.body.innerHTML = "";
         this.scorenMaken();
         this.currentscreen = new StartScreen(this);
-    };
-    Game.prototype.shopscreen = function () {
+    }
+    shopscreen() {
         document.body.innerHTML = "";
         this.scorenMaken();
         this.healthMaken();
         this.powerMaken();
         this.currentscreen = new Shop(this);
-    };
-    Game.prototype.playscreen = function () {
+    }
+    playscreen() {
         document.body.innerHTML = "";
         this.scorenMaken();
         this.healthMaken();
         this.powerMaken();
         this.currentscreen = new playscreen(this);
-    };
-    Game.prototype.scorenMaken = function () {
+    }
+    scorenMaken() {
         this.scoreElement = document.createElement("scoreElement");
         document.body.appendChild(this.scoreElement);
         this.scoreElement.innerHTML = "SCORE: " + this.score;
         console.log("scoreLEement:" + this.score);
-    };
-    Game.prototype.healthMaken = function () {
+    }
+    healthMaken() {
         this.healthElement = document.createElement("healthElement");
         document.body.appendChild(this.healthElement);
         if (this.health == 1) {
@@ -107,8 +151,8 @@ var Game = (function () {
         else {
             console.log("nog geen health");
         }
-    };
-    Game.prototype.powerMaken = function () {
+    }
+    powerMaken() {
         this.powerElement = document.createElement("powerElement");
         document.body.appendChild(this.powerElement);
         if (this.power == 1) {
@@ -117,48 +161,56 @@ var Game = (function () {
         else {
             console.log("nog geen power");
         }
-    };
-    return Game;
-}());
-window.addEventListener("load", function () { return new Game(); });
-var Tekst = (function () {
-    function Tekst(x, y, scale, type, g) {
-        var _this = this;
+    }
+    initJoystick(e) {
+        let joystick = this.arcade.Joysticks[e.detail];
+        for (const buttonEvent of joystick.ButtonEvents) {
+            document.addEventListener(buttonEvent, () => console.log(buttonEvent));
+        }
+        document.addEventListener(joystick.ButtonEvents[0], () => this.handleJump());
+    }
+    handleJump() {
+        console.log("hello");
+    }
+    disconnect() {
+        document.removeEventListener("joystickcreated", this.joystickListener);
+    }
+}
+window.addEventListener("load", () => new Game());
+class Tekst {
+    constructor(x, y, scale, type, g) {
         this.game = g;
         if (type == "naam") {
             this.tekst = document.createElement("naam");
             document.body.appendChild(this.tekst);
-            this.tekst.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
         }
         if (type == "start") {
             this.tekst = document.createElement("start");
             document.body.appendChild(this.tekst);
-            this.tekst.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
-            this.tekst.addEventListener("click", function () { return _this.start(); });
+            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+            this.tekst.addEventListener("click", () => this.start());
         }
     }
-    Tekst.prototype.start = function () {
+    start() {
         this.game.playscreen();
         console.log("next scene");
-    };
-    return Tekst;
-}());
-var Nummers = (function () {
-    function Nummers(x, y, scale, type) {
-        this.nummer = document.createElement("n" + type);
+    }
+}
+class Nummers {
+    constructor(x, y, scale, type) {
+        this.nummer = document.createElement(`n${type}`);
         document.body.appendChild(this.nummer);
-        this.nummer.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
-        this.nummer.id = "n" + type;
+        this.nummer.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+        this.nummer.id = `n${type}`;
         console.log("nummercreated");
     }
-    Nummers.prototype.delete = function () {
+    delete() {
         this.nummer.style.transform = 'translate(0px, 0px) scale (0)';
-    };
-    return Nummers;
-}());
-var Player = (function () {
-    function Player(x, y, scale, playscreen, g) {
-        var _this = this;
+    }
+}
+class Player {
+    constructor(x, y, scale, playscreen, g) {
         this.buttons = new Array(2);
         this.check = false;
         this.die = false;
@@ -169,29 +221,38 @@ var Player = (function () {
         this.player = document.createElement("player");
         document.body.appendChild(this.player);
         this.player.id = "player";
-        this.player.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+        this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
         console.log("player created");
-        document.addEventListener('keydown', function (e) { return _this.keyboardInput(e, x, y, scale); });
+        document.addEventListener('keydown', (e) => this.keyboardInput(e, x, y, scale));
+        document.addEventListener("joystick0button0", () => this.number1());
+        document.addEventListener("joystick0button0", () => this.number2());
+        document.addEventListener("joystick0button0", () => this.number3());
+        document.addEventListener("joystick0button0", () => this.number4());
+        document.addEventListener("joystick0button0", () => this.number5());
+        document.addEventListener("joystick0button0", () => this.number6());
     }
-    Player.prototype.keyboardInput = function (event, x, y, scale) {
+    keyboardInput(event, x, y, scale) {
+        this.x = x;
+        this.y = y;
+        this.scale = scale;
         if (event.keyCode == 37) {
             x -= 10;
-            this.player.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+            this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             this.playscreen.run();
         }
         else if (event.keyCode == 38) {
             if (this.action == "attack" && this.die == false && this.check == true) {
                 this.check = false;
-                var one = this.buttons[0];
-                var two = this.buttons[1];
-                var three = this.buttons[2];
-                var nummer1 = new Nummers(300, -100, 0.2, one);
-                var nummer2 = new Nummers(402.4, -100, 0.2, two);
-                var nummer3 = new Nummers(504.8, -100, 0.2, three);
+                let one = this.buttons[0];
+                let two = this.buttons[1];
+                let three = this.buttons[2];
+                let nummer1 = new Nummers(300, -100, 0.2, one);
+                let nummer2 = new Nummers(402.4, -100, 0.2, two);
+                let nummer3 = new Nummers(504.8, -100, 0.2, three);
                 this.balls = true;
                 console.log(this.buttons);
                 y -= 10;
-                this.player.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+                this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
                 this.AND = 0;
             }
             else {
@@ -205,18 +266,18 @@ var Player = (function () {
         else if (event.keyCode == 39) {
             if (this.check == false) {
                 x += 10;
-                this.player.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+                this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
                 this.check = true;
                 console.log("move choise making");
                 this.action = this.playscreen.dragon.moveChoice(this.game);
             }
             if (this.action == "attack") {
-                var number = 0;
-                var arr = [1, 2, 3, 4, 5, 6];
-                var buttons = new Array(2);
+                let number = 0;
+                let arr = [1, 2, 3, 4, 5, 6];
+                let buttons = new Array(2);
                 while (buttons.length == 2) {
-                    var multi = arr.length;
-                    var random = Math.floor(Math.random() * multi);
+                    let multi = arr.length;
+                    let random = Math.floor(Math.random() * multi);
                     buttons[number] = arr[random];
                     arr.splice(random, 1);
                     number++;
@@ -231,7 +292,7 @@ var Player = (function () {
                 this.action = "test";
                 this.playscreen.naarDeShop();
                 y += 10;
-                this.player.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+                this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             }
             else {
                 if (this.die == false) {
@@ -295,44 +356,164 @@ var Player = (function () {
                 this.nummerdelete();
             }
         }
-    };
-    Player.prototype.FAND = function () {
+    }
+    number1() {
+        if (this.buttons[0] == 1 || this.buttons[1] == 1 || this.buttons[2] == 1) {
+            this.FAND();
+        }
+        else {
+            this.playscreen.die();
+            this.nummerdelete();
+        }
+    }
+    number2() {
+        if (this.buttons[0] == 2 || this.buttons[1] == 2 || this.buttons[2] == 2) {
+            this.FAND();
+        }
+        else {
+            this.playscreen.die();
+            this.nummerdelete();
+        }
+    }
+    number3() {
+        if (this.buttons[0] == 3 || this.buttons[1] == 3 || this.buttons[2] == 3) {
+            this.FAND();
+        }
+        else {
+            this.playscreen.die();
+            this.nummerdelete();
+        }
+    }
+    number4() {
+        if (this.buttons[0] == 4 || this.buttons[1] == 4 || this.buttons[2] == 4) {
+            this.FAND();
+        }
+        else {
+            this.playscreen.die();
+            this.nummerdelete();
+        }
+    }
+    number5() {
+        if (this.buttons[0] == 5 || this.buttons[1] == 5 || this.buttons[2] == 5) {
+            this.FAND();
+        }
+        else {
+            this.playscreen.die();
+            this.nummerdelete();
+        }
+    }
+    number6() {
+        if (this.buttons[0] == 6 || this.buttons[1] == 6 || this.buttons[2] == 6) {
+            this.FAND();
+        }
+        else {
+            this.playscreen.die();
+            this.nummerdelete();
+        }
+    }
+    up() {
+        if (this.action == "attack" && this.die == false && this.check == true) {
+            this.check = false;
+            let one = this.buttons[0];
+            let two = this.buttons[1];
+            let three = this.buttons[2];
+            let nummer1 = new Nummers(300, -100, 0.2, one);
+            let nummer2 = new Nummers(402.4, -100, 0.2, two);
+            let nummer3 = new Nummers(504.8, -100, 0.2, three);
+            this.balls = true;
+            console.log(this.buttons);
+            this.y -= 10;
+            this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
+            this.AND = 0;
+        }
+        else {
+            if (this.action != "test" && this.die == false) {
+                this.playscreen.die();
+                this.nummerdelete();
+                this.action = "test";
+            }
+        }
+    }
+    down() {
+        if (this.action == "tame" && this.die == false && this.check == true) {
+            this.playscreen.dragon.onTame(this.playscreen, this.game);
+            this.canrun = false;
+            this.action = "test";
+            this.playscreen.naarDeShop();
+            this.y += 10;
+            this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
+        }
+        else {
+            if (this.die == false) {
+                this.playscreen.die();
+                this.nummerdelete();
+                this.action = "test";
+            }
+        }
+    }
+    right() {
+        if (this.check == false) {
+            this.x += 10;
+            this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
+            this.check = true;
+            console.log("move choise making");
+            this.action = this.playscreen.dragon.moveChoice(this.game);
+        }
+        if (this.action == "attack") {
+            let number = 0;
+            let arr = [1, 2, 3, 4, 5, 6];
+            let buttons = new Array(2);
+            while (buttons.length == 2) {
+                let multi = arr.length;
+                let random = Math.floor(Math.random() * multi);
+                buttons[number] = arr[random];
+                arr.splice(random, 1);
+                number++;
+            }
+            this.buttons = buttons;
+        }
+    }
+    left() {
+        this.x -= 10;
+        this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
+        this.playscreen.run();
+    }
+    FAND() {
         this.AND++;
         if (this.AND == 3) {
             this.playscreen.dragon.onHit();
             this.nummerdelete();
         }
-    };
-    Player.prototype.nummerdelete = function () {
-        for (var i = 0; i < 3; i++) {
+    }
+    nummerdelete() {
+        for (let i = 0; i < 3; i++) {
             if (this.balls == true) {
-                var elm = document.getElementById("n" + this.buttons[i]);
+                let elm = document.getElementById(`n${this.buttons[i]}`);
                 if (elm != undefined) {
                     elm.remove();
                 }
             }
         }
         this.balls = false;
-    };
-    Player.prototype.delete = function () {
-        var elm = document.getElementById("player");
+    }
+    delete() {
+        let elm = document.getElementById("player");
         if (elm != undefined) {
             elm.remove();
         }
         this.die = true;
-    };
-    return Player;
-}());
-var playscreen = (function () {
-    function playscreen(g) {
+    }
+}
+class playscreen {
+    constructor(g) {
         this.naardeshop = false;
         this.game = g;
-        var background = document.createElement("backdrak");
+        let background = document.createElement("backdrak");
         document.body.appendChild(background);
         this.dragon = new Dragon(900, 430, 2);
         this.player = new Player(150, 400, 2, this, this.game);
     }
-    playscreen.prototype.run = function () {
+    run() {
         console.log(this.game.currentscreen);
         if (this.player.canrun == true && this.naardeshop == false) {
             console.log("run");
@@ -342,9 +523,8 @@ var playscreen = (function () {
                 this.naarDeShop();
             }
         }
-    };
-    playscreen.prototype.die = function () {
-        var _this = this;
+    }
+    die() {
         if (this.player.die == false) {
             if (this.game.health == 1) {
                 this.game.health = 0;
@@ -358,29 +538,39 @@ var playscreen = (function () {
                 this.dragon.delete();
                 this.player.delete();
                 this.player.nummerdelete();
-                var eyes = new Eyes(250, 150, 1);
+                let eyes = new Eyes(250, 150, 1);
                 this.newGame = document.createElement("newGame");
                 document.body.appendChild(this.newGame);
                 this.newGame.innerHTML = "NEW GAME";
                 this.game.score = 0;
-                this.newGame.addEventListener("click", function () { return _this.game.startScreen(); });
+                this.newGame.addEventListener("click", () => this.game.startScreen());
             }
         }
-    };
-    playscreen.prototype.naarDeShop = function () {
+    }
+    naarDeShop() {
         this.game.power = 0;
         this.dragon.delete();
         this.player.delete();
         this.player.nummerdelete();
         this.game.shopscreen();
-    };
-    playscreen.prototype.update = function () {
-    };
-    return playscreen;
-}());
-var Shop = (function () {
-    function Shop(g) {
-        var _this = this;
+    }
+    update() {
+        if (this.game.joystick.Left == true) {
+            this.player.left();
+        }
+        else if (this.game.joystick.Right == true) {
+            this.player.right();
+        }
+        else if (this.game.joystick.Up == true) {
+            this.player.up();
+        }
+        else if (this.game.joystick.Down == true) {
+            this.player.down();
+        }
+    }
+}
+class Shop {
+    constructor(g) {
         this.game = g;
         this.waardeHealth = 300;
         this.waardePower = 200;
@@ -389,28 +579,28 @@ var Shop = (function () {
         this.health = document.createElement("health");
         this.health.innerHTML = "HEALTH (300)";
         document.body.appendChild(this.health);
-        this.health.addEventListener("click", function () { return _this.kooptHealth(); });
+        this.health.addEventListener("click", () => this.kooptHealth());
         this.powerUp = document.createElement("powerUp");
         this.powerUp.innerHTML = "POWER UP (200) ";
         document.body.appendChild(this.powerUp);
-        this.powerUp.addEventListener("click", function () { return _this.kooptPowerUp(); });
+        this.powerUp.addEventListener("click", () => this.kooptPowerUp());
         this.nextGame = document.createElement("nextGame");
         document.body.appendChild(this.nextGame);
-        this.nextGame.addEventListener("click", function () { return _this.naarStart(); });
+        this.nextGame.addEventListener("click", () => this.naarStart());
         this.message = document.createElement("message");
         document.body.appendChild(this.message);
     }
-    Shop.prototype.naarStart = function () {
+    naarStart() {
         console.log("start button werkt");
         this.game.playscreen();
-    };
-    Shop.prototype.kooptHealth = function () {
+    }
+    kooptHealth() {
         if (this.game.health == 0) {
             if (this.game.score - this.waardeHealth >= 0) {
                 this.game.health = this.game.health + 1;
                 this.game.score = this.game.score - this.waardeHealth;
                 this.updateScore(this.game.score);
-                var healthElement = document.getElementsByTagName("healthElement")[0];
+                let healthElement = document.getElementsByTagName("healthElement")[0];
                 healthElement.innerHTML = "+ Health";
             }
             else {
@@ -420,14 +610,14 @@ var Shop = (function () {
         else {
             this.message.innerHTML = "Je hebt al health";
         }
-    };
-    Shop.prototype.kooptPowerUp = function () {
+    }
+    kooptPowerUp() {
         if (this.game.power == 0) {
             if (this.game.score - this.waardePower >= 0) {
                 this.game.power = this.game.power + 1;
                 this.game.score = this.game.score - this.waardePower;
                 this.updateScore(this.game.score);
-                var powerElement = document.getElementsByTagName("powerElement")[0];
+                let powerElement = document.getElementsByTagName("powerElement")[0];
                 powerElement.innerHTML = "+ Power";
             }
             else {
@@ -437,37 +627,378 @@ var Shop = (function () {
         else {
             this.message.innerHTML = "Je hebt al health";
         }
-    };
-    Shop.prototype.updateScore = function (nieuweScore) {
-        var scoreElement = document.getElementsByTagName("scoreElement")[0];
+    }
+    updateScore(nieuweScore) {
+        let scoreElement = document.getElementsByTagName("scoreElement")[0];
         scoreElement.innerHTML = "SCORE: " + nieuweScore;
-    };
-    return Shop;
-}());
-var Sign = (function () {
-    function Sign(x, y, scale, type) {
+    }
+}
+class Sign {
+    constructor(x, y, scale, type) {
         if (type == 0) {
             this.sign = document.createElement("sign");
             document.body.appendChild(this.sign);
-            this.sign.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+            this.sign.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             console.log("signcreated");
         }
         else {
             this.bord = document.createElement("bord");
             document.body.appendChild(this.bord);
-            this.bord.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+            this.bord.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             console.log("bordcreated");
         }
     }
-    return Sign;
-}());
-var StartScreen = (function () {
-    function StartScreen(g) {
+}
+class StartScreen {
+    constructor(g) {
         this.game = g;
-        var background = document.createElement("startbackground");
+        let background = document.createElement("startbackground");
         document.body.appendChild(background);
-        var start = new Tekst(625, 670, 1, "start", g);
+        let start = new Tekst(625, 670, 1, "start", g);
     }
-    return StartScreen;
-}());
+    update() {
+    }
+}
+class Arcade {
+    constructor(game, mp = false) {
+        this.DEBUG = true;
+        this.REDIRECT_URL = "http://hr-cmgt.github.io/arcade-server";
+        this.multiplayer = false;
+        this.game = game;
+        this.multiplayer = mp;
+        this.joysticks = [];
+        if (this.DEBUG)
+            this.showStatus("Gamepad is NOT connected. Press a button to connect");
+        document.addEventListener("redirect", () => this.onRedirect());
+        window.addEventListener("gamepadconnected", (e) => this.onGamePadConnected(e));
+        window.addEventListener("gamepaddisconnected", (e) => this.onGamePadDisconnected(e));
+    }
+    get Joysticks() { return this.joysticks; }
+    onRedirect() {
+        if (this.DEBUG) {
+            console.log('redirect!!');
+        }
+        window.location.href = this.REDIRECT_URL;
+    }
+    onGamePadConnected(e) {
+        if (this.DEBUG) {
+            console.log('Game pad connected');
+            console.log("Joystick number: " + e.gamepad.index);
+        }
+        if ((!this.multiplayer && this.joysticks.length == 0) || this.multiplayer) {
+            let joystick = this.createAndAddJoystick(e.gamepad.index, 6);
+            joystick.PreviousGamepad = joystick.Gamepad;
+            joystick.Gamepad = e.gamepad;
+            if (joystick.PreviousGamepad == null) {
+                joystick.PreviousGamepad = e.gamepad;
+            }
+        }
+        if (this.DEBUG)
+            this.removeStatus();
+    }
+    onGamePadDisconnected(e) {
+        if (this.DEBUG) {
+            console.log('Game pad disconnected');
+        }
+        if (this.DEBUG)
+            this.showStatus("Gamepad is NOT connected. Connect the gamepad and press a button.");
+        this.removeJoystick(e.gamepad.index);
+        this.game.disconnect();
+    }
+    createAndAddJoystick(joystickNumber, numOfButtons) {
+        let joystickCheck = this.getJoystickByNumber(joystickNumber);
+        if (joystickCheck != null) {
+            return joystickCheck;
+        }
+        let joystickNew = new Joystick(joystickNumber, numOfButtons, this.DEBUG);
+        this.joysticks[joystickNumber] = joystickNew;
+        if (joystickNew)
+            document.dispatchEvent(new CustomEvent("joystickcreated", { detail: joystickNumber }));
+        return joystickNew;
+    }
+    removeJoystick(joystickNumber) {
+        let joystickCheck = this.getJoystickByNumber(joystickNumber);
+        if (joystickCheck == null) {
+            return;
+        }
+        var index = this.joysticks.indexOf(joystickCheck);
+        this.joysticks[index].destroy();
+        if (index > -1) {
+            this.joysticks.splice(index, 1);
+        }
+    }
+    getJoystickByNumber(joystickNumber) {
+        for (let joystick of this.joysticks) {
+            if (joystick.JoystickNumber == joystickNumber) {
+                return joystick;
+            }
+        }
+        return null;
+    }
+    showStatus(content) {
+        let container;
+        let p;
+        if (!(container = document.getElementsByTagName("status")[0])) {
+            container = document.createElement("status");
+            document.body.append(container);
+        }
+        if (container) {
+            if (!(p = container.getElementsByTagName("p")[0])) {
+                p = document.createElement("p");
+                container.appendChild(p);
+            }
+        }
+        if (p) {
+            p.innerHTML = content;
+        }
+    }
+    removeStatus() {
+        let status;
+        if (status = document.getElementsByTagName("status")[0]) {
+            status.remove();
+        }
+    }
+}
+class Joystick {
+    constructor(joystickNumber, numOfButtons, debug) {
+        this.DEBUG = true;
+        this.BUT1 = 8;
+        this.BUT2 = 9;
+        this.joystickNumber = 0;
+        this.numberOfBUttons = 0;
+        this.buttonEvents = [];
+        this.axes = [];
+        this.joystickNumber = joystickNumber;
+        this.numberOfBUttons = numOfButtons;
+        this.DEBUG = debug;
+        for (let i = 0; i < this.numberOfBUttons; i++) {
+            this.buttonEvents.push('joystick' + this.JoystickNumber + 'button' + (i));
+        }
+        if (this.DEBUG) {
+            this.debugPanel = new DebugPanel(this, this.numberOfBUttons);
+        }
+    }
+    get Left() { return (this.axes[0] == -1); }
+    get Right() { return (this.axes[0] == 1); }
+    get Up() { return (this.axes[1] == -1); }
+    get Down() { return (this.axes[1] == 1); }
+    get Y() { return Math.round(this.axes[1]); }
+    get X() { return Math.round(this.axes[0]); }
+    get JoystickNumber() { return this.joystickNumber; }
+    get ButtonEvents() { return this.buttonEvents; }
+    get Gamepad() { return this.gamepad; }
+    set Gamepad(gamepad) { this.gamepad = gamepad; }
+    get PreviousGamepad() { return this.previousGamepad; }
+    set PreviousGamepad(previousGamepad) { this.previousGamepad = previousGamepad; }
+    update() {
+        let gamepad = navigator.getGamepads()[this.gamepad.index];
+        if (gamepad) {
+            this.readGamepad(gamepad);
+        }
+    }
+    readGamepad(gamepad) {
+        for (let index = 0; index < this.numberOfBUttons; index++) {
+            if (this.buttonPressed(gamepad.buttons[index]) && !this.buttonPressed(this.previousGamepad.buttons[index])) {
+                document.dispatchEvent(new Event(this.buttonEvents[index]));
+            }
+            if (this.buttonPressed(gamepad.buttons[this.BUT1]) &&
+                this.buttonPressed(gamepad.buttons[this.BUT2]) &&
+                (!this.buttonPressed(this.previousGamepad.buttons[this.BUT1]) || !this.buttonPressed(this.previousGamepad.buttons[this.BUT2]))) {
+                document.dispatchEvent(new Event('redirect'));
+            }
+        }
+        this.axes[0] = Math.round(gamepad.axes[0]);
+        this.axes[1] = Math.round(gamepad.axes[1]);
+        if (this.DEBUG) {
+            this.debugPanel.Axes[0] = this.axes[0];
+            this.debugPanel.Axes[1] = this.axes[1];
+            this.debugPanel.update();
+        }
+        this.previousGamepad = gamepad;
+    }
+    buttonPressed(b) {
+        if (typeof (b) == "object") {
+            return b.pressed;
+        }
+        return b == 1.0;
+    }
+    destroy() {
+        if (this.DEBUG)
+            this.debugPanel.remove();
+    }
+}
+const template = document.createElement('template');
+template.innerHTML = `
+<style>
+:host {
+    position:           absolute;
+    top:                10px;
+    right:              10px;
+}
+root {
+    top:                10px;
+    right:              10px;
+    width:              289px; 
+    height:             120px;
+    display:            block;
+    background-color:   #75a8f77a;
+}
+
+root * {
+    position:           relative;
+}
+
+.button-wrapper, .axes-wrapper {
+    display:            flex;
+    flex-wrap:          wrap;
+    float:              left;
+}
+
+root .button-div {
+    border: solid 1px black;
+    width:              60px;
+    margin:             5px;
+    padding:            5px;
+}
+
+.button-wrapper {
+    width:              164px;
+}
+
+.axes-wrapper {
+    width:              115px;
+    margin:             5px;
+}
+
+.axes-cell {
+    width:              25px;  
+    height:             25px; 
+    margin:             5px;  
+    border:             solid 1px transparent;
+}
+
+.axes-cell.direction {
+    border:             solid 1px black;
+}
+
+.axes-cell.center{
+    border:             solid 1px black;
+    background-color:   blue;
+}
+.axes-cell.active{
+    background-color:   red;
+}
+.identifier{
+    position:           absolute;
+    top:                5px;
+    left:               5px;
+    width:              auto;
+    font-weight:        bold;
+    color:              #fff;
+}
+</style>`;
+class DebugPanel extends HTMLElement {
+    constructor(joystick, numOfButtons) {
+        super();
+        this.panelHeight = 120;
+        this.panelSpacing = 10;
+        this.buttonDivs = [];
+        this.Axes = [];
+        this.joystick = joystick;
+        this.numberOfButtons = numOfButtons;
+        let spaceFromTop = this.panelSpacing + (this.joystick.JoystickNumber * (this.panelHeight + this.panelSpacing));
+        this.style.top = spaceFromTop + "px";
+        this.rootElement = document.createElement('root');
+        this.rootElement.style.height = this.panelHeight + "px";
+        template.appendChild(this.rootElement);
+        let identifier = document.createElement("div");
+        identifier.classList.add('identifier');
+        identifier.innerHTML = "#" + this.joystick.JoystickNumber;
+        this.rootElement.appendChild(identifier);
+        this.createHTMLForAxes();
+        this.createHTMLForButtons();
+        this.createListenersForButtons();
+        this.attachShadow({ mode: 'open' });
+        if (this.shadowRoot) {
+            let temp = template.content.cloneNode(true);
+            temp.appendChild(this.rootElement);
+            this.shadowRoot.appendChild(temp);
+        }
+        document.body.appendChild(this);
+    }
+    createListenersForButtons() {
+        for (let i = 0; i < this.numberOfButtons; i++) {
+            document.addEventListener(this.joystick.ButtonEvents[i], (e) => this.handleButtonClicks(e, i));
+        }
+    }
+    handleButtonClicks(event, index) {
+        console.log(event);
+        this.buttonDivs[index].style.filter =
+            'hue-rotate(' + (Math.random() * 360) + 'deg)';
+    }
+    createHTMLForButtons() {
+        let buttonWrapper = document.createElement("div");
+        buttonWrapper.className = "button-wrapper";
+        for (let index = 0; index < this.numberOfButtons; index++) {
+            let buttonDiv = document.createElement("div");
+            buttonDiv.className = "button-div";
+            buttonWrapper.appendChild(buttonDiv);
+            buttonDiv.style.backgroundColor = "blue";
+            buttonDiv.innerHTML = "Button " + (index + 1);
+            this.buttonDivs.push(buttonDiv);
+        }
+        this.rootElement.appendChild(buttonWrapper);
+    }
+    createHTMLForAxes() {
+        let axesWrapper = document.createElement("div");
+        axesWrapper.className = "axes-wrapper";
+        for (let i = 1; i <= 9; i++) {
+            let cell = document.createElement('div');
+            cell.className = "axes-cell";
+            if (i % 2 == 0)
+                cell.classList.add("direction");
+            if (i == 5)
+                cell.classList.add("center");
+            axesWrapper.appendChild(cell);
+            switch (i) {
+                case 2:
+                    this.up = cell;
+                    break;
+                case 4:
+                    this.left = cell;
+                    break;
+                case 6:
+                    this.right = cell;
+                    break;
+                case 8:
+                    this.down = cell;
+                    break;
+            }
+        }
+        this.rootElement.appendChild(axesWrapper);
+    }
+    update() {
+        if (this.Axes[0] == 0) {
+            this.left.classList.remove("active");
+            this.right.classList.remove("active");
+        }
+        else {
+            if (this.Axes[0] < 0)
+                this.left.classList.add("active");
+            else if (this.Axes[0] > 0)
+                this.right.classList.add("active");
+        }
+        if (this.Axes[1] == 0) {
+            this.up.classList.remove("active");
+            this.down.classList.remove("active");
+        }
+        else {
+            if (this.Axes[1] < 0)
+                this.up.classList.add("active");
+            else if (this.Axes[1] > 0)
+                this.down.classList.add("active");
+        }
+    }
+}
+window.customElements.define("debug-panel", DebugPanel);
 //# sourceMappingURL=main.js.map

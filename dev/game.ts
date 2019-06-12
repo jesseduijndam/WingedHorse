@@ -8,10 +8,15 @@ class Game {
     public health : number
     private healthElement:HTMLElement
     //PowerUp
-    
     public power : number
     private powerElement:HTMLElement
-    
+    //joystick
+    private arcade : Arcade
+    private joystickListener: EventListener
+    joystick: any;
+    // example of game objects
+    // private circles : Circle[] = []
+
     constructor() {
 
         //startWaardes 
@@ -19,12 +24,31 @@ class Game {
         this.health = 0 
         this.power = 0 
 
+        // create arcade cabinet with 2 joysticks (with 6 buttons)
+        this.arcade = new Arcade(this)
+        
+        // The game must wait for de joysticks to connect
+        this.joystickListener = (e: Event) => this.initJoystick(e as CustomEvent)
+        document.addEventListener("joystickcreated",  this.joystickListener)
+
         this.currentscreen = new StartScreen(this)
         this.gameLoop()
     }
     
     public gameLoop():void{
         this.currentscreen.update()
+        // for (const circle of this.circles) {
+        //     circle.update()
+        // }
+
+        for(this.joystick of this.arcade.Joysticks){
+            this.joystick.update()
+
+            // example: read directions as true / false
+            if(this.joystick.Right) console.log('RIGHT')
+            if(this.joystick.Up)    console.log('UP')
+            if(this.joystick.Down)  console.log('Down')
+        }
         requestAnimationFrame(() => this.gameLoop())
     }
 
@@ -78,6 +102,32 @@ class Game {
             console.log("nog geen power")
         } 
     }
+    private initJoystick(e:CustomEvent) {
+
+        let joystick = this.arcade.Joysticks[e.detail]
+        
+        // this.circles.push(new Circle(joystick))
+
+        for (const buttonEvent of joystick.ButtonEvents) {
+            document.addEventListener(buttonEvent, () => console.log(buttonEvent))
+        }
+        // alternatively you can handle single buttons
+        // Handle button 0 (this is the first button, X-Button on a PS4 controller)
+        document.addEventListener(joystick.ButtonEvents[0], () => this.handleJump())
+    }
+
+    handleJump(){
+        console.log("hello");
+        
+    }
+
+    public disconnect() {
+        document.removeEventListener("joystickcreated", this.joystickListener)
+        // for (const circle of this.circles) {
+        //     circle.remove()
+        // }
+        // this.circles = []
+    }//
 
 }
 

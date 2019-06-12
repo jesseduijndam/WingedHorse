@@ -21,6 +21,10 @@ class StartScreen {
 
     }
 
+    public update() {
+        
+    }
+
     /*public naarDeGame(){
         this.game.playscreen()  
     }*/

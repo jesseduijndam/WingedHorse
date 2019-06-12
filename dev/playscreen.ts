@@ -69,6 +69,15 @@ class playscreen {
     }
 
     public update(){
+        if(this.game.joystick.Left == true){
+            this.player.left()
+        }else if (this.game.joystick.Right == true){
+            this.player.right()
+        }else if (this.game.joystick.Up == true){
+            this.player.up()
+        }else if (this.game.joystick.Down == true){
+            this.player.down()
+        }
     }
 
 }
