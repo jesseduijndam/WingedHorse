@@ -33,6 +33,10 @@ class playscreen {
  
      die(){
          if (this.player.die == false) {
+             if (this.game.health == 1) {
+                 this.game.health = 0
+                 this.naarDeShop()
+             }else{
             this.player.canrun = false
             console.log("ik ben dood");
 
@@ -52,10 +56,12 @@ class playscreen {
             this.newGame.innerHTML = "NEW GAME"
             this.game.score = 0;
             this.newGame.addEventListener("click", () => this.game.startScreen() );
+             }
          }
      }
 
     public naarDeShop(){
+        this.game.power = 0
         this.dragon.delete()
         this.player.delete()
         this.player.nummerdelete()

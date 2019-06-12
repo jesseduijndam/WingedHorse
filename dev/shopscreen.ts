@@ -52,7 +52,7 @@ class Shop {
     public kooptHealth(){ 
         if( this.game.health == 0 ){
 
-            if ( this.game.score - this.waardeHealth > 0 ) { 
+            if ( this.game.score - this.waardeHealth >= 0 ) { 
                 this.game.health = this.game.health + 1  
                 this.game.score = this.game.score - this.waardeHealth
                 this.updateScore(this.game.score)
@@ -71,7 +71,7 @@ class Shop {
     public kooptPowerUp(){ 
         if( this.game.power == 0 ){
 
-            if (this.game.score - this.waardePower > 0) { 
+            if (this.game.score - this.waardePower >= 0) { 
                 this.game.power = this.game.power + 1  
                 this.game.score = this.game.score - this.waardePower
                 this.updateScore(this.game.score)
