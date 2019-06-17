@@ -55,7 +55,7 @@ class Dragon {
             this.diff = 5;
         }
         let random = Math.floor(Math.random() * 10);
-        if (random < this.diff) {
+        if (random <= this.diff) {
             console.log("attack");
             this.x += 50;
             this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
@@ -175,6 +175,10 @@ class Game {
     disconnect() {
         document.removeEventListener("joystickcreated", this.joystickListener);
     }
+    buttons(n) {
+        this.button = n;
+        console.log(n, "button");
+    }
 }
 window.addEventListener("load", () => new Game());
 class Tekst {
@@ -224,12 +228,6 @@ class Player {
         this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
         console.log("player created");
         document.addEventListener('keydown', (e) => this.keyboardInput(e, x, y, scale));
-        document.addEventListener("joystick0button0", () => this.number1());
-        document.addEventListener("joystick0button0", () => this.number2());
-        document.addEventListener("joystick0button0", () => this.number3());
-        document.addEventListener("joystick0button0", () => this.number4());
-        document.addEventListener("joystick0button0", () => this.number5());
-        document.addEventListener("joystick0button0", () => this.number6());
     }
     keyboardInput(event, x, y, scale) {
         this.x = x;
@@ -271,6 +269,11 @@ class Player {
                 console.log("move choise making");
                 this.action = this.playscreen.dragon.moveChoice(this.game);
             }
+            else {
+                this.playscreen.die();
+                this.nummerdelete();
+                this.action = "test";
+            }
             if (this.action == "attack") {
                 let number = 0;
                 let arr = [1, 2, 3, 4, 5, 6];
@@ -290,6 +293,7 @@ class Player {
                 this.playscreen.dragon.onTame(this.playscreen, this.game);
                 this.canrun = false;
                 this.action = "test";
+                this.check = false;
                 this.playscreen.naarDeShop();
                 y += 10;
                 this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
@@ -412,6 +416,9 @@ class Player {
         }
     }
     up() {
+        console.log(this.action);
+        console.log(this.die);
+        console.log(this.check);
         if (this.action == "attack" && this.die == false && this.check == true) {
             this.check = false;
             let one = this.buttons[0];
@@ -427,7 +434,7 @@ class Player {
             this.AND = 0;
         }
         else {
-            if (this.action != "test" && this.die == false) {
+            if (this.die == false) {
                 this.playscreen.die();
                 this.nummerdelete();
                 this.action = "test";
@@ -439,6 +446,7 @@ class Player {
             this.playscreen.dragon.onTame(this.playscreen, this.game);
             this.canrun = false;
             this.action = "test";
+            this.check = false;
             this.playscreen.naarDeShop();
             this.y += 10;
             this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
@@ -458,6 +466,11 @@ class Player {
             this.check = true;
             console.log("move choise making");
             this.action = this.playscreen.dragon.moveChoice(this.game);
+        }
+        else {
+            this.playscreen.die();
+            this.nummerdelete();
+            this.action = "test";
         }
         if (this.action == "attack") {
             let number = 0;
@@ -507,11 +520,19 @@ class Player {
 class playscreen {
     constructor(g) {
         this.naardeshop = false;
+        this.rightcooldown = 0;
+        this.upcooldown = 0;
         this.game = g;
         let background = document.createElement("backdrak");
         document.body.appendChild(background);
         this.dragon = new Dragon(900, 430, 2);
         this.player = new Player(150, 400, 2, this, this.game);
+        document.addEventListener("joystick0button0", () => this.player.number1());
+        document.addEventListener("joystick0button1", () => this.player.number2());
+        document.addEventListener("joystick0button2", () => this.player.number3());
+        document.addEventListener("joystick0button3", () => this.player.number4());
+        document.addEventListener("joystick0button4", () => this.player.number5());
+        document.addEventListener("joystick0button5", () => this.player.number6());
     }
     run() {
         console.log(this.game.currentscreen);
@@ -555,17 +576,24 @@ class playscreen {
         this.game.shopscreen();
     }
     update() {
-        if (this.game.joystick.Left == true) {
+        if (this.game.joystick.Left) {
             this.player.left();
         }
-        else if (this.game.joystick.Right == true) {
+        else if (this.game.joystick.Right && this.rightcooldown <= 0) {
+            this.rightcooldown = 100;
             this.player.right();
         }
-        else if (this.game.joystick.Up == true) {
+        else if (this.game.joystick.Up && this.upcooldown <= 0) {
+            this.upcooldown = 100;
             this.player.up();
         }
-        else if (this.game.joystick.Down == true) {
+        else if (this.game.joystick.Down) {
             this.player.down();
+        }
+        this.rightcooldown--;
+        this.upcooldown--;
+        if (this.game.button == 0) {
+            this.player.number1();
         }
     }
 }
@@ -631,6 +659,8 @@ class Shop {
     updateScore(nieuweScore) {
         let scoreElement = document.getElementsByTagName("scoreElement")[0];
         scoreElement.innerHTML = "SCORE: " + nieuweScore;
+    }
+    update() {
     }
 }
 class Sign {

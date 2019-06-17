@@ -14,6 +14,7 @@ class Game {
     private arcade : Arcade
     private joystickListener: EventListener
     joystick: any;
+    button: number;
     // example of game objects
     // private circles : Circle[] = []
 
@@ -30,7 +31,6 @@ class Game {
         // The game must wait for de joysticks to connect
         this.joystickListener = (e: Event) => this.initJoystick(e as CustomEvent)
         document.addEventListener("joystickcreated",  this.joystickListener)
-
         this.currentscreen = new StartScreen(this)
         this.gameLoop()
     }
@@ -43,7 +43,6 @@ class Game {
 
         for(this.joystick of this.arcade.Joysticks){
             this.joystick.update()
-
             // example: read directions as true / false
             if(this.joystick.Right) console.log('RIGHT')
             if(this.joystick.Up)    console.log('UP')
@@ -114,6 +113,7 @@ class Game {
         // alternatively you can handle single buttons
         // Handle button 0 (this is the first button, X-Button on a PS4 controller)
         document.addEventListener(joystick.ButtonEvents[0], () => this.handleJump())
+        
     }
 
     handleJump(){
@@ -129,6 +129,11 @@ class Game {
         // this.circles = []
     }//
 
+    private buttons(n : number) : void{
+        this.button = n
+        console.log(n, "button");
+        
+    }
 }
 
 window.addEventListener("load", () => new Game())

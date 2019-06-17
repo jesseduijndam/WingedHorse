@@ -24,12 +24,6 @@ class Player {
     this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
     console.log("player created");
     document.addEventListener('keydown', (e) => this.keyboardInput(e, x, y, scale))
-    document.addEventListener("joystick0button0", () => this.number1())
-    document.addEventListener("joystick0button0", () => this.number2())
-    document.addEventListener("joystick0button0", () => this.number3())
-    document.addEventListener("joystick0button0", () => this.number4())
-    document.addEventListener("joystick0button0", () => this.number5())
-    document.addEventListener("joystick0button0", () => this.number6())
   }
   
   keyboardInput(event: KeyboardEvent, x: number, y: number, scale: number) {
@@ -78,6 +72,10 @@ class Player {
         this.check = true
         console.log("move choise making")
         this.action = this.playscreen.dragon.moveChoice(this.game)
+      }else{
+        this.playscreen.die()
+        this.nummerdelete()
+        this.action = "test"
       }
       if (this.action == "attack") {
         let number = 0
@@ -103,7 +101,7 @@ class Player {
           this.playscreen.dragon.onTame(this.playscreen, this.game)
           this.canrun = false
           this.action = "test"
-          
+          this.check = false
           this.playscreen.naarDeShop()
           //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
           y += 10
@@ -240,6 +238,10 @@ class Player {
   }
   
   up(){
+    console.log(this.action);
+    console.log(this.die);
+    console.log(this.check);
+    
     if (this.action == "attack" && this.die == false && this.check == true) {
       this.check = false
       let one = this.buttons[0]
@@ -256,7 +258,7 @@ class Player {
       this.AND = 0
     }else{
       // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
-      if (this.action != "test" && this.die == false) {
+      if ( this.die == false) {
         this.playscreen.die()
         this.nummerdelete()
         this.action = "test"
@@ -270,7 +272,7 @@ class Player {
       this.playscreen.dragon.onTame(this.playscreen, this.game)
       this.canrun = false
       this.action = "test"
-      
+      this.check = false
       this.playscreen.naarDeShop()
       //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
       this.y += 10
@@ -279,7 +281,6 @@ class Player {
     // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
       if (this.die == false) {
         this.playscreen.die()
-
         this.nummerdelete()
         this.action = "test"
       }
@@ -293,6 +294,10 @@ class Player {
       this.check = true
       console.log("move choise making")
       this.action = this.playscreen.dragon.moveChoice(this.game)
+    }else{
+      this.playscreen.die()
+      this.nummerdelete()
+      this.action = "test"
     }
     if (this.action == "attack") {
       let number = 0

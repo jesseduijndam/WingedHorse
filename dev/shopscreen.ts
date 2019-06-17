@@ -94,4 +94,7 @@ class Shop {
         scoreElement.innerHTML = "SCORE: " + nieuweScore;
     }
 
+    public update(){
+        
+    }
 }
