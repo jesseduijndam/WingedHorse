@@ -184,6 +184,8 @@ class Player {
   }
 
   number1(){
+    console.log("button 1 player");
+    
     if (this.buttons[0] == 1 || this.buttons[1] == 1 || this.buttons[2] == 1 ) {
       this.FAND()
     } else{

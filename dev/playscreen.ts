@@ -77,21 +77,22 @@ class playscreen {
     }
 
     public update(){
-        if(this.game.joystick.Left){
-            this.player.left()
-        }else if (this.game.joystick.Right && this.rightcooldown <= 0){
-            this.rightcooldown = 100
-            this.player.right()
-        }else if (this.game.joystick.Up && this.upcooldown <= 0){
-            this.upcooldown = 100
-            this.player.up()
-        }else if (this.game.joystick.Down){
-            this.player.down()
+        for (const joystick of this.game.Arcade.Joysticks) {
+            if(joystick.Left){
+                this.player.left()
+            }else if (joystick.Right && this.rightcooldown <= 0){
+                this.rightcooldown = 100
+                this.player.right()
+            }else if (joystick.Up && this.upcooldown <= 0){
+                this.upcooldown = 100
+                this.player.up()
+            }else if (joystick.Down){
+                this.player.down()
+            }
         }
+
+    
         this.rightcooldown--
         this.upcooldown--
-        if(this.game.button == 0){
-            this.player.number1()
-        }
     }
 }

@@ -94,6 +94,9 @@ class Eyes {
     }
 }
 class Game {
+    get Arcade() {
+        return this.arcade;
+    }
     constructor() {
         this.score = 0;
         this.health = 0;
@@ -102,18 +105,21 @@ class Game {
         this.joystickListener = (e) => this.initJoystick(e);
         document.addEventListener("joystickcreated", this.joystickListener);
         this.currentscreen = new StartScreen(this);
+        document.addEventListener("joystick0button0", () => console.log("FIRE"));
         this.gameLoop();
     }
     gameLoop() {
         this.currentscreen.update();
-        for (this.joystick of this.arcade.Joysticks) {
-            this.joystick.update();
-            if (this.joystick.Right)
+        for (let joystick of this.arcade.Joysticks) {
+            joystick.update();
+            if (joystick.Right)
                 console.log('RIGHT');
-            if (this.joystick.Up)
+            if (joystick.Up)
                 console.log('UP');
-            if (this.joystick.Down)
+            if (joystick.Down)
                 console.log('Down');
+            if (joystick.Left)
+                console.log('Left');
         }
         requestAnimationFrame(() => this.gameLoop());
     }
@@ -174,10 +180,6 @@ class Game {
     }
     disconnect() {
         document.removeEventListener("joystickcreated", this.joystickListener);
-    }
-    buttons(n) {
-        this.button = n;
-        console.log(n, "button");
     }
 }
 window.addEventListener("load", () => new Game());
@@ -362,6 +364,7 @@ class Player {
         }
     }
     number1() {
+        console.log("button 1 player");
         if (this.buttons[0] == 1 || this.buttons[1] == 1 || this.buttons[2] == 1) {
             this.FAND();
         }
@@ -576,25 +579,24 @@ class playscreen {
         this.game.shopscreen();
     }
     update() {
-        if (this.game.joystick.Left) {
-            this.player.left();
-        }
-        else if (this.game.joystick.Right && this.rightcooldown <= 0) {
-            this.rightcooldown = 100;
-            this.player.right();
-        }
-        else if (this.game.joystick.Up && this.upcooldown <= 0) {
-            this.upcooldown = 100;
-            this.player.up();
-        }
-        else if (this.game.joystick.Down) {
-            this.player.down();
+        for (const joystick of this.game.Arcade.Joysticks) {
+            if (joystick.Left) {
+                this.player.left();
+            }
+            else if (joystick.Right && this.rightcooldown <= 0) {
+                this.rightcooldown = 100;
+                this.player.right();
+            }
+            else if (joystick.Up && this.upcooldown <= 0) {
+                this.upcooldown = 100;
+                this.player.up();
+            }
+            else if (joystick.Down) {
+                this.player.down();
+            }
         }
         this.rightcooldown--;
         this.upcooldown--;
-        if (this.game.button == 0) {
-            this.player.number1();
-        }
     }
 }
 class Shop {
@@ -829,6 +831,7 @@ class Joystick {
     readGamepad(gamepad) {
         for (let index = 0; index < this.numberOfBUttons; index++) {
             if (this.buttonPressed(gamepad.buttons[index]) && !this.buttonPressed(this.previousGamepad.buttons[index])) {
+                console.log("press");
                 document.dispatchEvent(new Event(this.buttonEvents[index]));
             }
             if (this.buttonPressed(gamepad.buttons[this.BUT1]) &&

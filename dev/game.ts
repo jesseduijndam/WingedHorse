@@ -13,11 +13,15 @@ class Game {
     //joystick
     private arcade : Arcade
     private joystickListener: EventListener
-    joystick: any;
-    button: number;
+    // joystick: any;
     // example of game objects
     // private circles : Circle[] = []
 
+    
+    public get Arcade() : Arcade {
+        return this.arcade
+    }
+    
     constructor() {
 
         //startWaardes 
@@ -32,6 +36,7 @@ class Game {
         this.joystickListener = (e: Event) => this.initJoystick(e as CustomEvent)
         document.addEventListener("joystickcreated",  this.joystickListener)
         this.currentscreen = new StartScreen(this)
+        document.addEventListener("joystick0button0", () => console.log("FIRE"))
         this.gameLoop()
     }
     
@@ -41,12 +46,14 @@ class Game {
         //     circle.update()
         // }
 
-        for(this.joystick of this.arcade.Joysticks){
-            this.joystick.update()
+        for(let joystick of this.arcade.Joysticks){
+            joystick.update()
             // example: read directions as true / false
-            if(this.joystick.Right) console.log('RIGHT')
-            if(this.joystick.Up)    console.log('UP')
-            if(this.joystick.Down)  console.log('Down')
+            if(joystick.Right) console.log('RIGHT')
+            if(joystick.Up)    console.log('UP')
+            if(joystick.Down)  console.log('Down')
+            if(joystick.Left)  console.log('Left')
+            
         }
         requestAnimationFrame(() => this.gameLoop())
     }
@@ -128,12 +135,6 @@ class Game {
         // }
         // this.circles = []
     }//
-
-    private buttons(n : number) : void{
-        this.button = n
-        console.log(n, "button");
-        
-    }
 }
 
 window.addEventListener("load", () => new Game())

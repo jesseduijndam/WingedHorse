@@ -68,7 +68,12 @@ class Joystick {
     private readGamepad(gamepad: Gamepad) : void {
         
         for (let index = 0; index < this.numberOfBUttons; index++) {
+            // if(!this.buttonPressed(this.previousGamepad.buttons[index])) console.log("false");
+            
+            // if(this.buttonPressed(gamepad.buttons[index])) console.log(this.buttonPressed(this.previousGamepad.buttons[index]));
+            
             if (this.buttonPressed(gamepad.buttons[index]) && !this.buttonPressed(this.previousGamepad.buttons[index])) {
+                console.log("press");
                 document.dispatchEvent(new Event(this.buttonEvents[index]))
             }
             if (this.buttonPressed(gamepad.buttons[this.BUT1]) && 
@@ -90,7 +95,7 @@ class Joystick {
 
             this.debugPanel.update()
         }
-
+        
         this.previousGamepad = gamepad
     }
     /**
