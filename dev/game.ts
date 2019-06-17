@@ -8,9 +8,9 @@ class Game {
     public health : number
     private healthElement:HTMLElement
     //PowerUp
-    
     public power : number
     private powerElement:HTMLElement
+    public highscores : number[] = [0,0,0]
     
     constructor() {
 
@@ -21,6 +21,7 @@ class Game {
 
         this.currentscreen = new StartScreen(this)
         this.gameLoop()
+        
     }
     
     public gameLoop():void{
@@ -34,9 +35,14 @@ class Game {
         this.currentscreen = new StartScreen(this)
     }
 
+    public instructionScreen(){
+        document.body.innerHTML = ""
+        this.currentscreen = new instructionScreen(this)
+    }
+
     public shopscreen() {
         document.body.innerHTML = ""
-        this.scorenMaken()
+        this.scorenMaken() 
         this.healthMaken()
         this.powerMaken() 
         this.currentscreen = new Shop(this)
@@ -78,7 +84,6 @@ class Game {
             console.log("nog geen power")
         } 
     }
-
 }
 
 window.addEventListener("load", () => new Game())

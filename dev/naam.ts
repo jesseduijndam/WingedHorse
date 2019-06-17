@@ -17,9 +17,7 @@ class Tekst {
         
     }
     start(){
-        this.game.playscreen()
+        this.game.instructionScreen()
         console.log("next scene");
-
-        
     }
 }

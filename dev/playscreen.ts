@@ -4,18 +4,18 @@ class playscreen {
 
     private game : Game
     private newGame: HTMLElement 
+    private highScoresLijst: HTMLElement
     player : Player
     eindScore: number 
     dragon : Dragon
     naardeshop : boolean = false
    
     constructor( g: Game ) {
-
         this.game = g
         let background = document.createElement("backdrak")
         document.body.appendChild(background)
         this.dragon = new Dragon(900 , 430, 2)
-        this.player = new Player(150 , 400, 2, this, this.game)
+        this.player = new Player(150 , 400, 2, this, this.game)        
     }
 
     run(){
@@ -32,7 +32,9 @@ class playscreen {
      }
  
      die(){
+
          if (this.player.die == false) {
+
             this.player.canrun = false
             console.log("ik ben dood");
 
@@ -43,15 +45,30 @@ class playscreen {
             this.player.delete()
             this.player.nummerdelete()
 
-            //game over afbeelding
+            //game-over afbeelding
             let eyes = new Eyes(250, 150, 1)
             
             //new Game button
             this.newGame = document.createElement("newGame")
             document.body.appendChild(this.newGame)
             this.newGame.innerHTML = "NEW GAME"
+            //score weer op nul zetten voor het volgende spel 
             this.game.score = 0;
-            this.newGame.addEventListener("click", () => this.game.startScreen() );
+
+            //hightscore Toevoegen aan array 
+            this.game.highscores.push(this.eindScore)
+
+            //array laten zien 
+            this.highScoresLijst = document.createElement("scoresLijst")
+            document.body.appendChild(this.highScoresLijst)
+
+            for ( let x of this.game.highscores ) {
+                console.log(x)
+            }
+
+            //controleren huidige scoren 
+            this.newGame.addEventListener("click", () => this.game.startScreen());
+
          }
      }
 
