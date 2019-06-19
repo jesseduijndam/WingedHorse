@@ -14,8 +14,11 @@ class Player {
   private x : number
   private y : number
   private scale : number
+  //timer
+  private timer : number
 
   constructor(x: number, y: number, scale: number , playscreen : playscreen , g : Game) {
+    this.timer = 0
     this.playscreen = playscreen
     this.game = g
     this.player = document.createElement("player")
@@ -25,6 +28,19 @@ class Player {
     console.log("player created");
     document.addEventListener('keydown', (e) => this.keyboardInput(e, x, y, scale))
   }
+  update(){
+    if (this.game.difficulty == 2) {
+      this.timer++
+      if (this.timer == 600) {
+        this.playscreen.die()
+      }
+    }else if (this.game.difficulty == 3) {
+      this.timer++
+      if (this.timer == 300) {
+        this.playscreen.die()
+      }
+    }
+  }
   
   keyboardInput(event: KeyboardEvent, x: number, y: number, scale: number) {
     // PRESS LEFT ARROW
@@ -32,12 +48,14 @@ class Player {
     this.y = y
     this.scale = scale
     if (event.keyCode == 37) {
+      this.timer = 0
       x -= 10
       this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
       this.playscreen.run()
     }
     // PRESS UP ARROW attack
     else if (event.keyCode == 38) {
+      this.timer = 0
         if (this.action == "attack" && this.die == false && this.check == true) {
           this.check = false
           let one = this.buttons[0]
@@ -56,7 +74,6 @@ class Player {
           // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
           if (this.action != "test" && this.die == false) {
             this.playscreen.die()
-            this.nummerdelete()
             this.action = "test"
           }
           
@@ -66,6 +83,7 @@ class Player {
     }
     // PRESS RIGHT ARROW start its move
     else if (event.keyCode == 39) {
+      this.timer = 0
       if (this.check == false) {
         x += 10
         this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
@@ -74,7 +92,6 @@ class Player {
         this.action = this.playscreen.dragon.moveChoice(this.game)
       }else{
         this.playscreen.die()
-        this.nummerdelete()
         this.action = "test"
       }
       if (this.action == "attack") {
@@ -97,6 +114,7 @@ class Player {
     }
     // PRESS DOWN ARROW tame
     else if (event.keyCode == 40) {
+      this.timer = 0
       if (this.action == "tame" && this.die == false && this.check == true) {
           this.playscreen.dragon.onTame(this.playscreen, this.game)
           this.canrun = false
@@ -122,7 +140,6 @@ class Player {
           this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }
       
     }
@@ -132,7 +149,6 @@ class Player {
         this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }
     }
     //E
@@ -141,7 +157,6 @@ class Player {
         this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }  
     }
     //A
@@ -150,7 +165,6 @@ class Player {
         this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }
       
     }
@@ -160,7 +174,6 @@ class Player {
         this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }
       
     }
@@ -170,7 +183,6 @@ class Player {
         this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }
       
     }
@@ -190,7 +202,6 @@ class Player {
       this.FAND()
     } else{
     this.playscreen.die()
-    this.nummerdelete()
     }
   }
 
@@ -199,7 +210,6 @@ class Player {
       this.FAND()
     } else{
     this.playscreen.die()
-    this.nummerdelete()
     }
   }
 
@@ -208,7 +218,6 @@ class Player {
       this.FAND()
     } else{
     this.playscreen.die()
-    this.nummerdelete()
     }
   }
 
@@ -217,7 +226,6 @@ class Player {
       this.FAND()
     } else{
     this.playscreen.die()
-    this.nummerdelete()
     }
   }
 
@@ -226,7 +234,6 @@ class Player {
       this.FAND()
     } else{
     this.playscreen.die()
-    this.nummerdelete()
     }
   }
 
@@ -235,15 +242,14 @@ class Player {
       this.FAND()
     } else{
     this.playscreen.die()
-    this.nummerdelete()
     }
   }
   
   up(){
-    console.log(this.action);
-    console.log(this.die);
-    console.log(this.check);
-    
+    // console.log(this.action);
+    // console.log(this.die);
+    // console.log(this.check);
+    this.timer = 0
     if (this.action == "attack" && this.die == false && this.check == true) {
       this.check = false
       let one = this.buttons[0]
@@ -262,7 +268,6 @@ class Player {
       // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
       if ( this.die == false) {
         this.playscreen.die()
-        this.nummerdelete()
         this.action = "test"
       }
       
@@ -270,6 +275,7 @@ class Player {
   }
   
   down(){
+    this.timer = 0
     if (this.action == "tame" && this.die == false && this.check == true) {
       this.playscreen.dragon.onTame(this.playscreen, this.game)
       this.canrun = false
@@ -283,13 +289,13 @@ class Player {
     // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
       if (this.die == false) {
         this.playscreen.die()
-        this.nummerdelete()
         this.action = "test"
       }
     }
   }
   
   right(){
+    this.timer = 0
     if (this.check == false) {
       this.x += 10
       this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
@@ -298,7 +304,6 @@ class Player {
       this.action = this.playscreen.dragon.moveChoice(this.game)
     }else{
       this.playscreen.die()
-      this.nummerdelete()
       this.action = "test"
     }
     if (this.action == "attack") {
@@ -318,6 +323,7 @@ class Player {
     }
   }
   left(){
+    this.timer = 0
     this.x -= 10
     this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
     this.playscreen.run()
@@ -326,6 +332,7 @@ class Player {
   FAND(){
     this.AND++
     if (this.AND == 3 ) {
+      this.timer = 0
       this.playscreen.dragon.onHit()
       this.nummerdelete()
     }

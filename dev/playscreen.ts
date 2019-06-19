@@ -54,7 +54,7 @@ class playscreen {
             this.dragon.delete()
             this.player.delete()
             this.player.nummerdelete()
-
+            this.game.dragonslayed = 0
             //game over afbeelding
             let eyes = new Eyes(250, 150, 1)
             
@@ -70,6 +70,8 @@ class playscreen {
 
     public naarDeShop(){
         this.game.power = 0
+        this.game.dragonslayed ++
+        console.log(this.game.dragonslayed);
         this.dragon.delete()
         this.player.delete()
         this.player.nummerdelete()
@@ -90,7 +92,7 @@ class playscreen {
                 this.player.down()
             }
         }
-
+        this.player.update()
     
         this.rightcooldown--
         this.upcooldown--

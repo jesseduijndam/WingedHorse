@@ -10,6 +10,9 @@ class Game {
     //PowerUp
     public power : number
     private powerElement:HTMLElement
+    //difficulty
+    public difficulty : number
+    public dragonslayed: number = 0
     //joystick
     private arcade : Arcade
     private joystickListener: EventListener
@@ -58,9 +61,13 @@ class Game {
         requestAnimationFrame(() => this.gameLoop())
     }
 
+    public diffscreen(){
+        document.body.innerHTML = ""
+        this.currentscreen = new DiffScreen(this)
+    }
+
     public startScreen() {
         document.body.innerHTML = ""
-        this.scorenMaken()
         this.currentscreen = new StartScreen(this)
     }
 
