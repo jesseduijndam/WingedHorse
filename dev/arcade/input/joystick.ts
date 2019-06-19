@@ -18,6 +18,9 @@ class Joystick {
 
     private debugPanel      : DebugPanel
 
+    //timer
+    private button           : number[]  = [0,0,0,0,0,0]
+
     // PROPERTIES
     // Axes as booleans
     public get Left()           : boolean { return (this.axes[0] == -1) }
@@ -72,16 +75,21 @@ class Joystick {
             
             // if(this.buttonPressed(gamepad.buttons[index])) console.log(this.buttonPressed(this.previousGamepad.buttons[index]));
             
-            if (this.buttonPressed(gamepad.buttons[index]) && !this.buttonPressed(this.previousGamepad.buttons[index])) {
-                console.log("press");
-                document.dispatchEvent(new Event(this.buttonEvents[index]))
-            }
-            if (this.buttonPressed(gamepad.buttons[this.BUT1]) && 
-                this.buttonPressed(gamepad.buttons[this.BUT2]) &&
-                (!this.buttonPressed(this.previousGamepad.buttons[this.BUT1]) ||  !this.buttonPressed(this.previousGamepad.buttons[this.BUT2]))) {
-                    document.dispatchEvent(new Event('redirect'))
+            if (this.buttonPressed(gamepad.buttons[index]) && this.buttonPressed(this.previousGamepad.buttons[index])) {
+                
+                if (this.button[index] <= 0) {
+                    this.button[index] = 100
+                    console.log("press");
+                    document.dispatchEvent(new Event(this.buttonEvents[index]))
+                }
             }
         }
+        this.button[0]--
+        this.button[1]--
+        this.button[2]--
+        this.button[3]--
+        this.button[4]--
+        this.button[5]--
 
         // gamepad has 4 axes, first is x, second is y
         // an axe returns a float, only int is needed

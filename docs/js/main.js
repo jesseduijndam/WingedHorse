@@ -135,7 +135,6 @@ class Game {
         return this.arcade;
     }
     gameLoop() {
-        this.currentscreen.update();
         for (let joystick of this.arcade.Joysticks) {
             joystick.update();
             if (joystick.Right)
@@ -147,6 +146,7 @@ class Game {
             if (joystick.Left)
                 console.log('Left');
         }
+        this.currentscreen.update();
         requestAnimationFrame(() => this.gameLoop());
     }
     diffscreen() {
@@ -873,6 +873,7 @@ class Joystick {
         this.numberOfBUttons = 0;
         this.buttonEvents = [];
         this.axes = [];
+        this.button = [0, 0, 0, 0, 0, 0];
         this.joystickNumber = joystickNumber;
         this.numberOfBUttons = numOfButtons;
         this.DEBUG = debug;
@@ -903,16 +904,20 @@ class Joystick {
     }
     readGamepad(gamepad) {
         for (let index = 0; index < this.numberOfBUttons; index++) {
-            if (this.buttonPressed(gamepad.buttons[index]) && !this.buttonPressed(this.previousGamepad.buttons[index])) {
-                console.log("press");
-                document.dispatchEvent(new Event(this.buttonEvents[index]));
-            }
-            if (this.buttonPressed(gamepad.buttons[this.BUT1]) &&
-                this.buttonPressed(gamepad.buttons[this.BUT2]) &&
-                (!this.buttonPressed(this.previousGamepad.buttons[this.BUT1]) || !this.buttonPressed(this.previousGamepad.buttons[this.BUT2]))) {
-                document.dispatchEvent(new Event('redirect'));
+            if (this.buttonPressed(gamepad.buttons[index]) && this.buttonPressed(this.previousGamepad.buttons[index])) {
+                if (this.button[index] <= 0) {
+                    this.button[index] = 100;
+                    console.log("press");
+                    document.dispatchEvent(new Event(this.buttonEvents[index]));
+                }
             }
         }
+        this.button[0]--;
+        this.button[1]--;
+        this.button[2]--;
+        this.button[3]--;
+        this.button[4]--;
+        this.button[5]--;
         this.axes[0] = Math.round(gamepad.axes[0]);
         this.axes[1] = Math.round(gamepad.axes[1]);
         if (this.DEBUG) {
