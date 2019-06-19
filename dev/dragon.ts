@@ -28,7 +28,7 @@ class Dragon {
     }
     let random = Math.floor(Math.random() * 10)
 
-    if (random < this.diff) {
+    if (random <= this.diff) {
       console.log("attack");
       this.x += 50
       this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`

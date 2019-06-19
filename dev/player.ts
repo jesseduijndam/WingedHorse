@@ -11,6 +11,9 @@ class Player {
   balls: boolean = false
   private playscreen : playscreen
   private game : Game
+  private x : number
+  private y : number
+  private scale : number
 
   constructor(x: number, y: number, scale: number , playscreen : playscreen , g : Game) {
     this.playscreen = playscreen
@@ -25,6 +28,9 @@ class Player {
   
   keyboardInput(event: KeyboardEvent, x: number, y: number, scale: number) {
     // PRESS LEFT ARROW
+    this.x = x
+    this.y = y
+    this.scale = scale
     if (event.keyCode == 37) {
       x -= 10
       this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
@@ -66,6 +72,10 @@ class Player {
         this.check = true
         console.log("move choise making")
         this.action = this.playscreen.dragon.moveChoice(this.game)
+      }else{
+        this.playscreen.die()
+        this.nummerdelete()
+        this.action = "test"
       }
       if (this.action == "attack") {
         let number = 0
@@ -91,7 +101,7 @@ class Player {
           this.playscreen.dragon.onTame(this.playscreen, this.game)
           this.canrun = false
           this.action = "test"
-          
+          this.check = false
           this.playscreen.naarDeShop()
           //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
           y += 10
@@ -172,6 +182,147 @@ class Player {
     */
    
   }
+
+  number1(){
+    console.log("button 1 player");
+    
+    if (this.buttons[0] == 1 || this.buttons[1] == 1 || this.buttons[2] == 1 ) {
+      this.FAND()
+    } else{
+    this.playscreen.die()
+    this.nummerdelete()
+    }
+  }
+
+  number2(){
+    if (this.buttons[0] == 2 || this.buttons[1] == 2 || this.buttons[2] == 2 ) {
+      this.FAND()
+    } else{
+    this.playscreen.die()
+    this.nummerdelete()
+    }
+  }
+
+  number3(){
+    if (this.buttons[0] == 3 || this.buttons[1] == 3 || this.buttons[2] == 3 ) {
+      this.FAND()
+    } else{
+    this.playscreen.die()
+    this.nummerdelete()
+    }
+  }
+
+  number4(){
+    if (this.buttons[0] == 4 || this.buttons[1] == 4 || this.buttons[2] == 4 ) {
+      this.FAND()
+    } else{
+    this.playscreen.die()
+    this.nummerdelete()
+    }
+  }
+
+  number5(){
+    if (this.buttons[0] == 5 || this.buttons[1] == 5 || this.buttons[2] == 5 ) {
+      this.FAND()
+    } else{
+    this.playscreen.die()
+    this.nummerdelete()
+    }
+  }
+
+  number6(){
+    if (this.buttons[0] == 6 || this.buttons[1] == 6 || this.buttons[2] == 6 ) {
+      this.FAND()
+    } else{
+    this.playscreen.die()
+    this.nummerdelete()
+    }
+  }
+  
+  up(){
+    console.log(this.action);
+    console.log(this.die);
+    console.log(this.check);
+    
+    if (this.action == "attack" && this.die == false && this.check == true) {
+      this.check = false
+      let one = this.buttons[0]
+      let two = this.buttons[1]
+      let three = this.buttons[2]
+      let nummer1 = new Nummers(300,-100,0.2,one)
+      let nummer2 = new Nummers(402.4,-100,0.2,two)
+      let nummer3 = new Nummers(504.8,-100,0.2,three)
+      this.balls = true
+      console.log(this.buttons);
+        //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
+        this.y -= 10
+        this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+      this.AND = 0
+    }else{
+      // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
+      if ( this.die == false) {
+        this.playscreen.die()
+        this.nummerdelete()
+        this.action = "test"
+      }
+      
+    }
+  }
+  
+  down(){
+    if (this.action == "tame" && this.die == false && this.check == true) {
+      this.playscreen.dragon.onTame(this.playscreen, this.game)
+      this.canrun = false
+      this.action = "test"
+      this.check = false
+      this.playscreen.naarDeShop()
+      //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
+      this.y += 10
+      this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+    }else{
+    // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
+      if (this.die == false) {
+        this.playscreen.die()
+        this.nummerdelete()
+        this.action = "test"
+      }
+    }
+  }
+  
+  right(){
+    if (this.check == false) {
+      this.x += 10
+      this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+      this.check = true
+      console.log("move choise making")
+      this.action = this.playscreen.dragon.moveChoice(this.game)
+    }else{
+      this.playscreen.die()
+      this.nummerdelete()
+      this.action = "test"
+    }
+    if (this.action == "attack") {
+      let number = 0
+      let arr: number[] = [1, 2, 3, 4, 5, 6]
+      let buttons = new Array<number>(2)
+      while (buttons.length == 2) {
+        let multi = arr.length
+        let random = Math.floor(Math.random() * multi)
+        
+        buttons[number] = arr[random]
+          arr.splice(random,1)
+        number++
+
+      }
+      this.buttons = buttons
+    }
+  }
+  left(){
+    this.x -= 10
+    this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+    this.playscreen.run()
+  }
+
   FAND(){
     this.AND++
     if (this.AND == 3 ) {
