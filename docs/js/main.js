@@ -34,6 +34,18 @@ class Circle extends HTMLElement {
     }
 }
 window.customElements.define("circle-component", Circle);
+class DiffScreen {
+    constructor(g) {
+        this.game = g;
+        let background = document.createElement("diffscene");
+        document.body.appendChild(background);
+        let start = new Tekst(625, 290, 3, "easy", g);
+        let start1 = new Tekst(625, 390, 3, "medium", g);
+        let start2 = new Tekst(625, 490, 3, "hard", g);
+    }
+    update() {
+    }
+}
 class Dragon {
     constructor(x, y, scale) {
         this.dragon = document.createElement("dragon");
@@ -54,7 +66,21 @@ class Dragon {
         else {
             this.diff = 5;
         }
-        let random = Math.floor(Math.random() * 10);
+        this.z = Math.floor(this.game.dragonslayed / 10);
+        if (this.z == 0 && this.game.difficulty == 1) {
+            this.randommax = 10;
+        }
+        else if (this.game.difficulty == 2) {
+            this.randommax = 15;
+        }
+        else if (this.game.difficulty == 3) {
+            this.randommax = 20;
+        }
+        else {
+            this.randommax += 5;
+        }
+        console.log(this.randommax);
+        let random = Math.floor(Math.random() * this.randommax);
         if (random <= this.diff) {
             console.log("attack");
             this.x += 50;
@@ -76,7 +102,6 @@ class Dragon {
         this.playscreen = playscreen;
         this.game = g;
         this.game.score += 100;
-        this.playscreen.naarDeShop();
         console.log("Ik ben getamed");
     }
     delete() {
@@ -94,10 +119,8 @@ class Eyes {
     }
 }
 class Game {
-    get Arcade() {
-        return this.arcade;
-    }
     constructor() {
+        this.dragonslayed = 0;
         this.score = 0;
         this.health = 0;
         this.power = 0;
@@ -107,6 +130,9 @@ class Game {
         this.currentscreen = new StartScreen(this);
         document.addEventListener("joystick0button0", () => console.log("FIRE"));
         this.gameLoop();
+    }
+    get Arcade() {
+        return this.arcade;
     }
     gameLoop() {
         this.currentscreen.update();
@@ -123,9 +149,12 @@ class Game {
         }
         requestAnimationFrame(() => this.gameLoop());
     }
+    diffscreen() {
+        document.body.innerHTML = "";
+        this.currentscreen = new DiffScreen(this);
+    }
     startScreen() {
         document.body.innerHTML = "";
-        this.scorenMaken();
         this.currentscreen = new StartScreen(this);
     }
     shopscreen() {
@@ -197,8 +226,44 @@ class Tekst {
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             this.tekst.addEventListener("click", () => this.start());
         }
+        if (type == "easy") {
+            this.tekst = document.createElement("tekst");
+            document.body.appendChild(this.tekst);
+            this.tekst.innerHTML = "easy";
+            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+            this.tekst.addEventListener("click", () => this.easy());
+        }
+        if (type == "medium") {
+            this.tekst = document.createElement("tekst");
+            document.body.appendChild(this.tekst);
+            this.tekst.innerHTML = "medium";
+            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+            this.tekst.addEventListener("click", () => this.medium());
+        }
+        if (type == "hard") {
+            this.tekst = document.createElement("tekst");
+            document.body.appendChild(this.tekst);
+            this.tekst.innerHTML = "hard";
+            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+            this.tekst.addEventListener("click", () => this.hard());
+        }
     }
     start() {
+        this.game.diffscreen();
+        console.log("next scene");
+    }
+    easy() {
+        this.game.difficulty = 1;
+        this.game.playscreen();
+        console.log("next scene");
+    }
+    medium() {
+        this.game.difficulty = 2;
+        this.game.playscreen();
+        console.log("next scene");
+    }
+    hard() {
+        this.game.difficulty = 3;
         this.game.playscreen();
         console.log("next scene");
     }
@@ -222,6 +287,7 @@ class Player {
         this.die = false;
         this.canrun = true;
         this.balls = false;
+        this.timer = 0;
         this.playscreen = playscreen;
         this.game = g;
         this.player = document.createElement("player");
@@ -231,16 +297,32 @@ class Player {
         console.log("player created");
         document.addEventListener('keydown', (e) => this.keyboardInput(e, x, y, scale));
     }
+    update() {
+        if (this.game.difficulty == 2) {
+            this.timer++;
+            if (this.timer == 600) {
+                this.playscreen.die();
+            }
+        }
+        else if (this.game.difficulty == 3) {
+            this.timer++;
+            if (this.timer == 300) {
+                this.playscreen.die();
+            }
+        }
+    }
     keyboardInput(event, x, y, scale) {
         this.x = x;
         this.y = y;
         this.scale = scale;
         if (event.keyCode == 37) {
+            this.timer = 0;
             x -= 10;
             this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             this.playscreen.run();
         }
         else if (event.keyCode == 38) {
+            this.timer = 0;
             if (this.action == "attack" && this.die == false && this.check == true) {
                 this.check = false;
                 let one = this.buttons[0];
@@ -258,12 +340,12 @@ class Player {
             else {
                 if (this.action != "test" && this.die == false) {
                     this.playscreen.die();
-                    this.nummerdelete();
                     this.action = "test";
                 }
             }
         }
         else if (event.keyCode == 39) {
+            this.timer = 0;
             if (this.check == false) {
                 x += 10;
                 this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
@@ -273,7 +355,6 @@ class Player {
             }
             else {
                 this.playscreen.die();
-                this.nummerdelete();
                 this.action = "test";
             }
             if (this.action == "attack") {
@@ -291,6 +372,7 @@ class Player {
             }
         }
         else if (event.keyCode == 40) {
+            this.timer = 0;
             if (this.action == "tame" && this.die == false && this.check == true) {
                 this.playscreen.dragon.onTame(this.playscreen, this.game);
                 this.canrun = false;
@@ -314,7 +396,6 @@ class Player {
             }
             else {
                 this.playscreen.die();
-                this.nummerdelete();
             }
         }
         else if (event.keyCode == 87) {
@@ -323,7 +404,6 @@ class Player {
             }
             else {
                 this.playscreen.die();
-                this.nummerdelete();
             }
         }
         else if (event.keyCode == 69) {
@@ -332,7 +412,6 @@ class Player {
             }
             else {
                 this.playscreen.die();
-                this.nummerdelete();
             }
         }
         else if (event.keyCode == 65) {
@@ -341,7 +420,6 @@ class Player {
             }
             else {
                 this.playscreen.die();
-                this.nummerdelete();
             }
         }
         else if (event.keyCode == 83) {
@@ -350,7 +428,6 @@ class Player {
             }
             else {
                 this.playscreen.die();
-                this.nummerdelete();
             }
         }
         else if (event.keyCode == 68) {
@@ -359,7 +436,6 @@ class Player {
             }
             else {
                 this.playscreen.die();
-                this.nummerdelete();
             }
         }
     }
@@ -370,7 +446,6 @@ class Player {
         }
         else {
             this.playscreen.die();
-            this.nummerdelete();
         }
     }
     number2() {
@@ -379,7 +454,6 @@ class Player {
         }
         else {
             this.playscreen.die();
-            this.nummerdelete();
         }
     }
     number3() {
@@ -388,7 +462,6 @@ class Player {
         }
         else {
             this.playscreen.die();
-            this.nummerdelete();
         }
     }
     number4() {
@@ -397,7 +470,6 @@ class Player {
         }
         else {
             this.playscreen.die();
-            this.nummerdelete();
         }
     }
     number5() {
@@ -406,7 +478,6 @@ class Player {
         }
         else {
             this.playscreen.die();
-            this.nummerdelete();
         }
     }
     number6() {
@@ -415,13 +486,10 @@ class Player {
         }
         else {
             this.playscreen.die();
-            this.nummerdelete();
         }
     }
     up() {
-        console.log(this.action);
-        console.log(this.die);
-        console.log(this.check);
+        this.timer = 0;
         if (this.action == "attack" && this.die == false && this.check == true) {
             this.check = false;
             let one = this.buttons[0];
@@ -439,12 +507,12 @@ class Player {
         else {
             if (this.die == false) {
                 this.playscreen.die();
-                this.nummerdelete();
                 this.action = "test";
             }
         }
     }
     down() {
+        this.timer = 0;
         if (this.action == "tame" && this.die == false && this.check == true) {
             this.playscreen.dragon.onTame(this.playscreen, this.game);
             this.canrun = false;
@@ -457,12 +525,12 @@ class Player {
         else {
             if (this.die == false) {
                 this.playscreen.die();
-                this.nummerdelete();
                 this.action = "test";
             }
         }
     }
     right() {
+        this.timer = 0;
         if (this.check == false) {
             this.x += 10;
             this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
@@ -472,7 +540,6 @@ class Player {
         }
         else {
             this.playscreen.die();
-            this.nummerdelete();
             this.action = "test";
         }
         if (this.action == "attack") {
@@ -490,6 +557,7 @@ class Player {
         }
     }
     left() {
+        this.timer = 0;
         this.x -= 10;
         this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
         this.playscreen.run();
@@ -497,6 +565,7 @@ class Player {
     FAND() {
         this.AND++;
         if (this.AND == 3) {
+            this.timer = 0;
             this.playscreen.dragon.onHit();
             this.nummerdelete();
         }
@@ -562,6 +631,7 @@ class playscreen {
                 this.dragon.delete();
                 this.player.delete();
                 this.player.nummerdelete();
+                this.game.dragonslayed = 0;
                 let eyes = new Eyes(250, 150, 1);
                 this.newGame = document.createElement("newGame");
                 document.body.appendChild(this.newGame);
@@ -573,6 +643,8 @@ class playscreen {
     }
     naarDeShop() {
         this.game.power = 0;
+        this.game.dragonslayed++;
+        console.log(this.game.dragonslayed);
         this.dragon.delete();
         this.player.delete();
         this.player.nummerdelete();
@@ -595,6 +667,7 @@ class playscreen {
                 this.player.down();
             }
         }
+        this.player.update();
         this.rightcooldown--;
         this.upcooldown--;
     }

@@ -5,6 +5,9 @@ class Dragon {
   private diff : number
   private x: number
   private y: number
+  //random
+  private z: number
+  private randommax: number
   private scale: number
   private playscreen: playscreen
   private game : Game
@@ -26,7 +29,19 @@ class Dragon {
     }else{
       this.diff = 5
     }
-    let random = Math.floor(Math.random() * 10)
+    this.z = Math.floor(this.game.dragonslayed / 10);
+    if (this.z == 0 && this.game.difficulty == 1) {
+      this.randommax = 10
+    }else if(this.game.difficulty == 2){
+      this.randommax = 15
+    }else if(this.game.difficulty == 3){
+      this.randommax = 20
+    }else{
+      this.randommax +=5
+    }
+    console.log(this.randommax);
+    
+    let random = Math.floor(Math.random() * this.randommax)
 
     if (random <= this.diff) {
       console.log("attack");
@@ -51,7 +66,6 @@ class Dragon {
     this.playscreen = playscreen
     this.game = g
     this.game.score += 100
-    this.playscreen.naarDeShop()
     console.log("Ik ben getamed")
   }
 
