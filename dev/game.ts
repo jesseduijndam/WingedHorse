@@ -44,7 +44,7 @@ class Game {
     }
     
     public gameLoop():void{
-        this.currentscreen.update()
+        
         // for (const circle of this.circles) {
         //     circle.update()
         // }
@@ -58,6 +58,7 @@ class Game {
             if(joystick.Left)  console.log('Left')
             
         }
+        this.currentscreen.update()
         requestAnimationFrame(() => this.gameLoop())
     }
 

@@ -92,6 +92,7 @@ class playscreen {
                 this.player.down()
             }
         }
+        
         this.player.update()
     
         this.rightcooldown--
