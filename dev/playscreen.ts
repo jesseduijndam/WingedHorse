@@ -20,7 +20,7 @@ class playscreen {
         this.dragon = new Dragon(500 , 280)
         this.player = new Player(220 , 500, 1, this, this.game)
         this.sign = new Sign(0, 700, 1, 2)
-        let tekst = new Tekst(100, 740, 1, "shop", this.game)
+        let tekst = new Tekst(40, 739, 1, "shop(50)", this.game)
         document.addEventListener("joystick0button0", () => this.player.number1())
         document.addEventListener("joystick0button1", () => this.player.number2())
         document.addEventListener("joystick0button2", () => this.player.number3())
