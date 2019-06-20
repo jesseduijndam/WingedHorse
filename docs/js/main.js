@@ -237,12 +237,32 @@ class Tekst {
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             this.tekst.addEventListener("click", () => this.start());
         }
-        else {
+        else if (type == "easy") {
             this.tekst = document.createElement("tekst");
             document.body.appendChild(this.tekst);
             this.tekst.innerHTML = type;
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             this.tekst.addEventListener("click", () => this.easy());
+        }
+        else if (type == "medium") {
+            this.tekst = document.createElement("tekst");
+            document.body.appendChild(this.tekst);
+            this.tekst.innerHTML = "medium";
+            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+            this.tekst.addEventListener("click", () => this.medium());
+        }
+        else if (type == "hard") {
+            this.tekst = document.createElement("tekst");
+            document.body.appendChild(this.tekst);
+            this.tekst.innerHTML = "hard";
+            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+            this.tekst.addEventListener("click", () => this.hard());
+        }
+        else {
+            this.tekst = document.createElement("tekst");
+            document.body.appendChild(this.tekst);
+            this.tekst.innerHTML = type;
+            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
         }
     }
     start() {
@@ -597,7 +617,7 @@ class playscreen {
         this.dragon = new Dragon(500, 280);
         this.player = new Player(220, 500, 1, this, this.game);
         this.sign = new Sign(0, 700, 1, 2);
-        let tekst = new Tekst(100, 740, 1, "shop", this.game);
+        let tekst = new Tekst(40, 739, 1, "shop(50)", this.game);
         document.addEventListener("joystick0button0", () => this.player.number1());
         document.addEventListener("joystick0button1", () => this.player.number2());
         document.addEventListener("joystick0button2", () => this.player.number3());
