@@ -47,15 +47,14 @@ class DiffScreen {
     }
 }
 class Dragon {
-    constructor(x, y, scale) {
+    constructor(x, y) {
         this.dragon = document.createElement("dragon");
         document.body.appendChild(this.dragon);
         this.dragon.id = "drake";
-        this.dragon.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+        this.dragon.style.transform = `translate(${x}px, ${y}px) scale(0.7)`;
         console.log("dragon created");
         this.x = x;
         this.y = y;
-        this.scale = scale;
     }
     moveChoice(g) {
         console.log("move choise made");
@@ -83,20 +82,32 @@ class Dragon {
         let random = Math.floor(Math.random() * this.randommax);
         if (random <= this.diff) {
             console.log("attack");
-            this.x += 50;
-            this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
+            this.delete();
+            this.dragon = document.createElement("dragonattac");
+            document.body.appendChild(this.dragon);
+            this.dragon.id = "drake";
+            let y = this.y - 60;
+            this.dragon.style.transform = `translate(${this.x}px, ${y}px) scale(1)`;
             return "attack";
         }
         else {
             console.log("tame");
-            this.x -= 50;
-            this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
+            this.delete();
+            this.dragon = document.createElement("dragontame");
+            document.body.appendChild(this.dragon);
+            this.dragon.id = "drake";
+            let y = this.y + 140;
+            this.dragon.style.transform = `translate(${this.x}px, ${y}px) scale(0.7)`;
             return "tame";
         }
     }
     onHit() {
         console.log("AUW!!!!");
-        this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
+        this.delete();
+        this.dragon = document.createElement("dragon");
+        document.body.appendChild(this.dragon);
+        this.dragon.id = "drake";
+        this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.7)`;
     }
     onTame(playscreen, g) {
         this.playscreen = playscreen;
@@ -597,8 +608,8 @@ class playscreen {
         this.game = g;
         let background = document.createElement("backdrak");
         document.body.appendChild(background);
-        this.dragon = new Dragon(900, 430, 2);
-        this.player = new Player(150, 400, 2, this, this.game);
+        this.dragon = new Dragon(500, 280);
+        this.player = new Player(100, 500, 1, this, this.game);
         document.addEventListener("joystick0button0", () => this.player.number1());
         document.addEventListener("joystick0button1", () => this.player.number2());
         document.addEventListener("joystick0button2", () => this.player.number3());
