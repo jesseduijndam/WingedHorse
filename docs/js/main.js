@@ -231,32 +231,18 @@ class Tekst {
             document.body.appendChild(this.tekst);
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
         }
-        if (type == "start") {
+        else if (type == "start") {
             this.tekst = document.createElement("start");
             document.body.appendChild(this.tekst);
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             this.tekst.addEventListener("click", () => this.start());
         }
-        if (type == "easy") {
+        else {
             this.tekst = document.createElement("tekst");
             document.body.appendChild(this.tekst);
-            this.tekst.innerHTML = "easy";
+            this.tekst.innerHTML = type;
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             this.tekst.addEventListener("click", () => this.easy());
-        }
-        if (type == "medium") {
-            this.tekst = document.createElement("tekst");
-            document.body.appendChild(this.tekst);
-            this.tekst.innerHTML = "medium";
-            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-            this.tekst.addEventListener("click", () => this.medium());
-        }
-        if (type == "hard") {
-            this.tekst = document.createElement("tekst");
-            document.body.appendChild(this.tekst);
-            this.tekst.innerHTML = "hard";
-            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-            this.tekst.addEventListener("click", () => this.hard());
         }
     }
     start() {
@@ -609,7 +595,9 @@ class playscreen {
         let background = document.createElement("backdrak");
         document.body.appendChild(background);
         this.dragon = new Dragon(500, 280);
-        this.player = new Player(100, 500, 1, this, this.game);
+        this.player = new Player(220, 500, 1, this, this.game);
+        this.sign = new Sign(0, 700, 1, 2);
+        let tekst = new Tekst(100, 740, 1, "shop", this.game);
         document.addEventListener("joystick0button0", () => this.player.number1());
         document.addEventListener("joystick0button1", () => this.player.number2());
         document.addEventListener("joystick0button2", () => this.player.number3());
@@ -757,11 +745,17 @@ class Sign {
             this.sign.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             console.log("signcreated");
         }
-        else {
+        else if (type == 1) {
             this.bord = document.createElement("bord");
             document.body.appendChild(this.bord);
             this.bord.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             console.log("bordcreated");
+        }
+        else if (type == 2) {
+            this.bord = document.createElement("back2shop");
+            document.body.appendChild(this.bord);
+            this.bord.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+            console.log("back2shop created");
         }
     }
 }

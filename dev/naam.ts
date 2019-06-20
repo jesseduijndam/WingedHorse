@@ -7,33 +7,17 @@ class Tekst {
             this.tekst = document.createElement("naam")
             document.body.appendChild(this.tekst)
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
-        }
-        if (type == "start"){
+        }else if (type == "start"){
             this.tekst = document.createElement("start")
             document.body.appendChild(this.tekst)
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
             this.tekst.addEventListener("click", () => this.start());
-        }
-        if (type == "easy"){
+        }else{
             this.tekst = document.createElement("tekst")
             document.body.appendChild(this.tekst)
-            this.tekst.innerHTML = "easy"
+            this.tekst.innerHTML = type
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
             this.tekst.addEventListener("click", () => this.easy());
-        }
-        if (type == "medium"){
-            this.tekst = document.createElement("tekst")
-            document.body.appendChild(this.tekst)
-            this.tekst.innerHTML = "medium"
-            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
-            this.tekst.addEventListener("click", () => this.medium());
-        }
-        if (type == "hard"){
-            this.tekst = document.createElement("tekst")
-            document.body.appendChild(this.tekst)
-            this.tekst.innerHTML = "hard"
-            this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
-            this.tekst.addEventListener("click", () => this.hard());
         }
         
     }

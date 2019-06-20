@@ -7,6 +7,7 @@ class playscreen {
     player : Player
     eindScore: number 
     dragon : Dragon
+    sign: Sign
     naardeshop : boolean = false
     private rightcooldown : number = 0
     private upcooldown : number = 0
@@ -17,7 +18,9 @@ class playscreen {
         let background = document.createElement("backdrak")
         document.body.appendChild(background)
         this.dragon = new Dragon(500 , 280)
-        this.player = new Player(100 , 500, 1, this, this.game)
+        this.player = new Player(220 , 500, 1, this, this.game)
+        this.sign = new Sign(0, 700, 1, 2)
+        let tekst = new Tekst(100, 740, 1, "shop", this.game)
         document.addEventListener("joystick0button0", () => this.player.number1())
         document.addEventListener("joystick0button1", () => this.player.number2())
         document.addEventListener("joystick0button2", () => this.player.number3())
