@@ -11,15 +11,14 @@ class Dragon {
   private scale: number
   private playscreen: playscreen
   private game : Game
-    constructor(x: number, y: number, scale: number) {
+    constructor(x: number, y: number) {
     this.dragon = document.createElement("dragon")
     document.body.appendChild(this.dragon)
     this.dragon.id = "drake"
-    this.dragon.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
+    this.dragon.style.transform = `translate(${x}px, ${y}px) scale(0.7)`
     console.log("dragon created");
     this.x = x
     this.y = y 
-    this.scale = scale
   }
   moveChoice(g: Game){
     console.log("move choise made");
@@ -45,21 +44,33 @@ class Dragon {
 
     if (random <= this.diff) {
       console.log("attack");
-      this.x += 50
-      this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+      this.delete()
+      this.dragon = document.createElement("dragonattac")
+      document.body.appendChild(this.dragon)
+      this.dragon.id = "drake"
+      let y = this.y - 60
+      this.dragon.style.transform = `translate(${this.x}px, ${y}px) scale(1)`
       return "attack" ;
     }
     else{
       console.log("tame");
-      this.x -= 50
-      this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+      this.delete()
+      this.dragon = document.createElement("dragontame")
+      document.body.appendChild(this.dragon)
+      this.dragon.id = "drake"
+      let y = this.y + 140
+      this.dragon.style.transform = `translate(${this.x}px, ${y}px) scale(0.7)`
       return "tame";
     }
   }
   //geeft door aan hier en verplaatst met functie naar achter nr voor of anders
   onHit(){
       console.log("AUW!!!!")
-      this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+      this.delete()
+      this.dragon = document.createElement("dragon")
+      document.body.appendChild(this.dragon)
+      this.dragon.id = "drake"
+      this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.7)`
   }
 
   onTame( playscreen : playscreen, g: Game){

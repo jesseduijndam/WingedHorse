@@ -16,8 +16,8 @@ class playscreen {
         this.game = g
         let background = document.createElement("backdrak")
         document.body.appendChild(background)
-        this.dragon = new Dragon(900 , 430, 2)
-        this.player = new Player(150 , 400, 2, this, this.game)
+        this.dragon = new Dragon(500 , 280)
+        this.player = new Player(100 , 500, 1, this, this.game)
         document.addEventListener("joystick0button0", () => this.player.number1())
         document.addEventListener("joystick0button1", () => this.player.number2())
         document.addEventListener("joystick0button2", () => this.player.number3())
