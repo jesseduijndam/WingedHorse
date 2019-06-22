@@ -11,7 +11,7 @@ class Dragon {
   private scale: number
   private playscreen: playscreen
   private game : Game
-    constructor(x: number, y: number) {
+  constructor(x: number, y: number) {
     this.dragon = document.createElement("dragon")
     document.body.appendChild(this.dragon)
     this.dragon.id = "drake"
@@ -64,13 +64,15 @@ class Dragon {
     }
   }
   //geeft door aan hier en verplaatst met functie naar achter nr voor of anders
-  onHit(){
+  onHit(p : Player){
+    if (p.AND == 3){
       console.log("AUW!!!!")
       this.delete()
       this.dragon = document.createElement("dragon")
       document.body.appendChild(this.dragon)
       this.dragon.id = "drake"
       this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.7)`
+    }
   }
 
   onTame( playscreen : playscreen, g: Game){

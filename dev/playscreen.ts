@@ -21,12 +21,12 @@ class playscreen {
         this.player = new Player(220 , 500, 1, this, this.game)
         this.sign = new Sign(0, 700, 1, 2)
         let tekst = new Tekst(40, 739, 1, "shop(50)", this.game)
-        document.addEventListener("joystick0button0", () => this.player.number1())
-        document.addEventListener("joystick0button1", () => this.player.number2())
-        document.addEventListener("joystick0button2", () => this.player.number3())
-        document.addEventListener("joystick0button3", () => this.player.number4())
-        document.addEventListener("joystick0button4", () => this.player.number5())
-        document.addEventListener("joystick0button5", () => this.player.number6())
+        document.addEventListener("joystick0button0", () => this.player.numbers(1))
+        document.addEventListener("joystick0button1", () => this.player.numbers(2))
+        document.addEventListener("joystick0button2", () => this.player.numbers(3))
+        document.addEventListener("joystick0button3", () => this.player.numbers(4))
+        document.addEventListener("joystick0button4", () => this.player.numbers(5))
+        document.addEventListener("joystick0button5", () => this.player.numbers(6))
     }
 
     run(){
@@ -65,11 +65,27 @@ class playscreen {
             this.newGame = document.createElement("newGame")
             document.body.appendChild(this.newGame)
             this.newGame.innerHTML = "NEW GAME"
+            this.newGame.id = "newgame"
             this.game.score = 0;
             this.newGame.addEventListener("click", () => this.game.startScreen() );
+            document.addEventListener("joystick0button0", () => this.startscreen())
+            document.addEventListener("joystick0button1", () => this.startscreen())
+            document.addEventListener("joystick0button2", () => this.startscreen())
+            document.addEventListener("joystick0button3", () => this.startscreen())
+            document.addEventListener("joystick0button4", () => this.startscreen())
+            document.addEventListener("joystick0button5", () => this.startscreen())
              }
          }
      }
+    private startscreen(){
+        if (this.game.ifactive == "playscreen" && this.player.canrun == false) {
+            let elm = document.getElementById("newgame");
+            if (elm != undefined) {
+              elm.remove();
+            }
+          this.game.startScreen()  
+        }
+    }
 
     public naarDeShop(){
         this.game.power = 0

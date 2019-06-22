@@ -16,9 +16,12 @@ class Game {
     //joystick
     private arcade : Arcade
     private joystickListener: EventListener
-    // joystick: any;
+        // joystick: any;
     // example of game objects
-    // private circles : Circle[] = []
+        // private circles : Circle[] = []
+    //ifactive
+    public ifactive : string
+
 
     
     public get Arcade() : Arcade {
@@ -38,8 +41,7 @@ class Game {
         // The game must wait for de joysticks to connect
         this.joystickListener = (e: Event) => this.initJoystick(e as CustomEvent)
         document.addEventListener("joystickcreated",  this.joystickListener)
-        this.currentscreen = new StartScreen(this)
-        document.addEventListener("joystick0button0", () => console.log("FIRE"))
+        this.startScreen()
         this.gameLoop()
     }
     
@@ -62,14 +64,17 @@ class Game {
         requestAnimationFrame(() => this.gameLoop())
     }
 
-    public diffscreen(){
-        document.body.innerHTML = ""
-        this.currentscreen = new DiffScreen(this)
-    }
-
     public startScreen() {
         document.body.innerHTML = ""
         this.currentscreen = new StartScreen(this)
+        this.ifactive = "startscreen"
+    }
+
+    public diffscreen(){
+        console.log("diff screen trigger");
+        document.body.innerHTML = ""
+        this.currentscreen = new DiffScreen(this)
+        this.ifactive = "diffscreen"
     }
 
     public shopscreen() {
@@ -78,6 +83,7 @@ class Game {
         this.healthMaken()
         this.powerMaken() 
         this.currentscreen = new Shop(this)
+        this.ifactive = "shopscreen"
     }
 
     public playscreen() {
@@ -86,6 +92,7 @@ class Game {
         this.healthMaken()
         this.powerMaken()
         this.currentscreen = new playscreen(this)
+        this.ifactive = "playscreen"
     }
 
     public scorenMaken(){
