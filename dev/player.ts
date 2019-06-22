@@ -84,33 +84,34 @@ class Player {
     // PRESS RIGHT ARROW start its move
     else if (event.keyCode == 39) {
       this.timer = 0
-      if (this.check == false) {
-        x += 10
-        this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
-        this.check = true
-        console.log("move choise making")
-        this.action = this.playscreen.dragon.moveChoice(this.game)
-      }else{
-        this.playscreen.die()
-        this.action = "test"
-      }
-      if (this.action == "attack") {
-        let number = 0
-        let arr: number[] = [1, 2, 3, 4, 5, 6]
-        let buttons = new Array<number>(2)
-        while (buttons.length == 2) {
-          let multi = arr.length
-          let random = Math.floor(Math.random() * multi)
-          
-          buttons[number] = arr[random]
-            arr.splice(random,1)
-          number++
- 
+      if (this.canrun == true){
+        if (this.check == false) {
+          x += 10
+          this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
+          this.check = true
+          console.log("move choise making")
+          this.action = this.playscreen.dragon.moveChoice(this.game)
+        }else{
+          this.playscreen.die()
+          this.action = "test"
         }
-        this.buttons = buttons
-        
-      }
-      
+        if (this.action == "attack") {
+          let number = 0
+          let arr: number[] = [1, 2, 3, 4, 5, 6]
+          let buttons = new Array<number>(2)
+          while (buttons.length == 2) {
+            let multi = arr.length
+            let random = Math.floor(Math.random() * multi)
+            
+            buttons[number] = arr[random]
+              arr.splice(random,1)
+            number++
+  
+          }
+          this.buttons = buttons
+          
+        }
+      }  
     }
     // PRESS DOWN ARROW tame
     else if (event.keyCode == 40) {
@@ -195,53 +196,14 @@ class Player {
    
   }
 
-  number1(){
-    console.log("button 1 player");
-    
-    if (this.buttons[0] == 1 || this.buttons[1] == 1 || this.buttons[2] == 1 ) {
-      this.FAND()
-    } else{
-    this.playscreen.die()
-    }
-  }
-
-  number2(){
-    if (this.buttons[0] == 2 || this.buttons[1] == 2 || this.buttons[2] == 2 ) {
-      this.FAND()
-    } else{
-    this.playscreen.die()
-    }
-  }
-
-  number3(){
-    if (this.buttons[0] == 3 || this.buttons[1] == 3 || this.buttons[2] == 3 ) {
-      this.FAND()
-    } else{
-    this.playscreen.die()
-    }
-  }
-
-  number4(){
-    if (this.buttons[0] == 4 || this.buttons[1] == 4 || this.buttons[2] == 4 ) {
-      this.FAND()
-    } else{
-    this.playscreen.die()
-    }
-  }
-
-  number5(){
-    if (this.buttons[0] == 5 || this.buttons[1] == 5 || this.buttons[2] == 5 ) {
-      this.FAND()
-    } else{
-    this.playscreen.die()
-    }
-  }
-
-  number6(){
-    if (this.buttons[0] == 6 || this.buttons[1] == 6 || this.buttons[2] == 6 ) {
-      this.FAND()
-    } else{
-    this.playscreen.die()
+  numbers(n: number){
+    if (this.game.ifactive == "playscreen") {
+      console.log(`button ${n} pushed`);
+      if (this.buttons[0] == n || this.buttons[1] == n || this.buttons[2] == n ) {
+        this.FAND()
+      } else{
+      this.playscreen.die()
+      }
     }
   }
   
@@ -296,30 +258,32 @@ class Player {
   
   right(){
     this.timer = 0
-    if (this.check == false) {
-      this.x += 10
-      this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
-      this.check = true
-      console.log("move choise making")
-      this.action = this.playscreen.dragon.moveChoice(this.game)
-    }else{
-      this.playscreen.die()
-      this.action = "test"
-    }
-    if (this.action == "attack") {
-      let number = 0
-      let arr: number[] = [1, 2, 3, 4, 5, 6]
-      let buttons = new Array<number>(2)
-      while (buttons.length == 2) {
-        let multi = arr.length
-        let random = Math.floor(Math.random() * multi)
-        
-        buttons[number] = arr[random]
-          arr.splice(random,1)
-        number++
-
+    if(this.canrun == true){
+      if (this.check == false) {
+        this.x += 10
+        this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+        this.check = true
+        console.log("move choise making")
+        this.action = this.playscreen.dragon.moveChoice(this.game)
+      }else{
+        this.playscreen.die()
+        this.action = "test"
       }
-      this.buttons = buttons
+      if (this.action == "attack") {
+        let number = 0
+        let arr: number[] = [1, 2, 3, 4, 5, 6]
+        let buttons = new Array<number>(2)
+        while (buttons.length == 2) {
+          let multi = arr.length
+          let random = Math.floor(Math.random() * multi)
+          
+          buttons[number] = arr[random]
+            arr.splice(random,1)
+          number++
+
+        }
+        this.buttons = buttons
+      }
     }
   }
   left(){
@@ -333,7 +297,7 @@ class Player {
     this.AND++
     if (this.AND == 3 ) {
       this.timer = 0
-      this.playscreen.dragon.onHit()
+      this.playscreen.dragon.onHit(this)
       this.nummerdelete()
     }
   }
