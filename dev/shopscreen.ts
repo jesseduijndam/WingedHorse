@@ -41,50 +41,59 @@ class Shop {
         this.message = document.createElement("message")
           
         document.body.appendChild(this.message)
+        document.addEventListener("joystick0button0", () => this.naarStart())
+        document.addEventListener("joystick0button1", () => this.kooptHealth())
+        document.addEventListener("joystick0button2", () => this.kooptPowerUp())
 
     }
     
     public naarStart(){
-        console.log("start button werkt")
-        this.game.playscreen()  
+        if (this.game.ifactive == "shopscreen") {
+            console.log("start button werkt")
+            this.game.playscreen()  
+        }
     }
 
     public kooptHealth(){ 
-        if( this.game.health == 0 ){
+        if (this.game.ifactive == "shopscreen") {
+            if( this.game.health == 0 ){
 
-            if ( this.game.score - this.waardeHealth > 0 ) { 
-                this.game.health = this.game.health + 1  
-                this.game.score = this.game.score - this.waardeHealth
-                this.updateScore(this.game.score)
-                let healthElement = document.getElementsByTagName("healthElement")[0];
-                healthElement.innerHTML = "+ Health"
-            } 
-            else {
-                this.message.innerHTML = "Je hebt te weinig geld"  
+                if ( this.game.score - this.waardeHealth >= 0 ) { 
+                    this.game.health = this.game.health + 1  
+                    this.game.score = this.game.score - this.waardeHealth
+                    this.updateScore(this.game.score)
+                    let healthElement = document.getElementsByTagName("healthElement")[0];
+                    healthElement.innerHTML = "+ Health"
+                } 
+                else {
+                    this.message.innerHTML = "Je hebt te weinig geld"  
+                }
+
+            }else{
+                this.message.innerHTML = "Je hebt al health"   
             }
-
-        }else{
-            this.message.innerHTML = "Je hebt al health"   
         }
     }
 
     public kooptPowerUp(){ 
-        if( this.game.power == 0 ){
+        if (this.game.ifactive == "shopscreen") {
+            if( this.game.power == 0 ){
 
-            if (this.game.score - this.waardePower > 0) { 
-                this.game.power = this.game.power + 1  
-                this.game.score = this.game.score - this.waardePower
-                this.updateScore(this.game.score)
-                let powerElement = document.getElementsByTagName("powerElement")[0]
-                powerElement.innerHTML = "+ Power"  
-            } 
-            else {
-                this.message.innerHTML = "Je hebt te weinig geld"   
+                if (this.game.score - this.waardePower >= 0) { 
+                    this.game.power = this.game.power + 1  
+                    this.game.score = this.game.score - this.waardePower
+                    this.updateScore(this.game.score)
+                    let powerElement = document.getElementsByTagName("powerElement")[0]
+                    powerElement.innerHTML = "+ Power"  
+                } 
+                else {
+                    this.message.innerHTML = "Je hebt te weinig geld"   
+                }
+
+            }else{
+                this.message.innerHTML = "Je hebt al health"
+            
             }
-
-        }else{
-            this.message.innerHTML = "Je hebt al health"
-           
         }
     }
 
@@ -94,4 +103,7 @@ class Shop {
         scoreElement.innerHTML = "SCORE: " + nieuweScore;
     }
 
+    public update(){
+        
+    }
 }

@@ -11,8 +11,14 @@ class Player {
   balls: boolean = false
   private playscreen : playscreen
   private game : Game
+  private x : number
+  private y : number
+  private scale : number
+  //timer
+  private timer : number
 
   constructor(x: number, y: number, scale: number , playscreen : playscreen , g : Game) {
+    this.timer = 0
     this.playscreen = playscreen
     this.game = g
     this.player = document.createElement("player")
@@ -22,16 +28,34 @@ class Player {
     console.log("player created");
     document.addEventListener('keydown', (e) => this.keyboardInput(e, x, y, scale))
   }
+  update(){
+    if (this.game.difficulty == 2) {
+      this.timer++
+      if (this.timer == 600) {
+        this.playscreen.die()
+      }
+    }else if (this.game.difficulty == 3) {
+      this.timer++
+      if (this.timer == 300) {
+        this.playscreen.die()
+      }
+    }
+  }
   
   keyboardInput(event: KeyboardEvent, x: number, y: number, scale: number) {
     // PRESS LEFT ARROW
+    this.x = x
+    this.y = y
+    this.scale = scale
     if (event.keyCode == 37) {
+      this.timer = 0
       x -= 10
       this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
       this.playscreen.run()
     }
     // PRESS UP ARROW attack
     else if (event.keyCode == 38) {
+      this.timer = 0
         if (this.action == "attack" && this.die == false && this.check == true) {
           this.check = false
           let one = this.buttons[0]
@@ -50,7 +74,6 @@ class Player {
           // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
           if (this.action != "test" && this.die == false) {
             this.playscreen.die()
-            this.nummerdelete()
             this.action = "test"
           }
           
@@ -60,38 +83,44 @@ class Player {
     }
     // PRESS RIGHT ARROW start its move
     else if (event.keyCode == 39) {
-      if (this.check == false) {
-        x += 10
-        this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
-        this.check = true
-        console.log("move choise making")
-        this.action = this.playscreen.dragon.moveChoice()
-      }
-      if (this.action == "attack") {
-        let number = 0
-        let arr: number[] = [1, 2, 3, 4, 5, 6]
-        let buttons = new Array<number>(2)
-        while (buttons.length == 2) {
-          let multi = arr.length
-          let random = Math.floor(Math.random() * multi)
-          
-          buttons[number] = arr[random]
-            arr.splice(random,1)
-          number++
- 
+      this.timer = 0
+      if (this.canrun == true){
+        if (this.check == false) {
+          x += 10
+          this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
+          this.check = true
+          console.log("move choise making")
+          this.action = this.playscreen.dragon.moveChoice(this.game)
+        }else{
+          this.playscreen.die()
+          this.action = "test"
         }
-        this.buttons = buttons
-        
-      }
-      
+        if (this.action == "attack") {
+          let number = 0
+          let arr: number[] = [1, 2, 3, 4, 5, 6]
+          let buttons = new Array<number>(2)
+          while (buttons.length == 2) {
+            let multi = arr.length
+            let random = Math.floor(Math.random() * multi)
+            
+            buttons[number] = arr[random]
+              arr.splice(random,1)
+            number++
+  
+          }
+          this.buttons = buttons
+          
+        }
+      }  
     }
     // PRESS DOWN ARROW tame
     else if (event.keyCode == 40) {
+      this.timer = 0
       if (this.action == "tame" && this.die == false && this.check == true) {
           this.playscreen.dragon.onTame(this.playscreen, this.game)
           this.canrun = false
           this.action = "test"
-          
+          this.check = false
           this.playscreen.naarDeShop()
           //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
           y += 10
@@ -112,7 +141,6 @@ class Player {
           this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }
       
     }
@@ -122,7 +150,6 @@ class Player {
         this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }
     }
     //E
@@ -131,7 +158,6 @@ class Player {
         this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }  
     }
     //A
@@ -140,7 +166,6 @@ class Player {
         this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }
       
     }
@@ -150,7 +175,6 @@ class Player {
         this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }
       
     }
@@ -160,7 +184,6 @@ class Player {
         this.FAND()
       } else{
         this.playscreen.die()
-        this.nummerdelete()
       }
       
     }
@@ -172,10 +195,109 @@ class Player {
     */
    
   }
+
+  numbers(n: number){
+    if (this.game.ifactive == "playscreen") {
+      console.log(`button ${n} pushed`);
+      if (this.buttons[0] == n || this.buttons[1] == n || this.buttons[2] == n ) {
+        this.FAND()
+      } else{
+      this.playscreen.die()
+      }
+    }
+  }
+  
+  up(){
+    // console.log(this.action);
+    // console.log(this.die);
+    // console.log(this.check);
+    this.timer = 0
+    if (this.action == "attack" && this.die == false && this.check == true) {
+      this.check = false
+      let one = this.buttons[0]
+      let two = this.buttons[1]
+      let three = this.buttons[2]
+      let nummer1 = new Nummers(300,-100,0.2,one)
+      let nummer2 = new Nummers(402.4,-100,0.2,two)
+      let nummer3 = new Nummers(504.8,-100,0.2,three)
+      this.balls = true
+      console.log(this.buttons);
+        //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
+        this.y -= 10
+        this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+      this.AND = 0
+    }else{
+      // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
+      if ( this.die == false) {
+        this.playscreen.die()
+        this.action = "test"
+      }
+      
+    }
+  }
+  
+  down(){
+    this.timer = 0
+    if (this.action == "tame" && this.die == false && this.check == true) {
+      this.playscreen.dragon.onTame(this.playscreen, this.game)
+      this.canrun = false
+      this.action = "test"
+      this.check = false
+      this.playscreen.naarDeShop()
+      //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
+      this.y += 10
+      this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+    }else{
+    // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
+      if (this.die == false) {
+        this.playscreen.die()
+        this.action = "test"
+      }
+    }
+  }
+  
+  right(){
+    this.timer = 0
+    if(this.canrun == true){
+      if (this.check == false) {
+        this.x += 10
+        this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+        this.check = true
+        console.log("move choise making")
+        this.action = this.playscreen.dragon.moveChoice(this.game)
+      }else{
+        this.playscreen.die()
+        this.action = "test"
+      }
+      if (this.action == "attack") {
+        let number = 0
+        let arr: number[] = [1, 2, 3, 4, 5, 6]
+        let buttons = new Array<number>(2)
+        while (buttons.length == 2) {
+          let multi = arr.length
+          let random = Math.floor(Math.random() * multi)
+          
+          buttons[number] = arr[random]
+            arr.splice(random,1)
+          number++
+
+        }
+        this.buttons = buttons
+      }
+    }
+  }
+  left(){
+    this.timer = 0
+    this.x -= 10
+    this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
+    this.playscreen.run()
+  }
+
   FAND(){
     this.AND++
     if (this.AND == 3 ) {
-      this.playscreen.dragon.onHit()
+      this.timer = 0
+      this.playscreen.dragon.onHit(this)
       this.nummerdelete()
     }
   }

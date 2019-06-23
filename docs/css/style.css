@@ -96,15 +96,18 @@ newGame {
     font-size: 30px;
 }
 
-eindScoreElement{
-    width: 100%; height: 100%; 
-    position: absolute;
-    color: red;
 
+hoogsteHighscore{
+    position: absolute;
+    width: 100%;
+    margin-top: 600px;
+    font-size: 30px;
+    margin-left: 500px;
 }
 
+
 /*jesse's css*/
-sign, bord, naam, start, startbackground, n1, n2, n3, n4, n5, n6, backdrak, player, dragon, eyes {
+sign, bord, back2shop, naam, start, startbackground, diffscene, n1, n2, n3, n4, n5, n6, backdrak, player, dragon, dragontame, dragonattac, eyes {
     position: absolute;
     display: block;
     margin:0px; padding:0px;
@@ -120,6 +123,12 @@ sign {
 bord {
     background-image: url(../img/bord2.png);
     width:683px; height:195px;
+    background-size: cover;
+}
+
+back2shop {
+    background-image: url(../img/back2shop.png);
+    width: 292px; height: 172px;
     background-size: cover;
 }
 
@@ -141,21 +150,37 @@ startbackground {
     background-size: cover;
 }
 
+diffscene {
+    background-image: url(../img/diffscene.jpg);
+    width:1440px; height: 900px;
+    background-size: cover;
+}
+
 backdrak {
-    background-image: url(../img/backdrak.jpg);
+    background-image: url(../img/achtergrond.jpg);
     width:1440px; height: 900px;
     background-size: cover;
 }
 
 player {
-    background-image: url(../img/temmer.png);
-    width: 272px; height: 283px;
+    background-image: url(../img/character.png);
+    width: 365px; height: 382px;
     background-size: cover;
 }
 
 dragon {
-    background-image: url(../img/dragon.png);
-    width: 256px ; height: 256px ;
+    background-image: url(../img/dragonNormal.png);
+    width: 1101px ; height: 730px ;
+}
+
+dragontame{
+    background-image: url(../img/dragonTemmen.png);
+    width: 1107px; height: 593px; 
+}
+
+dragonattac{
+    background-image: url(../img/draakAanvallen.png);
+    width: 724px; height: 714px;
 }
 
 eyes {
@@ -191,4 +216,11 @@ n5 {
 n6 {
     background-image: url(../img/6.png);
     width: 512px ; height: 512px;  
+}
+
+tekst {
+    position: absolute;
+    display: block;
+    font-size: 30px;     
+    z-index: 1;
 }
