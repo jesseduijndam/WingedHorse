@@ -96,12 +96,15 @@ newGame {
     font-size: 30px;
 }
 
-eindScoreElement{
-    width: 100%; height: 100%; 
-    position: absolute;
-    color: red;
 
+hoogsteHighscore{
+    position: absolute;
+    width: 100%;
+    margin-top: 600px;
+    font-size: 30px;
+    margin-left: 500px;
 }
+
 
 /*jesse's css*/
 sign, bord, back2shop, naam, start, startbackground, diffscene, n1, n2, n3, n4, n5, n6, backdrak, player, dragon, dragontame, dragonattac, eyes {

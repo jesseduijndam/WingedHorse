@@ -143,6 +143,7 @@ class Eyes {
 }
 class Game {
     constructor() {
+        this.hoogsteHighScore = 0;
         this.dragonslayed = 0;
         this.score = 0;
         this.health = 0;
@@ -628,12 +629,23 @@ class playscreen {
                 this.player.canrun = false;
                 console.log("ik ben dood");
                 this.eindScore = this.game.score;
-                console.log(this.eindScore);
+                if (this.eindScore > this.game.hoogsteHighScore) {
+                    console.log("oude highscore: " + this.game.hoogsteHighScore);
+                    this.game.hoogsteHighScore = this.eindScore;
+                    console.log("nieuwe highscore: " + this.game.hoogsteHighScore);
+                }
+                this.highScoresLijst = document.createElement("hoogsteHighscore");
+                document.body.append(this.highScoresLijst);
+                let y = this.game.hoogsteHighScore.toString();
+                this.highScoresLijst.innerHTML = "HIGHSCORE: " + y;
+
                 this.dragon.delete();
                 this.player.delete();
                 this.player.nummerdelete();
                 this.game.dragonslayed = 0;
-                let eyes = new Eyes(250, 150, 1);
+
+                let eyes = new Eyes(280, 150, 1);
+
                 this.newGame = document.createElement("newGame");
                 document.body.appendChild(this.newGame);
                 this.newGame.innerHTML = "NEW GAME";
@@ -982,6 +994,7 @@ class Joystick {
     }
 }
 const template = document.createElement('template');
+
 template.innerHTML = `
 <style>
 :host {
