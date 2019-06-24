@@ -197,14 +197,12 @@ class Player {
   }
 
   numbers(n: number){
-    if (this.game.ifactive == "playscreen") {
       console.log(`button ${n} pushed`);
       if (this.buttons[0] == n || this.buttons[1] == n || this.buttons[2] == n ) {
         this.FAND()
       } else{
       this.playscreen.die()
       }
-    }
   }
   
   up(){

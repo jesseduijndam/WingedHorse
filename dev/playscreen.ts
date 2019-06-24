@@ -12,7 +12,16 @@ class playscreen {
     naardeshop : boolean = false
     private rightcooldown : number = 0
     private upcooldown : number = 0
-   
+
+    //removing eventlitners
+    private callback1 : EventListener
+    private callback2 : EventListener
+    private callback3 : EventListener
+    private callback4 : EventListener
+    private callback5 : EventListener
+    private callback6 : EventListener
+    private callbackstart : EventListener
+
     constructor( g: Game ) {
 
         this.game = g
@@ -22,12 +31,18 @@ class playscreen {
         this.player = new Player(220 , 500, 1, this, this.game)
         this.sign = new Sign(0, 700, 1, 2)
         let tekst = new Tekst(40, 739, 1, "shop(50)", this.game)
-        document.addEventListener("joystick0button0", () => this.player.numbers(1))
-        document.addEventListener("joystick0button1", () => this.player.numbers(2))
-        document.addEventListener("joystick0button2", () => this.player.numbers(3))
-        document.addEventListener("joystick0button3", () => this.player.numbers(4))
-        document.addEventListener("joystick0button4", () => this.player.numbers(5))
-        document.addEventListener("joystick0button5", () => this.player.numbers(6))
+        this.callback1 = () => this.player.numbers(1)
+        this.callback2 = () => this.player.numbers(2)
+        this.callback3 = () => this.player.numbers(3)
+        this.callback4 = () => this.player.numbers(4)
+        this.callback5 = () => this.player.numbers(5)
+        this.callback6 = () => this.player.numbers(6)
+        document.addEventListener("joystick0button0", this.callback1)
+        document.addEventListener("joystick0button1", this.callback2)
+        document.addEventListener("joystick0button2", this.callback3)
+        document.addEventListener("joystick0button3", this.callback4)
+        document.addEventListener("joystick0button4", this.callback5)
+        document.addEventListener("joystick0button5", this.callback6)
     }
 
     run(){
@@ -49,6 +64,12 @@ class playscreen {
                  this.game.health = 0
                  this.naarDeShop()
              }else{
+                document.removeEventListener("joystick0button0", this.callback1)
+                document.removeEventListener("joystick0button1", this.callback2)
+                document.removeEventListener("joystick0button2", this.callback3)
+                document.removeEventListener("joystick0button3", this.callback4)
+                document.removeEventListener("joystick0button4", this.callback5)
+                document.removeEventListener("joystick0button5", this.callback6)
             this.player.canrun = false
             console.log("ik ben dood");
 
@@ -105,42 +126,47 @@ class playscreen {
                     this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2
             }
            
-            this.dragon.delete()
-            this.player.delete()
+                this.dragon.delete()
+                this.player.delete()
 
-            this.player.nummerdelete() 
+                this.player.nummerdelete() 
 
-            this.game.dragonslayed = 0
-            //game over afbeelding
-            let eyes = new Eyes(280, 150, 1)
-            
-            //new Game button
-            this.newGame = document.createElement("newGame")
-            document.body.appendChild(this.newGame)
-            this.newGame.innerHTML = "NEW GAME"
-            this.newGame.id = "newgame"
-            this.game.score = 0;
-            this.newGame.addEventListener("click", () => this.game.startScreen() );
-            document.addEventListener("joystick0button0", () => this.startscreen())
-            document.addEventListener("joystick0button1", () => this.startscreen())
-            document.addEventListener("joystick0button2", () => this.startscreen())
-            document.addEventListener("joystick0button3", () => this.startscreen())
-            document.addEventListener("joystick0button4", () => this.startscreen())
-            document.addEventListener("joystick0button5", () => this.startscreen())
-             }
+                this.game.dragonslayed = 0
+                //game over afbeelding
+                let eyes = new Eyes(280, 150, 1)
+                
+                //new Game button
+                this.newGame = document.createElement("newGame")
+                document.body.appendChild(this.newGame)
+                this.newGame.innerHTML = "NEW GAME"
+                this.newGame.id = "newgame"
+                this.game.score = 0;
+                this.newGame.addEventListener("click", () => this.game.startScreen() );
+                this.callbackstart = () => this.startscreen()
+                for (let i = 0; i < 6; i++) {
+                    document.addEventListener(`joystick0button${i}`, this.callbackstart)
+                }
+            }
          }
      }
     private startscreen(){
-        if (this.game.ifactive == "playscreen" && this.player.canrun == false) {
+        for (let i = 0; i < 6; i++) {
+            document.removeEventListener(`joystick0button${i}`, this.callbackstart)
+        }
             let elm = document.getElementById("newgame");
             if (elm != undefined) {
               elm.remove();
             }
           this.game.startScreen()  
-        }
     }
 
     public naarDeShop(){
+        document.removeEventListener("joystick0button0", this.callback1)
+        document.removeEventListener("joystick0button1", this.callback2)
+        document.removeEventListener("joystick0button2", this.callback3)
+        document.removeEventListener("joystick0button3", this.callback4)
+        document.removeEventListener("joystick0button4", this.callback5)
+        document.removeEventListener("joystick0button5", this.callback6)
         this.game.power = 0
         this.game.dragonslayed ++
         console.log(this.game.dragonslayed);

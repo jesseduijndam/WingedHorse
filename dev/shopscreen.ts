@@ -8,7 +8,9 @@ class Shop {
     private game : Game
     private waardeHealth : number
     private waardePower : number 
-    
+    private callbackstart : EventListener
+    private callbackpower : EventListener
+    private callbackhealth : EventListener
     constructor( g: Game ) {
     
         this.game = g 
@@ -41,59 +43,59 @@ class Shop {
         this.message = document.createElement("message")
           
         document.body.appendChild(this.message)
-        document.addEventListener("joystick0button0", () => this.naarStart())
-        document.addEventListener("joystick0button1", () => this.kooptHealth())
-        document.addEventListener("joystick0button2", () => this.kooptPowerUp())
+        this.callbackstart = () => this.naarStart()
+        this.callbackhealth = () => this.kooptHealth()
+        this.callbackpower = () => this.kooptPowerUp()
+        document.addEventListener("joystick0button0", this.callbackstart)
+        document.addEventListener("joystick0button1", this.callbackhealth)
+        document.addEventListener("joystick0button2", this.callbackpower)
 
     }
     
     public naarStart(){
-        if (this.game.ifactive == "shopscreen") {
-            console.log("start button werkt")
-            this.game.playscreen()  
-        }
+        document.removeEventListener("joystick0button0", this.callbackstart)
+        document.removeEventListener("joystick0button1", this.callbackhealth)
+        document.removeEventListener("joystick0button2", this.callbackpower)
+        console.log("start button werkt")
+        this.game.playscreen()  
     }
 
     public kooptHealth(){ 
-        if (this.game.ifactive == "shopscreen") {
-            if( this.game.health == 0 ){
+        if( this.game.health == 0 ){
 
-                if ( this.game.score - this.waardeHealth >= 0 ) { 
-                    this.game.health = this.game.health + 1  
-                    this.game.score = this.game.score - this.waardeHealth
-                    this.updateScore(this.game.score)
-                    let healthElement = document.getElementsByTagName("healthElement")[0];
-                    healthElement.innerHTML = "+ Health"
-                } 
-                else {
-                    this.message.innerHTML = "Je hebt te weinig geld"  
-                }
-
-            }else{
-                this.message.innerHTML = "Je hebt al health"   
+            if ( this.game.score - this.waardeHealth >= 0 ) { 
+                this.game.health = this.game.health + 1  
+                this.game.score = this.game.score - this.waardeHealth
+                this.updateScore(this.game.score)
+                let healthElement = document.getElementsByTagName("healthElement")[0];
+                healthElement.innerHTML = "+ Health"
+            } 
+            else {
+                this.message.innerHTML = "Je hebt te weinig geld"  
             }
-        }
+
+        }else{
+            this.message.innerHTML = "Je hebt al health"   
+            }
     }
 
     public kooptPowerUp(){ 
-        if (this.game.ifactive == "shopscreen") {
-            if( this.game.power == 0 ){
+        if( this.game.power == 0 ){
 
-                if (this.game.score - this.waardePower >= 0) { 
-                    this.game.power = this.game.power + 1  
-                    this.game.score = this.game.score - this.waardePower
-                    this.updateScore(this.game.score)
-                    let powerElement = document.getElementsByTagName("powerElement")[0]
-                    powerElement.innerHTML = "+ Power"  
-                } 
-                else {
-                    this.message.innerHTML = "Je hebt te weinig geld"   
-                }
-
-            }else{
-                this.message.innerHTML = "Je hebt al health"
-            
+            if (this.game.score - this.waardePower >= 0) { 
+                this.game.power = this.game.power + 1  
+                this.game.score = this.game.score - this.waardePower
+                this.updateScore(this.game.score)
+                let powerElement = document.getElementsByTagName("powerElement")[0]
+                powerElement.innerHTML = "+ Power"  
+            } 
+            else {
+                this.message.innerHTML = "Je hebt te weinig geld"   
             }
+
+        }else{
+            this.message.innerHTML = "Je hebt al health"
+        
         }
     }
 

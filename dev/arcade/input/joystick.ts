@@ -78,7 +78,7 @@ class Joystick {
             if (this.buttonPressed(gamepad.buttons[index]) && this.buttonPressed(this.previousGamepad.buttons[index])) {
                 
                 if (this.button[index] <= 0) {
-                    this.button[index] = 100
+                    this.button[index] = 60
                     console.log("press");
                     document.dispatchEvent(new Event(this.buttonEvents[index]))
                 }
