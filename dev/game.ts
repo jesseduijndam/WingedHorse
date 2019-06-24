@@ -17,7 +17,7 @@ class Game {
     public difficulty : number
     public dragonslayed: number = 0
     //joystick
-    private arcade : Arcade
+    public arcade : Arcade
     private joystickListener: EventListener
         // joystick: any;
     // example of game objects
@@ -40,10 +40,8 @@ class Game {
 
         // create arcade cabinet with 2 joysticks (with 6 buttons)
         this.arcade = new Arcade(this)
+
         
-        // The game must wait for de joysticks to connect
-        this.joystickListener = (e: Event) => this.initJoystick(e as CustomEvent)
-        document.addEventListener("joystickcreated",  this.joystickListener)
         this.startScreen()
         this.gameLoop()
     }

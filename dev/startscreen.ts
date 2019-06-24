@@ -2,26 +2,29 @@ class StartScreen {
 
     private game : Game
     private nextGame: HTMLElement 
-  
+    private callback : EventListener
    
     constructor( g: Game ) {
         this.game = g
         let background = document.createElement("startbackground")
         document.body.appendChild(background)
-        document.addEventListener("joystick0button0", () => this.deleteeventlistner())
-        document.addEventListener("joystick0button1", () => this.deleteeventlistner())
-        document.addEventListener("joystick0button2", () => this.deleteeventlistner())
-        document.addEventListener("joystick0button3", () => this.deleteeventlistner())
-        document.addEventListener("joystick0button4", () => this.deleteeventlistner())
-        document.addEventListener("joystick0button5", () => this.deleteeventlistner())
+
+        this.callback =  () => this.deleteeventlistner()
+        for (let i = 0; i < 6; i++) {
+            document.addEventListener(`joystick0button${i}`, this.callback)
+        }
+        document.addEventListener("joystick0button0", this.callback)  
         let start = new Tekst(625, 670, 1, "start", g)
 
     }
     deleteeventlistner(){
-        if (this.game.ifactive == "startscreen") {
-            this.game.diffscreen()
+        console.log("removing event listener")
+        for (let i = 0; i < 6; i++) {
+            document.removeEventListener(`joystick0button${i}`, this.callback)
         }
-        
+       
+        this.game.diffscreen()
+
     }
 
     public update() {

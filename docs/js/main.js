@@ -37,21 +37,27 @@ window.customElements.define("circle-component", Circle);
 class DiffScreen {
     constructor(g) {
         this.game = g;
+        console.log("diffscreenload");
+        this.callBackEasy = () => this.difficulty(1);
+        this.callBackMedium = () => this.difficulty(2);
+        this.callBackHard = () => this.difficulty(3);
         let background = document.createElement("diffscene");
         document.body.appendChild(background);
         let start = new Tekst(625, 290, 3, "easy", g);
         let start1 = new Tekst(625, 390, 3, "medium", g);
         let start2 = new Tekst(625, 490, 3, "hard", g);
-        document.addEventListener("joystick0button0", () => this.difficulty(1));
-        document.addEventListener("joystick0button1", () => this.difficulty(2));
-        document.addEventListener("joystick0button2", () => this.difficulty(3));
+        document.addEventListener("joystick0button0", this.callBackEasy);
+        document.addEventListener("joystick0button1", this.callBackMedium);
+        document.addEventListener("joystick0button2", this.callBackHard);
     }
     difficulty(n) {
-        if (this.game.ifactive == "diffscreen") {
-            this.game.difficulty = n;
-            this.game.playscreen();
-            console.log("next scene");
-        }
+        document.removeEventListener("joystick0button0", this.callBackEasy);
+        document.removeEventListener("joystick0button1", this.callBackMedium);
+        document.removeEventListener("joystick0button2", this.callBackHard);
+        this.game.difficulty = n;
+        this.game.playscreen();
+        console.log("selected difficulty " + n);
+        console.log("next scene");
     }
     update() {
     }
@@ -151,8 +157,6 @@ class Game {
         this.health = 0;
         this.power = 0;
         this.arcade = new Arcade(this);
-        this.joystickListener = (e) => this.initJoystick(e);
-        document.addEventListener("joystickcreated", this.joystickListener);
         this.startScreen();
         this.gameLoop();
     }
@@ -495,14 +499,12 @@ class Player {
         }
     }
     numbers(n) {
-        if (this.game.ifactive == "playscreen") {
-            console.log(`button ${n} pushed`);
-            if (this.buttons[0] == n || this.buttons[1] == n || this.buttons[2] == n) {
-                this.FAND();
-            }
-            else {
-                this.playscreen.die();
-            }
+        console.log(`button ${n} pushed`);
+        if (this.buttons[0] == n || this.buttons[1] == n || this.buttons[2] == n) {
+            this.FAND();
+        }
+        else {
+            this.playscreen.die();
         }
     }
     up() {
@@ -620,12 +622,18 @@ class playscreen {
         this.player = new Player(220, 500, 1, this, this.game);
         this.sign = new Sign(0, 700, 1, 2);
         let tekst = new Tekst(40, 739, 1, "shop(50)", this.game);
-        document.addEventListener("joystick0button0", () => this.player.numbers(1));
-        document.addEventListener("joystick0button1", () => this.player.numbers(2));
-        document.addEventListener("joystick0button2", () => this.player.numbers(3));
-        document.addEventListener("joystick0button3", () => this.player.numbers(4));
-        document.addEventListener("joystick0button4", () => this.player.numbers(5));
-        document.addEventListener("joystick0button5", () => this.player.numbers(6));
+        this.callback1 = () => this.player.numbers(1);
+        this.callback2 = () => this.player.numbers(2);
+        this.callback3 = () => this.player.numbers(3);
+        this.callback4 = () => this.player.numbers(4);
+        this.callback5 = () => this.player.numbers(5);
+        this.callback6 = () => this.player.numbers(6);
+        document.addEventListener("joystick0button0", this.callback1);
+        document.addEventListener("joystick0button1", this.callback2);
+        document.addEventListener("joystick0button2", this.callback3);
+        document.addEventListener("joystick0button3", this.callback4);
+        document.addEventListener("joystick0button4", this.callback5);
+        document.addEventListener("joystick0button5", this.callback6);
     }
     run() {
         console.log(this.game.currentscreen);
@@ -645,6 +653,12 @@ class playscreen {
                 this.naarDeShop();
             }
             else {
+                document.removeEventListener("joystick0button0", this.callback1);
+                document.removeEventListener("joystick0button1", this.callback2);
+                document.removeEventListener("joystick0button2", this.callback3);
+                document.removeEventListener("joystick0button3", this.callback4);
+                document.removeEventListener("joystick0button4", this.callback5);
+                document.removeEventListener("joystick0button5", this.callback6);
                 this.player.canrun = false;
                 console.log("ik ben dood");
                 this.eindScore = this.game.score;
@@ -692,25 +706,30 @@ class playscreen {
                 this.newGame.id = "newgame";
                 this.game.score = 0;
                 this.newGame.addEventListener("click", () => this.game.startScreen());
-                document.addEventListener("joystick0button0", () => this.startscreen());
-                document.addEventListener("joystick0button1", () => this.startscreen());
-                document.addEventListener("joystick0button2", () => this.startscreen());
-                document.addEventListener("joystick0button3", () => this.startscreen());
-                document.addEventListener("joystick0button4", () => this.startscreen());
-                document.addEventListener("joystick0button5", () => this.startscreen());
+                this.callbackstart = () => this.startscreen();
+                for (let i = 0; i < 6; i++) {
+                    document.addEventListener(`joystick0button${i}`, this.callbackstart);
+                }
             }
         }
     }
     startscreen() {
-        if (this.game.ifactive == "playscreen" && this.player.canrun == false) {
-            let elm = document.getElementById("newgame");
-            if (elm != undefined) {
-                elm.remove();
-            }
-            this.game.startScreen();
+        for (let i = 0; i < 6; i++) {
+            document.removeEventListener(`joystick0button${i}`, this.callbackstart);
         }
+        let elm = document.getElementById("newgame");
+        if (elm != undefined) {
+            elm.remove();
+        }
+        this.game.startScreen();
     }
     naarDeShop() {
+        document.removeEventListener("joystick0button0", this.callback1);
+        document.removeEventListener("joystick0button1", this.callback2);
+        document.removeEventListener("joystick0button2", this.callback3);
+        document.removeEventListener("joystick0button3", this.callback4);
+        document.removeEventListener("joystick0button4", this.callback5);
+        document.removeEventListener("joystick0button5", this.callback6);
         this.game.power = 0;
         this.game.dragonslayed++;
         console.log(this.game.dragonslayed);
@@ -761,52 +780,52 @@ class Shop {
         this.nextGame.addEventListener("click", () => this.naarStart());
         this.message = document.createElement("message");
         document.body.appendChild(this.message);
-        document.addEventListener("joystick0button0", () => this.naarStart());
-        document.addEventListener("joystick0button1", () => this.kooptHealth());
-        document.addEventListener("joystick0button2", () => this.kooptPowerUp());
+        this.callbackstart = () => this.naarStart();
+        this.callbackhealth = () => this.kooptHealth();
+        this.callbackpower = () => this.kooptPowerUp();
+        document.addEventListener("joystick0button0", this.callbackstart);
+        document.addEventListener("joystick0button1", this.callbackhealth);
+        document.addEventListener("joystick0button2", this.callbackpower);
     }
     naarStart() {
-        if (this.game.ifactive == "shopscreen") {
-            console.log("start button werkt");
-            this.game.playscreen();
-        }
+        document.removeEventListener("joystick0button0", this.callbackstart);
+        document.removeEventListener("joystick0button1", this.callbackhealth);
+        document.removeEventListener("joystick0button2", this.callbackpower);
+        console.log("start button werkt");
+        this.game.playscreen();
     }
     kooptHealth() {
-        if (this.game.ifactive == "shopscreen") {
-            if (this.game.health == 0) {
-                if (this.game.score - this.waardeHealth >= 0) {
-                    this.game.health = this.game.health + 1;
-                    this.game.score = this.game.score - this.waardeHealth;
-                    this.updateScore(this.game.score);
-                    let healthElement = document.getElementsByTagName("healthElement")[0];
-                    healthElement.innerHTML = "+ Health";
-                }
-                else {
-                    this.message.innerHTML = "Je hebt te weinig geld";
-                }
+        if (this.game.health == 0) {
+            if (this.game.score - this.waardeHealth >= 0) {
+                this.game.health = this.game.health + 1;
+                this.game.score = this.game.score - this.waardeHealth;
+                this.updateScore(this.game.score);
+                let healthElement = document.getElementsByTagName("healthElement")[0];
+                healthElement.innerHTML = "+ Health";
             }
             else {
-                this.message.innerHTML = "Je hebt al health";
+                this.message.innerHTML = "Je hebt te weinig geld";
             }
+        }
+        else {
+            this.message.innerHTML = "Je hebt al health";
         }
     }
     kooptPowerUp() {
-        if (this.game.ifactive == "shopscreen") {
-            if (this.game.power == 0) {
-                if (this.game.score - this.waardePower >= 0) {
-                    this.game.power = this.game.power + 1;
-                    this.game.score = this.game.score - this.waardePower;
-                    this.updateScore(this.game.score);
-                    let powerElement = document.getElementsByTagName("powerElement")[0];
-                    powerElement.innerHTML = "+ Power";
-                }
-                else {
-                    this.message.innerHTML = "Je hebt te weinig geld";
-                }
+        if (this.game.power == 0) {
+            if (this.game.score - this.waardePower >= 0) {
+                this.game.power = this.game.power + 1;
+                this.game.score = this.game.score - this.waardePower;
+                this.updateScore(this.game.score);
+                let powerElement = document.getElementsByTagName("powerElement")[0];
+                powerElement.innerHTML = "+ Power";
             }
             else {
-                this.message.innerHTML = "Je hebt al health";
+                this.message.innerHTML = "Je hebt te weinig geld";
             }
+        }
+        else {
+            this.message.innerHTML = "Je hebt al health";
         }
     }
     updateScore(nieuweScore) {
@@ -843,18 +862,19 @@ class StartScreen {
         this.game = g;
         let background = document.createElement("startbackground");
         document.body.appendChild(background);
-        document.addEventListener("joystick0button0", () => this.deleteeventlistner());
-        document.addEventListener("joystick0button1", () => this.deleteeventlistner());
-        document.addEventListener("joystick0button2", () => this.deleteeventlistner());
-        document.addEventListener("joystick0button3", () => this.deleteeventlistner());
-        document.addEventListener("joystick0button4", () => this.deleteeventlistner());
-        document.addEventListener("joystick0button5", () => this.deleteeventlistner());
+        this.callback = () => this.deleteeventlistner();
+        for (let i = 0; i < 6; i++) {
+            document.addEventListener(`joystick0button${i}`, this.callback);
+        }
+        document.addEventListener("joystick0button0", this.callback);
         let start = new Tekst(625, 670, 1, "start", g);
     }
     deleteeventlistner() {
-        if (this.game.ifactive == "startscreen") {
-            this.game.diffscreen();
+        console.log("removing event listener");
+        for (let i = 0; i < 6; i++) {
+            document.removeEventListener(`joystick0button${i}`, this.callback);
         }
+        this.game.diffscreen();
     }
     update() {
     }
@@ -1001,7 +1021,7 @@ class Joystick {
         for (let index = 0; index < this.numberOfBUttons; index++) {
             if (this.buttonPressed(gamepad.buttons[index]) && this.buttonPressed(this.previousGamepad.buttons[index])) {
                 if (this.button[index] <= 0) {
-                    this.button[index] = 100;
+                    this.button[index] = 60;
                     console.log("press");
                     document.dispatchEvent(new Event(this.buttonEvents[index]));
                 }
