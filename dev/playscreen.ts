@@ -53,19 +53,25 @@ class playscreen {
             console.log("ik ben dood");
 
             this.eindScore = this.game.score;
+            
+           
 
              //controleren of de score hoger is dan highscore
              if (this.eindScore > this.game.hoogsteHighScore) {
-                console.log("oude highscore: " + this.game.hoogsteHighScore)
+
                 this.game.hoogsteHighScore = this.eindScore
-                console.log("nieuwe highscore: " + this.game.hoogsteHighScore)
+                //omzetten naar string
+                let y = this.game.hoogsteHighScore.toString();
+                //scoreLocalOpslaan
+                localStorage.setItem("opgeslagenHighScore", y);
             }
 
             //highscore tonen op scherm
             this.highScoresLijst = document.createElement("hoogsteHighscore")
             document.body.append(this.highScoresLijst)
-            let y = this.game.hoogsteHighScore.toString();
-            this.highScoresLijst.innerHTML = "HIGHSCORE: " + y
+     
+            let y2 = localStorage.getItem("opgeslagenHighScore")
+            this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2
            
             this.dragon.delete()
             this.player.delete()
