@@ -240,6 +240,23 @@ class Game {
     }
 }
 window.addEventListener("load", () => new Game());
+class instructionScreen {
+    constructor(g) {
+        this.game = g;
+        let background = document.createElement("startbackground");
+        document.body.appendChild(background);
+        this.uitleg = document.createElement("uitleg");
+        document.body.appendChild(this.uitleg);
+        this.uitleg.innerHTML = "Hier komt de uitleg over het spel";
+        this.startGame = document.createElement("startGame");
+        document.body.appendChild(this.startGame);
+        this.startGame.innerHTML = "NEXT ->";
+        this.startGame.addEventListener("click", () => this.naarDeGame());
+    }
+    naarDeGame() {
+        this.game.playscreen();
+    }
+}
 class Tekst {
     constructor(x, y, scale, type, g) {
         this.game = g;
@@ -630,22 +647,19 @@ class playscreen {
                 console.log("ik ben dood");
                 this.eindScore = this.game.score;
                 if (this.eindScore > this.game.hoogsteHighScore) {
-                    console.log("oude highscore: " + this.game.hoogsteHighScore);
                     this.game.hoogsteHighScore = this.eindScore;
-                    console.log("nieuwe highscore: " + this.game.hoogsteHighScore);
+                    let y = this.game.hoogsteHighScore.toString();
+                    localStorage.setItem("opgeslagenHighScore", y);
                 }
                 this.highScoresLijst = document.createElement("hoogsteHighscore");
                 document.body.append(this.highScoresLijst);
-                let y = this.game.hoogsteHighScore.toString();
-                this.highScoresLijst.innerHTML = "HIGHSCORE: " + y;
-
+                let y2 = localStorage.getItem("opgeslagenHighScore");
+                this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2;
                 this.dragon.delete();
                 this.player.delete();
                 this.player.nummerdelete();
                 this.game.dragonslayed = 0;
-
                 let eyes = new Eyes(280, 150, 1);
-
                 this.newGame = document.createElement("newGame");
                 document.body.appendChild(this.newGame);
                 this.newGame.innerHTML = "NEW GAME";
@@ -994,7 +1008,6 @@ class Joystick {
     }
 }
 const template = document.createElement('template');
-
 template.innerHTML = `
 <style>
 :host {
