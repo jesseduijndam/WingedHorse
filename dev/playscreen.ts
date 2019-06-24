@@ -75,7 +75,9 @@ class playscreen {
            
             this.dragon.delete()
             this.player.delete()
+
             this.player.nummerdelete() 
+
             this.game.dragonslayed = 0
             //game over afbeelding
             let eyes = new Eyes(280, 150, 1)

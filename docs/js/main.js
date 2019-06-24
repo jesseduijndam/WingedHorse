@@ -638,11 +638,14 @@ class playscreen {
                 document.body.append(this.highScoresLijst);
                 let y = this.game.hoogsteHighScore.toString();
                 this.highScoresLijst.innerHTML = "HIGHSCORE: " + y;
+
                 this.dragon.delete();
                 this.player.delete();
                 this.player.nummerdelete();
                 this.game.dragonslayed = 0;
+
                 let eyes = new Eyes(280, 150, 1);
+
                 this.newGame = document.createElement("newGame");
                 document.body.appendChild(this.newGame);
                 this.newGame.innerHTML = "NEW GAME";
@@ -991,6 +994,7 @@ class Joystick {
     }
 }
 const template = document.createElement('template');
+
 template.innerHTML = `
 <style>
 :host {
