@@ -4,6 +4,7 @@ class playscreen {
 
     private game : Game
     private newGame: HTMLElement 
+    private highScoresLijst: HTMLElement
     player : Player
     eindScore: number 
     dragon : Dragon
@@ -52,14 +53,34 @@ class playscreen {
             console.log("ik ben dood");
 
             this.eindScore = this.game.score;
-            console.log(this.eindScore);
+            
+           
+
+             //controleren of de score hoger is dan highscore
+             if (this.eindScore > this.game.hoogsteHighScore) {
+
+                this.game.hoogsteHighScore = this.eindScore
+                //omzetten naar string
+                let y = this.game.hoogsteHighScore.toString();
+                //scoreLocalOpslaan
+                localStorage.setItem("opgeslagenHighScore", y);
+            }
+
+            //highscore tonen op scherm
+            this.highScoresLijst = document.createElement("hoogsteHighscore")
+            document.body.append(this.highScoresLijst)
+     
+            let y2 = localStorage.getItem("opgeslagenHighScore")
+            this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2
            
             this.dragon.delete()
             this.player.delete()
-            this.player.nummerdelete()
+
+            this.player.nummerdelete() 
+
             this.game.dragonslayed = 0
             //game over afbeelding
-            let eyes = new Eyes(250, 150, 1)
+            let eyes = new Eyes(280, 150, 1)
             
             //new Game button
             this.newGame = document.createElement("newGame")
