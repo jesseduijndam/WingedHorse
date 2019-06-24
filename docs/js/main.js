@@ -143,7 +143,9 @@ class Eyes {
 }
 class Game {
     constructor() {
-        this.hoogsteHighScore = 0;
+        this.hoogsteHighScoreEasy = 0;
+        this.hoogsteHighScoreMedium = 0;
+        this.hoogsteHighScoreHard = 0;
         this.dragonslayed = 0;
         this.score = 0;
         this.health = 0;
@@ -646,15 +648,39 @@ class playscreen {
                 this.player.canrun = false;
                 console.log("ik ben dood");
                 this.eindScore = this.game.score;
-                if (this.eindScore > this.game.hoogsteHighScore) {
-                    this.game.hoogsteHighScore = this.eindScore;
-                    let y = this.game.hoogsteHighScore.toString();
-                    localStorage.setItem("opgeslagenHighScore", y);
+                if (this.game.difficulty == 1) {
+                    if (this.eindScore > this.game.hoogsteHighScoreEasy) {
+                        this.game.hoogsteHighScoreEasy = this.eindScore;
+                        let y = this.game.hoogsteHighScoreEasy.toString();
+                        localStorage.setItem("opgeslagenHighScoreEasy", y);
+                    }
+                    this.highScoresLijst = document.createElement("hoogsteHighscore");
+                    document.body.append(this.highScoresLijst);
+                    let y2 = localStorage.getItem("opgeslagenHighScoreEasy");
+                    this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2;
                 }
-                this.highScoresLijst = document.createElement("hoogsteHighscore");
-                document.body.append(this.highScoresLijst);
-                let y2 = localStorage.getItem("opgeslagenHighScore");
-                this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2;
+                else if (this.game.difficulty == 2) {
+                    if (this.eindScore > this.game.hoogsteHighScoreMedium) {
+                        this.game.hoogsteHighScoreMedium = this.eindScore;
+                        let y = this.game.hoogsteHighScoreMedium.toString();
+                        localStorage.setItem("opgeslagenHighScoreMedium", y);
+                    }
+                    this.highScoresLijst = document.createElement("hoogsteHighscore");
+                    document.body.append(this.highScoresLijst);
+                    let y2 = localStorage.getItem("opgeslagenHighScoreMedium");
+                    this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2;
+                }
+                else if (this.game.difficulty == 3) {
+                    if (this.eindScore > this.game.hoogsteHighScoreHard) {
+                        this.game.hoogsteHighScoreHard = this.eindScore;
+                        let y = this.game.hoogsteHighScoreHard.toString();
+                        localStorage.setItem("opgeslagenHighScoreHard", y);
+                    }
+                    this.highScoresLijst = document.createElement("hoogsteHighscore");
+                    document.body.append(this.highScoresLijst);
+                    let y2 = localStorage.getItem("opgeslagenHighScoreHard");
+                    this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2;
+                }
                 this.dragon.delete();
                 this.player.delete();
                 this.player.nummerdelete();
