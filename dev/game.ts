@@ -4,7 +4,9 @@ class Game {
     //score
     public score : number
     private scoreElement:HTMLElement
-    public hoogsteHighScore : number = 0 
+    public hoogsteHighScoreEasy : number = 0 
+    public hoogsteHighScoreMedium : number = 0 
+    public hoogsteHighScoreHard : number = 0 
     //Health 
     public health : number
     private healthElement:HTMLElement

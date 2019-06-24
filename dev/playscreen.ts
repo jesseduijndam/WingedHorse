@@ -53,25 +53,57 @@ class playscreen {
             console.log("ik ben dood");
 
             this.eindScore = this.game.score;
+            if (this.game.difficulty == 1) {
+                if (this.eindScore > this.game.hoogsteHighScoreEasy) {
+
+                    this.game.hoogsteHighScoreEasy = this.eindScore
+                    //omzetten naar string
+                    let y = this.game.hoogsteHighScoreEasy.toString();
+                    //scoreLocalOpslaan
+                    localStorage.setItem("opgeslagenHighScoreEasy", y);
+                }
+    
+                //highscore tonen op scherm
+                this.highScoresLijst = document.createElement("hoogsteHighscore")
+                document.body.append(this.highScoresLijst)
+         
+                let y2 = localStorage.getItem("opgeslagenHighScoreEasy")
+                this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2
+            }else if (this.game.difficulty == 2){
+            //controleren of de score hoger is dan highscore
+                if (this.eindScore > this.game.hoogsteHighScoreMedium) {
+
+                    this.game.hoogsteHighScoreMedium = this.eindScore
+                    //omzetten naar string
+                    let y = this.game.hoogsteHighScoreMedium.toString();
+                    //scoreLocalOpslaan
+                    localStorage.setItem("opgeslagenHighScoreMedium", y);
+                }
+
+                //highscore tonen op scherm
+                this.highScoresLijst = document.createElement("hoogsteHighscore")
+                document.body.append(this.highScoresLijst)
+        
+                let y2 = localStorage.getItem("opgeslagenHighScoreMedium")
+                this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2
+            }else if (this.game.difficulty == 3){
+                //controleren of de score hoger is dan highscore
+                    if (this.eindScore > this.game.hoogsteHighScoreHard) {
+    
+                        this.game.hoogsteHighScoreHard = this.eindScore
+                        //omzetten naar string
+                        let y = this.game.hoogsteHighScoreHard.toString();
+                        //scoreLocalOpslaan
+                        localStorage.setItem("opgeslagenHighScoreHard", y);
+                    }
+    
+                    //highscore tonen op scherm
+                    this.highScoresLijst = document.createElement("hoogsteHighscore")
+                    document.body.append(this.highScoresLijst)
             
-           
-
-             //controleren of de score hoger is dan highscore
-             if (this.eindScore > this.game.hoogsteHighScore) {
-
-                this.game.hoogsteHighScore = this.eindScore
-                //omzetten naar string
-                let y = this.game.hoogsteHighScore.toString();
-                //scoreLocalOpslaan
-                localStorage.setItem("opgeslagenHighScore", y);
+                    let y2 = localStorage.getItem("opgeslagenHighScoreHard")
+                    this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2
             }
-
-            //highscore tonen op scherm
-            this.highScoresLijst = document.createElement("hoogsteHighscore")
-            document.body.append(this.highScoresLijst)
-     
-            let y2 = localStorage.getItem("opgeslagenHighScore")
-            this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2
            
             this.dragon.delete()
             this.player.delete()
