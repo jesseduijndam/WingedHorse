@@ -33,6 +33,7 @@ class Tekst {
         }else{
             this.tekst = document.createElement("tekst")
             document.body.appendChild(this.tekst)
+            this.tekst.id = "tekst"
             this.tekst.innerHTML = type
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
         }
@@ -60,4 +61,11 @@ class Tekst {
         this.game.playscreen()
         console.log("next scene");  
     }
+
+    delete(){
+        let elm = document.getElementById("tekst");
+          if (elm != undefined) {
+            elm.remove();
+          }
+        }
 }

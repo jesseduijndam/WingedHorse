@@ -127,8 +127,8 @@ bord {
 }
 
 bord2{
-    background-image: url(../img/bord.png);
-    width: 255px; height: 170.25px;
+    background-image: url(../img/bord2.png);
+    width: 260px; height: 141px;
     background-size: cover
 }
 

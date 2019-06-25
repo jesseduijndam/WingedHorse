@@ -301,6 +301,7 @@ class Tekst {
         else {
             this.tekst = document.createElement("tekst");
             document.body.appendChild(this.tekst);
+            this.tekst.id = "tekst";
             this.tekst.innerHTML = type;
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
         }
@@ -323,6 +324,12 @@ class Tekst {
         this.game.difficulty = 3;
         this.game.playscreen();
         console.log("next scene");
+    }
+    delete() {
+        let elm = document.getElementById("tekst");
+        if (elm != undefined) {
+            elm.remove();
+        }
     }
 }
 class Nummers {
@@ -619,9 +626,9 @@ class playscreen {
         let background = document.createElement("backdrak");
         document.body.appendChild(background);
         this.dragon = new Dragon(500, 280);
+        this.sign = new Sign(0, 700, 1, 2);
+        this.text = new Tekst(20, 721, 1, "Shop(50)", this.game);
         this.player = new Player(220, 500, 1, this, this.game);
-        this.sign = new Sign(0, 600, 1, 2);
-        let tekst = new Tekst(13, 628, 0.9, "shop(50)", this.game);
         this.callback1 = () => this.player.numbers(1);
         this.callback2 = () => this.player.numbers(2);
         this.callback3 = () => this.player.numbers(3);
@@ -697,6 +704,8 @@ class playscreen {
                 }
                 this.dragon.delete();
                 this.player.delete();
+                this.sign.delete();
+                this.text.delete();
                 this.player.nummerdelete();
                 this.game.dragonslayed = 0;
                 let eyes = new Eyes(280, 150, 1);
@@ -852,8 +861,15 @@ class Sign {
         else if (type == 2) {
             this.bord = document.createElement("bord2");
             document.body.appendChild(this.bord);
+            this.bord.id = "bord";
             this.bord.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             console.log("back2shop created");
+        }
+    }
+    delete() {
+        let elm = document.getElementById("bord");
+        if (elm != undefined) {
+            elm.remove();
         }
     }
 }
