@@ -14,7 +14,7 @@ class StartScreen {
             document.addEventListener(`joystick0button${i}`, this.callback)
         }
         document.addEventListener("joystick0button0", this.callback)  
-        let start = new Tekst(625, 670, 1, "start", g)
+        let start = new Tekst(450, 250, 1, "logo", g)
 
     }
     deleteeventlistner(){

@@ -7,8 +7,8 @@ class Tekst {
             this.tekst = document.createElement("naam")
             document.body.appendChild(this.tekst)
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
-        }else if (type == "start"){
-            this.tekst = document.createElement("start")
+        }else if (type == "logo"){
+            this.tekst = document.createElement("logo")
             document.body.appendChild(this.tekst)
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
             this.tekst.addEventListener("click", () => this.start());

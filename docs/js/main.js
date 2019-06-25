@@ -41,11 +41,11 @@ class DiffScreen {
         this.callBackEasy = () => this.difficulty(1);
         this.callBackMedium = () => this.difficulty(2);
         this.callBackHard = () => this.difficulty(3);
-        let background = document.createElement("diffscene");
+        let background = document.createElement("startbackground");
         document.body.appendChild(background);
-        let start = new Tekst(625, 290, 3, "easy", g);
-        let start1 = new Tekst(625, 390, 3, "medium", g);
-        let start2 = new Tekst(625, 490, 3, "hard", g);
+        let start = new Tekst(530, 290, 3, "easy", g);
+        let start1 = new Tekst(500, 390, 3, "medium", g);
+        let start2 = new Tekst(530, 490, 3, "hard", g);
         document.addEventListener("joystick0button0", this.callBackEasy);
         document.addEventListener("joystick0button1", this.callBackMedium);
         document.addEventListener("joystick0button2", this.callBackHard);
@@ -271,8 +271,8 @@ class Tekst {
             document.body.appendChild(this.tekst);
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
         }
-        else if (type == "start") {
-            this.tekst = document.createElement("start");
+        else if (type == "logo") {
+            this.tekst = document.createElement("logo");
             document.body.appendChild(this.tekst);
             this.tekst.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             this.tekst.addEventListener("click", () => this.start());
@@ -883,7 +883,7 @@ class StartScreen {
             document.addEventListener(`joystick0button${i}`, this.callback);
         }
         document.addEventListener("joystick0button0", this.callback);
-        let start = new Tekst(625, 670, 1, "start", g);
+        let start = new Tekst(450, 250, 1, "logo", g);
     }
     deleteeventlistner() {
         console.log("removing event listener");

@@ -107,7 +107,7 @@ hoogsteHighscore{
 
 
 /*jesse's css*/
-sign, bord, bord2, back2shop, naam, start, startbackground, diffscene, n1, n2, n3, n4, n5, n6, backdrak, player, dragon, dragontame, dragonattac, eyes {
+sign, bord, bord2, back2shop, naam, logo, startbackground, diffscene, n1, n2, n3, n4, n5, n6, backdrak, player, dragon, dragontame, dragonattac, eyes {
     position: absolute;
     display: block;
     margin:0px; padding:0px;
@@ -144,14 +144,14 @@ naam {
     background-size: cover;
 }
 
-start {
-    background-image: url(../img/start.png);
-    width: 162px; height: 45px;
+logo {
+    background-image: url(../img/logo2.png);
+    width: 382px; height: 392px;
     background-size: cover;
 }
 
 startbackground {
-    background-image: url(../img/startscene.jpg);
+    background-image: url(../img/achtergrondStartScherm.jpg);
     width:1440px; height: 900px;
     background-size: cover;
 }
