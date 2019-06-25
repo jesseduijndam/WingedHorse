@@ -68,6 +68,8 @@ class Dragon {
         document.body.appendChild(this.dragon);
         this.dragon.id = "drake";
         this.dragon.style.transform = `translate(${x}px, ${y}px) scale(0.7)`;
+        this.randomcolor = Math.random() * 360;
+        this.dragon.style.filter = "hue-rotate(" + this.randomcolor + "deg)";
         console.log("dragon created");
         this.x = x;
         this.y = y;
@@ -104,6 +106,7 @@ class Dragon {
             this.dragon.id = "drake";
             let y = this.y - 60;
             this.dragon.style.transform = `translate(${this.x}px, ${y}px) scale(1)`;
+            this.dragon.style.filter = "hue-rotate(" + this.randomcolor + "deg)";
             return "attack";
         }
         else {
@@ -114,6 +117,7 @@ class Dragon {
             this.dragon.id = "drake";
             let y = this.y + 140;
             this.dragon.style.transform = `translate(${this.x}px, ${y}px) scale(0.7)`;
+            this.dragon.style.filter = "hue-rotate(" + this.randomcolor + "deg)";
             return "tame";
         }
     }
@@ -125,6 +129,7 @@ class Dragon {
             document.body.appendChild(this.dragon);
             this.dragon.id = "drake";
             this.dragon.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.7)`;
+            this.dragon.style.filter = "hue-rotate(" + this.randomcolor + "deg)";
         }
     }
     onTame(playscreen, g) {
