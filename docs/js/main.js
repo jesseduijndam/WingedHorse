@@ -620,8 +620,8 @@ class playscreen {
         document.body.appendChild(background);
         this.dragon = new Dragon(500, 280);
         this.player = new Player(220, 500, 1, this, this.game);
-        this.sign = new Sign(0, 700, 1, 2);
-        let tekst = new Tekst(40, 739, 1, "shop(50)", this.game);
+        this.sign = new Sign(0, 600, 1, 2);
+        let tekst = new Tekst(13, 628, 0.9, "shop(50)", this.game);
         this.callback1 = () => this.player.numbers(1);
         this.callback2 = () => this.player.numbers(2);
         this.callback3 = () => this.player.numbers(3);
@@ -850,7 +850,7 @@ class Sign {
             console.log("bordcreated");
         }
         else if (type == 2) {
-            this.bord = document.createElement("back2shop");
+            this.bord = document.createElement("bord2");
             document.body.appendChild(this.bord);
             this.bord.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
             console.log("back2shop created");
