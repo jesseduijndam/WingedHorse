@@ -14,12 +14,12 @@ class DiffScreen {
         this.callBackMedium = () => this.difficulty(2)
         this.callBackHard = () => this.difficulty(3)
         
-        let background = document.createElement("diffscene")
+        let background = document.createElement("startbackground")
         document.body.appendChild(background)
        
-        let start = new Tekst(625, 290, 3, "easy", g)
-        let start1 = new Tekst(625, 390, 3, "medium", g)
-        let start2 = new Tekst(625, 490, 3, "hard", g)
+        let start = new Tekst(530, 290, 3, "easy", g)
+        let start1 = new Tekst(500, 390, 3, "medium", g)
+        let start2 = new Tekst(530, 490, 3, "hard", g)
         document.addEventListener("joystick0button0", this.callBackEasy)
         document.addEventListener("joystick0button1", this.callBackMedium)
         document.addEventListener("joystick0button2", this.callBackHard)
