@@ -12,6 +12,7 @@ class playscreen {
     naardeshop : boolean = false
     private rightcooldown : number = 0
     private upcooldown : number = 0
+    private text : Tekst
 
     //removing eventlitners
     private callback1 : EventListener
@@ -28,9 +29,9 @@ class playscreen {
         let background = document.createElement("backdrak")
         document.body.appendChild(background)
         this.dragon = new Dragon(500 , 280)
+        this.sign = new Sign(0, 700, 1, 2)
+        this.text = new Tekst(20, 721, 1, "Shop(50)", this.game)
         this.player = new Player(220 , 500, 1, this, this.game)
-        this.sign = new Sign(0, 600, 1, 2)
-        let tekst = new Tekst(13, 628, 0.9, "shop(50)", this.game)
         this.callback1 = () => this.player.numbers(1)
         this.callback2 = () => this.player.numbers(2)
         this.callback3 = () => this.player.numbers(3)
@@ -128,7 +129,8 @@ class playscreen {
            
                 this.dragon.delete()
                 this.player.delete()
-
+                this.sign.delete()
+                this.text.delete()
                 this.player.nummerdelete() 
 
                 this.game.dragonslayed = 0

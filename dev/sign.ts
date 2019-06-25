@@ -15,8 +15,15 @@ class Sign{
         } else if(type == 2){
             this.bord = document.createElement("bord2")
             document.body.appendChild(this.bord)
+            this.bord.id = "bord"
             this.bord.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
             console.log("back2shop created");
         }             
+    }
+    delete(){
+    let elm = document.getElementById("bord");
+      if (elm != undefined) {
+        elm.remove();
+      }
     }
 }
