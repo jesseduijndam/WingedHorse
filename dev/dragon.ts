@@ -30,7 +30,7 @@ class Dragon {
     console.log("move choise made");
     this.game = g
     if (this.game.power == 1) {
-      this.diff = 3
+      this.diff = 7
     }else{
       this.diff = 5
     }
@@ -53,7 +53,7 @@ class Dragon {
     
     let random = Math.floor(Math.random() * this.randommax)
 
-    if (random >= this.diff && this.attackmax != this.i) {
+    if (random > this.diff && this.attackmax != this.i) {
       this.i++
       console.log("attack");
       this.delete()
