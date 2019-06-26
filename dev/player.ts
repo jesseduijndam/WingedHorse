@@ -117,7 +117,7 @@ class Player {
     else if (event.keyCode == 40) {
       this.timer = 0
       if (this.action == "tame" && this.die == false && this.check == true) {
-          this.playscreen.dragon.onTame(this.playscreen, this.game)
+          this.playscreen.dragon.onTame(this.game)
           this.canrun = false
           this.action = "test"
           this.check = false
@@ -237,7 +237,7 @@ class Player {
   down(){
     this.timer = 0
     if (this.action == "tame" && this.die == false && this.check == true) {
-      this.playscreen.dragon.onTame(this.playscreen, this.game)
+      this.playscreen.dragon.onTame(this.game)
       this.canrun = false
       this.action = "test"
       this.check = false

@@ -64,6 +64,8 @@ class DiffScreen {
 }
 class Dragon {
     constructor(x, y) {
+        this.previouszplus1 = 1;
+        this.i = 0;
         this.dragon = document.createElement("dragon");
         document.body.appendChild(this.dragon);
         this.dragon.id = "drake";
@@ -85,20 +87,26 @@ class Dragon {
         }
         this.z = Math.floor(this.game.dragonslayed / 10);
         if (this.z == 0 && this.game.difficulty == 1) {
+            this.attackmax = 5;
             this.randommax = 10;
         }
-        else if (this.game.difficulty == 2) {
+        else if (this.z == 0 && this.game.difficulty == 2) {
+            this.attackmax = 10;
             this.randommax = 15;
         }
-        else if (this.game.difficulty == 3) {
+        else if (this.z == 0 && this.game.difficulty == 3) {
+            this.attackmax = 15;
             this.randommax = 20;
         }
-        else {
+        else if (this.z == this.previouszplus1) {
+            this.previouszplus1 = this.z + 1;
+            this.attackmax += 5;
             this.randommax += 5;
         }
         console.log(this.randommax);
         let random = Math.floor(Math.random() * this.randommax);
-        if (random <= this.diff) {
+        if (random <= this.diff && this.attackmax != this.i) {
+            this.i++;
             console.log("attack");
             this.delete();
             this.dragon = document.createElement("dragonattac");
@@ -132,8 +140,7 @@ class Dragon {
             this.dragon.style.filter = "hue-rotate(" + this.randomcolor + "deg)";
         }
     }
-    onTame(playscreen, g) {
-        this.playscreen = playscreen;
+    onTame(g) {
         this.game = g;
         this.game.score += 100;
         console.log("Ik ben getamed");
@@ -445,7 +452,7 @@ class Player {
         else if (event.keyCode == 40) {
             this.timer = 0;
             if (this.action == "tame" && this.die == false && this.check == true) {
-                this.playscreen.dragon.onTame(this.playscreen, this.game);
+                this.playscreen.dragon.onTame(this.game);
                 this.canrun = false;
                 this.action = "test";
                 this.check = false;
@@ -545,7 +552,7 @@ class Player {
     down() {
         this.timer = 0;
         if (this.action == "tame" && this.die == false && this.check == true) {
-            this.playscreen.dragon.onTame(this.playscreen, this.game);
+            this.playscreen.dragon.onTame(this.game);
             this.canrun = false;
             this.action = "test";
             this.check = false;

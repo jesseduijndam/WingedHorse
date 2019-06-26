@@ -8,8 +8,9 @@ class Dragon {
   //random
   private z: number
   private randommax: number
-  private scale: number
-  private playscreen: playscreen
+  private attackmax: number
+  private previouszplus1 : number = 1
+  private i : number = 0
   private game : Game
   private randomcolor : number
   constructor(x: number, y: number) {
@@ -33,19 +34,25 @@ class Dragon {
     }
     this.z = Math.floor(this.game.dragonslayed / 10);
     if (this.z == 0 && this.game.difficulty == 1) {
+      this.attackmax = 5
       this.randommax = 10
-    }else if(this.game.difficulty == 2){
+    }else if(this.z==0 && this.game.difficulty == 2){
+      this.attackmax = 10
       this.randommax = 15
-    }else if(this.game.difficulty == 3){
+    }else if(this.z==0 && this.game.difficulty == 3){
+      this.attackmax = 15
       this.randommax = 20
-    }else{
+    }else if(this.z == this.previouszplus1){
+      this.previouszplus1 = this.z + 1
+      this.attackmax +=5
       this.randommax +=5
     }
     console.log(this.randommax);
     
     let random = Math.floor(Math.random() * this.randommax)
 
-    if (random <= this.diff) {
+    if (random <= this.diff && this.attackmax != this.i) {
+      this.i++
       console.log("attack");
       this.delete()
       this.dragon = document.createElement("dragonattac")
@@ -81,8 +88,7 @@ class Dragon {
     }
   }
 
-  onTame( playscreen : playscreen, g: Game){
-    this.playscreen = playscreen
+  onTame(g: Game){
     this.game = g
     this.game.score += 100
     console.log("Ik ben getamed")

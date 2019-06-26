@@ -1,7 +1,6 @@
 class DiffScreen {
 
     private game : Game
-    private nextGame: HTMLElement 
     private callBackEasy : EventListener
     private callBackMedium : EventListener
     private callBackHard : EventListener
