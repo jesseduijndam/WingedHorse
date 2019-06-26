@@ -53,7 +53,7 @@ class Dragon {
     
     let random = Math.floor(Math.random() * this.randommax)
 
-    if (random <= this.diff && this.attackmax != this.i) {
+    if (random >= this.diff && this.attackmax != this.i) {
       this.i++
       console.log("attack");
       this.delete()
