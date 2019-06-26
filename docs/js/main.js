@@ -64,8 +64,6 @@ class DiffScreen {
 }
 class Dragon {
     constructor(x, y) {
-        this.previouszplus1 = 1;
-        this.i = 0;
         this.dragon = document.createElement("dragon");
         document.body.appendChild(this.dragon);
         this.dragon.id = "drake";
@@ -75,6 +73,8 @@ class Dragon {
         console.log("dragon created");
         this.x = x;
         this.y = y;
+        this.previouszplus1 = 1;
+        this.i = 0;
     }
     moveChoice(g) {
         console.log("move choise made");
@@ -105,7 +105,7 @@ class Dragon {
         }
         console.log(this.randommax);
         let random = Math.floor(Math.random() * this.randommax);
-        if (random <= this.diff && this.attackmax != this.i) {
+        if (random >= this.diff && this.attackmax != this.i) {
             this.i++;
             console.log("attack");
             this.delete();
@@ -801,17 +801,14 @@ class Shop {
         this.nextGame.addEventListener("click", () => this.naarStart());
         this.message = document.createElement("message");
         document.body.appendChild(this.message);
-        this.callbackstart = () => this.naarStart();
         this.callbackhealth = () => this.kooptHealth();
         this.callbackpower = () => this.kooptPowerUp();
-        document.addEventListener("joystick0button0", this.callbackstart);
-        document.addEventListener("joystick0button1", this.callbackhealth);
-        document.addEventListener("joystick0button2", this.callbackpower);
+        document.addEventListener("joystick0button0", this.callbackhealth);
+        document.addEventListener("joystick0button1", this.callbackpower);
     }
     naarStart() {
-        document.removeEventListener("joystick0button0", this.callbackstart);
-        document.removeEventListener("joystick0button1", this.callbackhealth);
-        document.removeEventListener("joystick0button2", this.callbackpower);
+        document.removeEventListener("joystick0button0", this.callbackhealth);
+        document.removeEventListener("joystick0button1", this.callbackpower);
         console.log("start button werkt");
         this.game.playscreen();
     }
@@ -854,6 +851,11 @@ class Shop {
         scoreElement.innerHTML = "SCORE: " + nieuweScore;
     }
     update() {
+        for (let joystick of this.game.Arcade.Joysticks) {
+            if (joystick.Right)
+                this.naarStart();
+        }
+        this.rightcooldown--;
     }
 }
 class Sign {
