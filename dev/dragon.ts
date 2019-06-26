@@ -9,7 +9,7 @@ class Dragon {
   private z: number
   private randommax: number
   private attackmax: number
-  private previouszplus1 : number = 1
+  private previouszplus1 : number
   private i : number = 0
   private game : Game
   private randomcolor : number
@@ -23,6 +23,7 @@ class Dragon {
     console.log("dragon created");
     this.x = x
     this.y = y 
+    this.previouszplus1 = 1
   }
   moveChoice(g: Game){
     console.log("move choise made");
