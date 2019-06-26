@@ -1,7 +1,6 @@
 class StartScreen {
 
     private game : Game
-    private nextGame: HTMLElement 
     private callback : EventListener
    
     constructor( g: Game ) {
