@@ -254,7 +254,7 @@ class Player {
     }
   }
   
-  right(){
+  right(){    
     this.timer = 0
     if(this.canrun == true){
       if (this.check == false) {

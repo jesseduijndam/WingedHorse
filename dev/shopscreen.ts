@@ -8,9 +8,9 @@ class Shop {
     private game : Game
     private waardeHealth : number
     private waardePower : number 
-    private callbackstart : EventListener
     private callbackpower : EventListener
     private callbackhealth : EventListener
+    private rightcooldown : number
     constructor( g: Game ) {
     
         this.game = g 
@@ -43,19 +43,16 @@ class Shop {
         this.message = document.createElement("message")
           
         document.body.appendChild(this.message)
-        this.callbackstart = () => this.naarStart()
         this.callbackhealth = () => this.kooptHealth()
         this.callbackpower = () => this.kooptPowerUp()
-        document.addEventListener("joystick0button0", this.callbackstart)
-        document.addEventListener("joystick0button1", this.callbackhealth)
-        document.addEventListener("joystick0button2", this.callbackpower)
+        document.addEventListener("joystick0button0", this.callbackhealth)
+        document.addEventListener("joystick0button1", this.callbackpower)
 
     }
     
     public naarStart(){
-        document.removeEventListener("joystick0button0", this.callbackstart)
-        document.removeEventListener("joystick0button1", this.callbackhealth)
-        document.removeEventListener("joystick0button2", this.callbackpower)
+        document.removeEventListener("joystick0button0", this.callbackhealth)
+        document.removeEventListener("joystick0button1", this.callbackpower)
         console.log("start button werkt")
         this.game.playscreen()  
     }
@@ -106,6 +103,9 @@ class Shop {
     }
 
     public update(){
-        
+        for (let joystick of this.game.Arcade.Joysticks) {
+            if(joystick.Right) this.naarStart()
+        }
+        this.rightcooldown--
     }
 }
