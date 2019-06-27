@@ -37,7 +37,6 @@ window.customElements.define("circle-component", Circle);
 class DiffScreen {
     constructor(g) {
         this.game = g;
-        console.log("diffscreenload");
         this.callBackEasy = () => this.difficulty(1);
         this.callBackMedium = () => this.difficulty(2);
         this.callBackHard = () => this.difficulty(3);
@@ -56,8 +55,6 @@ class DiffScreen {
         document.removeEventListener("joystick0button2", this.callBackHard);
         this.game.difficulty = n;
         this.game.playscreen();
-        console.log("selected difficulty " + n);
-        console.log("next scene");
     }
     update() {
     }
@@ -70,44 +67,39 @@ class Dragon {
         this.dragon.style.transform = `translate(${x}px, ${y}px) scale(0.7)`;
         this.randomcolor = Math.random() * 360;
         this.dragon.style.filter = "hue-rotate(" + this.randomcolor + "deg)";
-        console.log("dragon created");
         this.x = x;
         this.y = y;
-        this.previouszplus1 = 1;
         this.i = 0;
     }
     moveChoice(g) {
-        console.log("move choise made");
         this.game = g;
         if (this.game.power == 1) {
-            this.diff = 3;
+            this.diff = 7;
         }
         else {
             this.diff = 5;
         }
         this.z = Math.floor(this.game.dragonslayed / 10);
         if (this.z == 0 && this.game.difficulty == 1) {
-            this.attackmax = 5;
-            this.randommax = 10;
+            this.game.attackmax = 5;
+            this.game.randommax = 10;
         }
         else if (this.z == 0 && this.game.difficulty == 2) {
-            this.attackmax = 10;
-            this.randommax = 15;
+            this.game.attackmax = 10;
+            this.game.randommax = 15;
         }
         else if (this.z == 0 && this.game.difficulty == 3) {
-            this.attackmax = 15;
-            this.randommax = 20;
+            this.game.attackmax = 15;
+            this.game.randommax = 20;
         }
-        else if (this.z == this.previouszplus1) {
-            this.previouszplus1 = this.z + 1;
-            this.attackmax += 5;
-            this.randommax += 5;
+        else if (this.z == this.game.previouszplus1) {
+            this.game.previouszplus1++;
+            this.game.attackmax += 5;
+            this.game.randommax += 5;
         }
-        console.log(this.randommax);
-        let random = Math.floor(Math.random() * this.randommax);
-        if (random >= this.diff && this.attackmax != this.i) {
+        let random = Math.floor(Math.random() * this.game.randommax);
+        if (random > this.diff && this.game.attackmax != this.i) {
             this.i++;
-            console.log("attack");
             this.delete();
             this.dragon = document.createElement("dragonattac");
             document.body.appendChild(this.dragon);
@@ -118,7 +110,6 @@ class Dragon {
             return "attack";
         }
         else {
-            console.log("tame");
             this.delete();
             this.dragon = document.createElement("dragontame");
             document.body.appendChild(this.dragon);
@@ -131,7 +122,6 @@ class Dragon {
     }
     onHit(p) {
         if (p.AND == 3) {
-            console.log("AUW!!!!");
             this.delete();
             this.dragon = document.createElement("dragon");
             document.body.appendChild(this.dragon);
@@ -143,7 +133,6 @@ class Dragon {
     onTame(g) {
         this.game = g;
         this.game.score += 100;
-        console.log("Ik ben getamed");
     }
     delete() {
         let elm = document.getElementById("drake");
@@ -161,6 +150,7 @@ class Eyes {
 }
 class Game {
     constructor() {
+        this.previouszplus1 = 1;
         this.hoogsteHighScoreEasy = 0;
         this.hoogsteHighScoreMedium = 0;
         this.hoogsteHighScoreHard = 0;
@@ -178,14 +168,6 @@ class Game {
     gameLoop() {
         for (let joystick of this.arcade.Joysticks) {
             joystick.update();
-            if (joystick.Right)
-                console.log('RIGHT');
-            if (joystick.Up)
-                console.log('UP');
-            if (joystick.Down)
-                console.log('Down');
-            if (joystick.Left)
-                console.log('Left');
         }
         this.currentscreen.update();
         requestAnimationFrame(() => this.gameLoop());
@@ -196,7 +178,6 @@ class Game {
         this.ifactive = "startscreen";
     }
     diffscreen() {
-        console.log("diff screen trigger");
         document.body.innerHTML = "";
         this.currentscreen = new DiffScreen(this);
         this.ifactive = "diffscreen";
@@ -221,7 +202,6 @@ class Game {
         this.scoreElement = document.createElement("scoreElement");
         document.body.appendChild(this.scoreElement);
         this.scoreElement.innerHTML = "SCORE: " + this.score;
-        console.log("scoreLEement:" + this.score);
     }
     healthMaken() {
         this.healthElement = document.createElement("healthElement");
@@ -230,7 +210,6 @@ class Game {
             this.healthElement.innerHTML = " + health ";
         }
         else {
-            console.log("nog geen health");
         }
     }
     powerMaken() {
@@ -240,18 +219,13 @@ class Game {
             this.powerElement.innerHTML = " + power ";
         }
         else {
-            console.log("nog geen power");
         }
     }
     initJoystick(e) {
         let joystick = this.arcade.Joysticks[e.detail];
-        for (const buttonEvent of joystick.ButtonEvents) {
-            document.addEventListener(buttonEvent, () => console.log(buttonEvent));
-        }
         document.addEventListener(joystick.ButtonEvents[0], () => this.handleJump());
     }
     handleJump() {
-        console.log("hello");
     }
     disconnect() {
         document.removeEventListener("joystickcreated", this.joystickListener);
@@ -320,22 +294,18 @@ class Tekst {
     }
     start() {
         this.game.diffscreen();
-        console.log("next scene");
     }
     easy() {
         this.game.difficulty = 1;
         this.game.playscreen();
-        console.log("next scene");
     }
     medium() {
         this.game.difficulty = 2;
         this.game.playscreen();
-        console.log("next scene");
     }
     hard() {
         this.game.difficulty = 3;
         this.game.playscreen();
-        console.log("next scene");
     }
     delete() {
         let elm = document.getElementById("tekst");
@@ -350,7 +320,6 @@ class Nummers {
         document.body.appendChild(this.nummer);
         this.nummer.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
         this.nummer.id = `n${type}`;
-        console.log("nummercreated");
     }
     delete() {
         this.nummer.style.transform = 'translate(0px, 0px) scale (0)';
@@ -370,7 +339,6 @@ class Player {
         document.body.appendChild(this.player);
         this.player.id = "player";
         this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-        console.log("player created");
         document.addEventListener('keydown', (e) => this.keyboardInput(e, x, y, scale));
     }
     update() {
@@ -408,7 +376,6 @@ class Player {
                 let nummer2 = new Nummers(402.4, -100, 0.2, two);
                 let nummer3 = new Nummers(504.8, -100, 0.2, three);
                 this.balls = true;
-                console.log(this.buttons);
                 y -= 10;
                 this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
                 this.AND = 0;
@@ -427,7 +394,6 @@ class Player {
                     x += 10;
                     this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
                     this.check = true;
-                    console.log("move choise making");
                     this.action = this.playscreen.dragon.moveChoice(this.game);
                 }
                 else {
@@ -518,7 +484,6 @@ class Player {
         }
     }
     numbers(n) {
-        console.log(`button ${n} pushed`);
         if (this.buttons[0] == n || this.buttons[1] == n || this.buttons[2] == n) {
             this.FAND();
         }
@@ -537,7 +502,6 @@ class Player {
             let nummer2 = new Nummers(402.4, -100, 0.2, two);
             let nummer3 = new Nummers(504.8, -100, 0.2, three);
             this.balls = true;
-            console.log(this.buttons);
             this.y -= 10;
             this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
             this.AND = 0;
@@ -574,7 +538,6 @@ class Player {
                 this.x += 10;
                 this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
                 this.check = true;
-                console.log("move choise making");
                 this.action = this.playscreen.dragon.moveChoice(this.game);
             }
             else {
@@ -655,9 +618,7 @@ class playscreen {
         document.addEventListener("joystick0button5", this.callback6);
     }
     run() {
-        console.log(this.game.currentscreen);
         if (this.player.canrun == true && this.naardeshop == false) {
-            console.log("run");
             if (this.game.score >= 50) {
                 this.game.score -= 50;
                 this.naardeshop = true;
@@ -679,7 +640,6 @@ class playscreen {
                 document.removeEventListener("joystick0button4", this.callback5);
                 document.removeEventListener("joystick0button5", this.callback6);
                 this.player.canrun = false;
-                console.log("ik ben dood");
                 this.eindScore = this.game.score;
                 if (this.game.difficulty == 1) {
                     if (this.eindScore > this.game.hoogsteHighScoreEasy) {
@@ -753,7 +713,6 @@ class playscreen {
         document.removeEventListener("joystick0button5", this.callback6);
         this.game.power = 0;
         this.game.dragonslayed++;
-        console.log(this.game.dragonslayed);
         this.dragon.delete();
         this.player.delete();
         this.player.nummerdelete();
@@ -809,7 +768,6 @@ class Shop {
     naarStart() {
         document.removeEventListener("joystick0button0", this.callbackhealth);
         document.removeEventListener("joystick0button1", this.callbackpower);
-        console.log("start button werkt");
         this.game.playscreen();
     }
     kooptHealth() {
@@ -864,20 +822,17 @@ class Sign {
             this.sign = document.createElement("sign");
             document.body.appendChild(this.sign);
             this.sign.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-            console.log("signcreated");
         }
         else if (type == 1) {
             this.bord = document.createElement("bord");
             document.body.appendChild(this.bord);
             this.bord.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-            console.log("bordcreated");
         }
         else if (type == 2) {
             this.bord = document.createElement("bord2");
             document.body.appendChild(this.bord);
             this.bord.id = "bord";
             this.bord.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-            console.log("back2shop created");
         }
     }
     delete() {
@@ -900,7 +855,6 @@ class StartScreen {
         let start = new Tekst(450, 250, 1, "logo", g);
     }
     deleteeventlistner() {
-        console.log("removing event listener");
         for (let i = 0; i < 6; i++) {
             document.removeEventListener(`joystick0button${i}`, this.callback);
         }

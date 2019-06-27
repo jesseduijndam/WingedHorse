@@ -47,10 +47,10 @@ class playscreen {
     }
 
     run(){
-        console.log(this.game.currentscreen);
+        // console.log(this.game.currentscreen);
         
         if (this.player.canrun == true && this.naardeshop == false) {
-          console.log("run");
+          // console.log("run");
           if (this.game.score >= 50) {
               this.game.score -= 50
               this.naardeshop = true
@@ -72,7 +72,7 @@ class playscreen {
                 document.removeEventListener("joystick0button4", this.callback5)
                 document.removeEventListener("joystick0button5", this.callback6)
             this.player.canrun = false
-            console.log("ik ben dood");
+            // console.log("ik ben dood");
 
             this.eindScore = this.game.score;
             if (this.game.difficulty == 1) {
@@ -171,7 +171,7 @@ class playscreen {
         document.removeEventListener("joystick0button5", this.callback6)
         this.game.power = 0
         this.game.dragonslayed ++
-        console.log(this.game.dragonslayed);
+        // console.log(this.game.dragonslayed);
         this.dragon.delete()
         this.player.delete()
         this.player.nummerdelete()

@@ -7,7 +7,7 @@ class DiffScreen {
    
     constructor( g: Game ) {
         this.game = g
-        console.log("diffscreenload");
+        // console.log("diffscreenload");
 
         this.callBackEasy =  () => this.difficulty(1)
         this.callBackMedium = () => this.difficulty(2)
@@ -31,8 +31,8 @@ class DiffScreen {
         document.removeEventListener("joystick0button2", this.callBackHard)
         this.game.difficulty = n
         this.game.playscreen()
-        console.log("selected difficulty " + n)
-        console.log("next scene"); 
+        // console.log("selected difficulty " + n)
+        // console.log("next scene"); 
         
     }
 

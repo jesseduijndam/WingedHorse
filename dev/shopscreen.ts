@@ -53,7 +53,7 @@ class Shop {
     public naarStart(){
         document.removeEventListener("joystick0button0", this.callbackhealth)
         document.removeEventListener("joystick0button1", this.callbackpower)
-        console.log("start button werkt")
+        // console.log("start button werkt")
         this.game.playscreen()  
     }
 

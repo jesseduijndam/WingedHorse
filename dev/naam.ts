@@ -41,25 +41,25 @@ class Tekst {
     }
     start(){
         this.game.diffscreen()
-        console.log("next scene");  
+        // console.log("next scene");  
     }
 
     easy(){
         this.game.difficulty = 1
         this.game.playscreen()
-        console.log("next scene");  
+        // console.log("next scene");  
     }
 
     medium(){
         this.game.difficulty = 2
         this.game.playscreen()
-        console.log("next scene");  
+        // console.log("next scene");  
     }
 
     hard(){
         this.game.difficulty = 3
         this.game.playscreen()
-        console.log("next scene");  
+        // console.log("next scene");  
     }
 
     delete(){
