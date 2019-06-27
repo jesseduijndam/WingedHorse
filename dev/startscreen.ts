@@ -17,7 +17,7 @@ class StartScreen {
 
     }
     deleteeventlistner(){
-        console.log("removing event listener")
+        // console.log("removing event listener")
         for (let i = 0; i < 6; i++) {
             document.removeEventListener(`joystick0button${i}`, this.callback)
         }

@@ -6,18 +6,18 @@ class Sign{
             this.sign = document.createElement("sign")
             document.body.appendChild(this.sign)
             this.sign.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
-            console.log("signcreated");
+            // console.log("signcreated");
         } else if(type == 1){
             this.bord = document.createElement("bord")
             document.body.appendChild(this.bord)
             this.bord.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
-            console.log("bordcreated");
+            // console.log("bordcreated");
         } else if(type == 2){
             this.bord = document.createElement("bord2")
             document.body.appendChild(this.bord)
             this.bord.id = "bord"
             this.bord.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
-            console.log("back2shop created");
+            // console.log("back2shop created");
         }             
     }
     delete(){

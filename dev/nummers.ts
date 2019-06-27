@@ -5,7 +5,7 @@ nummer : HTMLElement
             document.body.appendChild(this.nummer)
             this.nummer.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
             this.nummer.id = `n${type}`
-            console.log("nummercreated");
+            // console.log("nummercreated");
     }
     delete(){
         this.nummer.style.transform = 'translate(0px, 0px) scale (0)'

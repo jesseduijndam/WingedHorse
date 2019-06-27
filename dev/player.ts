@@ -25,7 +25,7 @@ class Player {
     document.body.appendChild(this.player)
     this.player.id = "player"
     this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
-    console.log("player created");
+    // console.log("player created");
     document.addEventListener('keydown', (e) => this.keyboardInput(e, x, y, scale))
   }
   update(){
@@ -65,7 +65,7 @@ class Player {
           let nummer2 = new Nummers(402.4,-100,0.2,two)
           let nummer3 = new Nummers(504.8,-100,0.2,three)
           this.balls = true
-          console.log(this.buttons);
+          // console.log(this.buttons);
             //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
             y -= 10
             this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
@@ -89,7 +89,7 @@ class Player {
           x += 10
           this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
           this.check = true
-          console.log("move choise making")
+          // console.log("move choise making")
           this.action = this.playscreen.dragon.moveChoice(this.game)
         }else{
           this.playscreen.die()
@@ -197,7 +197,7 @@ class Player {
   }
 
   numbers(n: number){
-      console.log(`button ${n} pushed`);
+      // console.log(`button ${n} pushed`);
       if (this.buttons[0] == n || this.buttons[1] == n || this.buttons[2] == n ) {
         this.FAND()
       } else{
@@ -219,7 +219,7 @@ class Player {
       let nummer2 = new Nummers(402.4,-100,0.2,two)
       let nummer3 = new Nummers(504.8,-100,0.2,three)
       this.balls = true
-      console.log(this.buttons);
+      // console.log(this.buttons);
         //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
         this.y -= 10
         this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
@@ -261,7 +261,7 @@ class Player {
         this.x += 10
         this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
         this.check = true
-        console.log("move choise making")
+        // console.log("move choise making")
         this.action = this.playscreen.dragon.moveChoice(this.game)
       }else{
         this.playscreen.die()

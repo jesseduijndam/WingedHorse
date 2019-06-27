@@ -1,6 +1,10 @@
 class Game {
 
     public currentscreen : any
+    //dragon
+    public randommax: number
+    public attackmax: number
+    public previouszplus1 : number = 1
     //score
     public score : number
     private scoreElement:HTMLElement
@@ -55,10 +59,10 @@ class Game {
         for(let joystick of this.arcade.Joysticks){
             joystick.update()
             // example: read directions as true / false
-            if(joystick.Right) console.log('RIGHT')
-            if(joystick.Up)    console.log('UP')
-            if(joystick.Down)  console.log('Down')
-            if(joystick.Left)  console.log('Left')
+            // if(joystick.Right) console.log('RIGHT')
+            // if(joystick.Up)    console.log('UP')
+            // if(joystick.Down)  console.log('Down')
+            // if(joystick.Left)  console.log('Left')
             
         }
         this.currentscreen.update()
@@ -72,7 +76,7 @@ class Game {
     }
 
     public diffscreen(){
-        console.log("diff screen trigger");
+        // console.log("diff screen trigger");
         document.body.innerHTML = ""
         this.currentscreen = new DiffScreen(this)
         this.ifactive = "diffscreen"
@@ -100,7 +104,7 @@ class Game {
         this.scoreElement = document.createElement("scoreElement")
         document.body.appendChild(this.scoreElement) 
         this.scoreElement.innerHTML = "SCORE: " + this.score;
-        console.log("scoreLEement:" + this.score)
+        // console.log("scoreLEement:" + this.score)
     }
 
     public healthMaken(){
@@ -110,7 +114,7 @@ class Game {
         if (this.health == 1) {
             this.healthElement.innerHTML = " + health "  
         } else {
-            console.log("nog geen health")
+            // console.log("nog geen health")
         } 
     }
 
@@ -121,7 +125,7 @@ class Game {
         if (this.power == 1) {
             this.powerElement.innerHTML = " + power "  
         } else {
-            console.log("nog geen power")
+            // console.log("nog geen power")
         } 
     }
     private initJoystick(e:CustomEvent) {
@@ -130,9 +134,9 @@ class Game {
         
         // this.circles.push(new Circle(joystick))
 
-        for (const buttonEvent of joystick.ButtonEvents) {
-            document.addEventListener(buttonEvent, () => console.log(buttonEvent))
-        }
+            // for (const buttonEvent of joystick.ButtonEvents) {
+            //     document.addEventListener(buttonEvent, () => console.log(buttonEvent))
+            // }
         // alternatively you can handle single buttons
         // Handle button 0 (this is the first button, X-Button on a PS4 controller)
         document.addEventListener(joystick.ButtonEvents[0], () => this.handleJump())
@@ -140,7 +144,7 @@ class Game {
     }
 
     handleJump(){
-        console.log("hello");
+        // console.log("hello");
         
     }
 
