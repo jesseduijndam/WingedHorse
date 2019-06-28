@@ -23,11 +23,10 @@ class Game {
     //joystick
     public arcade : Arcade
     private joystickListener: EventListener
+    public onarcade : boolean = false
         // joystick: any;
     // example of game objects
         // private circles : Circle[] = []
-    //ifactive
-    public ifactive : string
 
 
     
@@ -44,8 +43,6 @@ class Game {
 
         // create arcade cabinet with 2 joysticks (with 6 buttons)
         this.arcade = new Arcade(this)
-
-        
         this.startScreen()
         this.gameLoop()
     }
@@ -72,14 +69,17 @@ class Game {
     public startScreen() {
         document.body.innerHTML = ""
         this.currentscreen = new StartScreen(this)
-        this.ifactive = "startscreen"
     }
 
     public diffscreen(){
         // console.log("diff screen trigger");
         document.body.innerHTML = ""
         this.currentscreen = new DiffScreen(this)
-        this.ifactive = "diffscreen"
+    }
+    public instructionscreen(){
+        document.body.innerHTML = ""
+        this.currentscreen = new instructionScreen(this)
+
     }
 
     public shopscreen() {
@@ -88,7 +88,6 @@ class Game {
         this.healthMaken()
         this.powerMaken() 
         this.currentscreen = new Shop(this)
-        this.ifactive = "shopscreen"
     }
 
     public playscreen() {
@@ -97,7 +96,6 @@ class Game {
         this.healthMaken()
         this.powerMaken()
         this.currentscreen = new playscreen(this)
-        this.ifactive = "playscreen"
     }
 
     public scorenMaken(){
