@@ -56,5 +56,9 @@ class instructionScreen {
         }
         this.game.playscreen()  
     }
+
+    update(){
+        
+    }
 }
 

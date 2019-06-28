@@ -170,7 +170,7 @@ class Game {
         this.health = 0;
         this.power = 0;
         this.arcade = new Arcade(this);
-        this.instructionscreen();
+        this.startScreen();
         this.gameLoop();
     }
     get Arcade() {
@@ -285,6 +285,8 @@ class instructionScreen {
             document.removeEventListener(`joystick0button${i}`, this.callback);
         }
         this.game.playscreen();
+    }
+    update() {
     }
 }
 class Tekst {

@@ -43,9 +43,7 @@ class Game {
 
         // create arcade cabinet with 2 joysticks (with 6 buttons)
         this.arcade = new Arcade(this)
-
-        this.instructionscreen()
-        //this.startScreen()
+        this.startScreen()
         this.gameLoop()
     }
     
