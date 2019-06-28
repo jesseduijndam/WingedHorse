@@ -36,6 +36,7 @@ class Arcade{
      * @param e Gamepad event
      */
     private onGamePadConnected(e: GamepadEvent): void {
+        this.game.onarcade = true
         if (this.DEBUG) {
             console.log('Game pad connected')
             console.log("Joystick number: "+e.gamepad.index)
@@ -58,6 +59,7 @@ class Arcade{
      * @param e Gamepad event
      */
     private onGamePadDisconnected(e: GamepadEvent): void {
+        this.game.onarcade = false
         if(this.DEBUG) { console.log('Game pad disconnected') }
         if(this.DEBUG) this.showStatus("Gamepad is NOT connected. Connect the gamepad and press a button.")
         this.removeJoystick(e.gamepad.index)

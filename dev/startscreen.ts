@@ -14,7 +14,9 @@ class StartScreen {
         }
         document.addEventListener("joystick0button0", this.callback)  
         let start = new Tekst(450, 250, 1, "logo", g)
-
+        if (this.game.onarcade == true) {
+            let any = new Tekst(400, 10, 1, "press any button", g)
+        }
     }
     deleteeventlistner(){
         // console.log("removing event listener")

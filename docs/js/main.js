@@ -45,16 +45,26 @@ class DiffScreen {
         let start = new Tekst(530, 290, 3, "easy", g);
         let start1 = new Tekst(500, 390, 3, "medium", g);
         let start2 = new Tekst(530, 490, 3, "hard", g);
+        if (this.game.onarcade == true) {
+            let bttn = new Tekst(250, 300, 0.5, "[1]", g);
+            let bttn2 = new Tekst(250, 400, 0.5, "[2]", g);
+            let bttn3 = new Tekst(250, 500, 0.5, "[3]", g);
+        }
         document.addEventListener("joystick0button0", this.callBackEasy);
         document.addEventListener("joystick0button1", this.callBackMedium);
         document.addEventListener("joystick0button2", this.callBackHard);
     }
     difficulty(n) {
+        this.game.difficulty = n;
         document.removeEventListener("joystick0button0", this.callBackEasy);
         document.removeEventListener("joystick0button1", this.callBackMedium);
         document.removeEventListener("joystick0button2", this.callBackHard);
-        this.game.difficulty = n;
-        this.game.playscreen();
+        if (this.game.onarcade == true && n == 1) {
+            this.game.instructionscreen();
+        }
+        else {
+            this.game.playscreen();
+        }
     }
     update() {
     }
@@ -155,11 +165,12 @@ class Game {
         this.hoogsteHighScoreMedium = 0;
         this.hoogsteHighScoreHard = 0;
         this.dragonslayed = 0;
+        this.onarcade = false;
         this.score = 0;
         this.health = 0;
         this.power = 0;
         this.arcade = new Arcade(this);
-        this.startScreen();
+        this.instructionscreen();
         this.gameLoop();
     }
     get Arcade() {
@@ -175,12 +186,14 @@ class Game {
     startScreen() {
         document.body.innerHTML = "";
         this.currentscreen = new StartScreen(this);
-        this.ifactive = "startscreen";
     }
     diffscreen() {
         document.body.innerHTML = "";
         this.currentscreen = new DiffScreen(this);
-        this.ifactive = "diffscreen";
+    }
+    instructionscreen() {
+        document.body.innerHTML = "";
+        this.currentscreen = new instructionScreen(this);
     }
     shopscreen() {
         document.body.innerHTML = "";
@@ -188,7 +201,6 @@ class Game {
         this.healthMaken();
         this.powerMaken();
         this.currentscreen = new Shop(this);
-        this.ifactive = "shopscreen";
     }
     playscreen() {
         document.body.innerHTML = "";
@@ -196,7 +208,6 @@ class Game {
         this.healthMaken();
         this.powerMaken();
         this.currentscreen = new playscreen(this);
-        this.ifactive = "playscreen";
     }
     scorenMaken() {
         this.scoreElement = document.createElement("scoreElement");
@@ -239,7 +250,17 @@ class instructionScreen {
         document.body.appendChild(background);
         this.uitleg = document.createElement("uitleg");
         document.body.appendChild(this.uitleg);
-        this.uitleg.innerHTML = "Hier komt de uitleg over het spel";
+        this.uitleg.style.transform = "translate(200px, 200px) scale(1)";
+        let num1 = new Tekst(640, 370, 1, "1", g);
+        let num2 = new Tekst(830, 370, 1, "2", g);
+        let num3 = new Tekst(1010, 370, 1, "3", g);
+        let num4 = new Tekst(640, 510, 1, "4", g);
+        let num5 = new Tekst(830, 510, 1, "5", g);
+        let num6 = new Tekst(1010, 510, 1, "6", g);
+        let attack = new Tekst(10, 10, 1, "Attack", g);
+        let tame = new Tekst(10, 10, 1, "Tame", g);
+        let walk = new Tekst(10, 10, 1, "walk", g);
+        let run = new Tekst(10, 10, 1, "run", g);
         this.startGame = document.createElement("startGame");
         document.body.appendChild(this.startGame);
         this.startGame.innerHTML = "NEXT ->";
@@ -853,6 +874,9 @@ class StartScreen {
         }
         document.addEventListener("joystick0button0", this.callback);
         let start = new Tekst(450, 250, 1, "logo", g);
+        if (this.game.onarcade == true) {
+            let any = new Tekst(400, 10, 1, "press any button", g);
+        }
     }
     deleteeventlistner() {
         for (let i = 0; i < 6; i++) {
@@ -885,6 +909,7 @@ class Arcade {
         window.location.href = this.REDIRECT_URL;
     }
     onGamePadConnected(e) {
+        this.game.onarcade = true;
         if (this.DEBUG) {
             console.log('Game pad connected');
             console.log("Joystick number: " + e.gamepad.index);
@@ -901,6 +926,7 @@ class Arcade {
             this.removeStatus();
     }
     onGamePadDisconnected(e) {
+        this.game.onarcade = false;
         if (this.DEBUG) {
             console.log('Game pad disconnected');
         }

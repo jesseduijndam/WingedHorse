@@ -107,7 +107,7 @@ hoogsteHighscore{
 
 
 /*jesse's css*/
-sign, bord, bord2, back2shop, naam, logo, startbackground, diffscene, n1, n2, n3, n4, n5, n6, backdrak, player, dragon, dragontame, dragonattac, eyes {
+sign, bord, uitleg, bord2, back2shop, naam, logo, startbackground, diffscene, n1, n2, n3, n4, n5, n6, backdrak, player, dragon, dragontame, dragonattac, eyes {
     position: absolute;
     display: block;
     margin:0px; padding:0px;
@@ -229,4 +229,10 @@ tekst {
     display: block;
     font-size: 30px;     
     z-index: 1;
+}
+
+uitleg{
+    background-image: url(../img/joystick.png);
+    width: 895.5px ; height: 400.5px;  
+    background-size: cover;
 }
