@@ -98,6 +98,14 @@ class Game {
         this.currentscreen = new playscreen(this)
     }
 
+    public diescreen(h: boolean){
+        document.body.innerHTML = ""
+        this.scorenMaken()
+        this.healthMaken()
+        this.powerMaken()
+        this.currentscreen = new Diescreen(this, h)
+    }
+
     public scorenMaken(){
         this.scoreElement = document.createElement("scoreElement")
         document.body.appendChild(this.scoreElement) 
