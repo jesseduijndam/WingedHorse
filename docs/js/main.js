@@ -96,7 +96,8 @@ class Diescreen {
     }
     addletter() {
         this.letteractive++;
-        if (this.alphabetwhere.length <= this.letteractive) {
+        console.log(this.eindletters.length);
+        if (this.alphabetwhere.length <= this.letteractive && this.eindletters.length <= 19) {
             let letter = document.createElement("highname");
             this.middle.appendChild(letter);
             letter.innerHTML = this.alphabet[0];
@@ -203,18 +204,26 @@ class Diescreen {
     update() {
         for (const joystick of this.game.Arcade.Joysticks) {
             if (this.eventlistneractive) {
-                if (joystick.Up) {
+                if (joystick.Up && this.timeoutup == 0) {
                     this.letterup();
+                    this.timeoutup = 30;
                 }
-                else if (joystick.Down) {
+                else if (joystick.Down && this.timeoutdown == 0) {
                     this.letterdown();
+                    this.timeoutdown = 30;
                 }
-                else if (joystick.Right) {
+                else if (joystick.Right && this.timeoutright == 0) {
                     this.addletter();
+                    this.timeoutright = 30;
                 }
-                else if (joystick.Left) {
+                else if (joystick.Left && this.timeoutleft == 0) {
                     this.letterback();
+                    this.timeoutleft = 30;
                 }
+                this.timeoutup--;
+                this.timeoutdown--;
+                this.timeoutleft--;
+                this.timeoutright--;
             }
         }
         let elm = document.getElementById(this.letteractive.toString());
