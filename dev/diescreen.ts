@@ -12,6 +12,10 @@ class Diescreen {
     private letteractive : number = 0
     private eventlistneractive : boolean = true
     private background: HTMLElement;
+    private timeoutup: number;
+    private timeoutdown: number;
+    private timeoutright: number;
+    private timeoutleft: number;
     
     constructor(g:Game, h:boolean) {
         this.game = g        
@@ -71,7 +75,9 @@ class Diescreen {
 
     private addletter(){
         this.letteractive++
-        if (this.alphabetwhere.length <= this.letteractive) {
+        console.log(this.eindletters.length);
+        
+        if (this.alphabetwhere.length <= this.letteractive && this.eindletters.length !<= 19) {
             let letter = document.createElement("highname")
             this.middle.appendChild(letter)
             letter.innerHTML = this.alphabet[0]
@@ -186,15 +192,23 @@ class Diescreen {
     public update(){
         for (const joystick of this.game.Arcade.Joysticks) {
             if (this.eventlistneractive){
-                if(joystick.Up){
+                if(joystick.Up && this.timeoutup == 0){
                     this.letterup()
-                }else if (joystick.Down){
+                    this.timeoutup = 30
+                }else if (joystick.Down && this.timeoutdown == 0){
                     this.letterdown()
-                }else if (joystick.Right){
+                    this.timeoutdown = 30
+                }else if (joystick.Right && this.timeoutright == 0){
                     this.addletter()
-                }else if (joystick.Left){
+                    this.timeoutright = 30
+                }else if (joystick.Left && this.timeoutleft == 0){
                     this.letterback()
+                    this.timeoutleft = 30
                 }
+                this.timeoutup--
+                this.timeoutdown--
+                this.timeoutleft--
+                this.timeoutright--
             }
         }
         let elm = document.getElementById(this.letteractive.toString())
