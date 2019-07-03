@@ -3,8 +3,6 @@
 class playscreen {
 
     private game : Game
-    private newGame: HTMLElement 
-    private highScoresLijst: HTMLElement
     player : Player
     eindScore: number 
     dragon : Dragon
@@ -13,6 +11,7 @@ class playscreen {
     private rightcooldown : number = 0
     private upcooldown : number = 0
     private text : Tekst
+    private highscorebroken : boolean
 
     //removing eventlitners
     private callback1 : EventListener
@@ -21,10 +20,9 @@ class playscreen {
     private callback4 : EventListener
     private callback5 : EventListener
     private callback6 : EventListener
-    private callbackstart : EventListener
 
     constructor( g: Game ) {
-
+        this.highscorebroken = false
         this.game = g
         let background = document.createElement("backdrak")
         document.body.appendChild(background)
@@ -60,6 +58,7 @@ class playscreen {
      }
  
      die(){
+        this.highscorebroken = false
          if (this.player.die == false) {
              if (this.game.health == 1) {
                  this.game.health = 0
@@ -73,60 +72,38 @@ class playscreen {
                 document.removeEventListener("joystick0button5", this.callback6)
             this.player.canrun = false
             // console.log("ik ben dood");
-
+            
             this.eindScore = this.game.score;
             if (this.game.difficulty == 1) {
                 if (this.eindScore > this.game.hoogsteHighScoreEasy) {
-
+                    this.highscorebroken = true
                     this.game.hoogsteHighScoreEasy = this.eindScore
                     //omzetten naar string
                     let y = this.game.hoogsteHighScoreEasy.toString();
                     //scoreLocalOpslaan
                     localStorage.setItem("opgeslagenHighScoreEasy", y);
                 }
-    
-                //highscore tonen op scherm
-                this.highScoresLijst = document.createElement("hoogsteHighscore")
-                document.body.append(this.highScoresLijst)
-         
-                let y2 = localStorage.getItem("opgeslagenHighScoreEasy")
-                this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2
             }else if (this.game.difficulty == 2){
             //controleren of de score hoger is dan highscore
                 if (this.eindScore > this.game.hoogsteHighScoreMedium) {
-
+                    this.highscorebroken = true
                     this.game.hoogsteHighScoreMedium = this.eindScore
                     //omzetten naar string
                     let y = this.game.hoogsteHighScoreMedium.toString();
                     //scoreLocalOpslaan
                     localStorage.setItem("opgeslagenHighScoreMedium", y);
                 }
-
-                //highscore tonen op scherm
-                this.highScoresLijst = document.createElement("hoogsteHighscore")
-                document.body.append(this.highScoresLijst)
-        
-                let y2 = localStorage.getItem("opgeslagenHighScoreMedium")
-                this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2
             }else if (this.game.difficulty == 3){
                 //controleren of de score hoger is dan highscore
                     if (this.eindScore > this.game.hoogsteHighScoreHard) {
-    
+                        this.highscorebroken = true
                         this.game.hoogsteHighScoreHard = this.eindScore
                         //omzetten naar string
                         let y = this.game.hoogsteHighScoreHard.toString();
                         //scoreLocalOpslaan
                         localStorage.setItem("opgeslagenHighScoreHard", y);
-                    }
-    
-                    //highscore tonen op scherm
-                    this.highScoresLijst = document.createElement("hoogsteHighscore")
-                    document.body.append(this.highScoresLijst)
-            
-                    let y2 = localStorage.getItem("opgeslagenHighScoreHard")
-                    this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2
+                    }                    
             }
-           
                 this.dragon.delete()
                 this.player.delete()
                 this.sign.delete()
@@ -134,33 +111,11 @@ class playscreen {
                 this.player.nummerdelete() 
 
                 this.game.dragonslayed = 0
-                //game over afbeelding
-                let eyes = new Eyes(280, 150, 1)
+                this.game.diescreen(this.highscorebroken)
                 
-                //new Game button
-                this.newGame = document.createElement("newGame")
-                document.body.appendChild(this.newGame)
-                this.newGame.innerHTML = "NEW GAME"
-                this.newGame.id = "newgame"
-                this.game.score = 0;
-                this.newGame.addEventListener("click", () => this.game.startScreen() );
-                this.callbackstart = () => this.startscreen()
-                for (let i = 0; i < 6; i++) {
-                    document.addEventListener(`joystick0button${i}`, this.callbackstart)
-                }
             }
          }
      }
-    private startscreen(){
-        for (let i = 0; i < 6; i++) {
-            document.removeEventListener(`joystick0button${i}`, this.callbackstart)
-        }
-            let elm = document.getElementById("newgame");
-            if (elm != undefined) {
-              elm.remove();
-            }
-          this.game.startScreen()  
-    }
 
     public naarDeShop(){
         document.removeEventListener("joystick0button0", this.callback1)

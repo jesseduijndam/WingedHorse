@@ -34,6 +34,200 @@ class Circle extends HTMLElement {
     }
 }
 window.customElements.define("circle-component", Circle);
+class Diescreen {
+    constructor(g, h) {
+        this.alphabet = ("abcdefghijklmnopqrstuvwxyz1234567890").split("");
+        this.alphabetwhere = [];
+        this.eindletters = [];
+        this.letteractive = 0;
+        this.eventlistneractive = true;
+        this.game = g;
+        this.callbackname = () => this.settingname();
+        this.background = document.createElement("backdrak");
+        document.body.appendChild(this.background);
+        this.middle = document.createElement("middle");
+        document.body.appendChild(this.middle);
+        if (h == true) {
+            this.namenotset();
+        }
+        else {
+            this.nameset();
+        }
+        for (let i = 0; i < 6; i++) {
+            document.addEventListener(`joystick0button${i}`, this.callbackname);
+        }
+        document.addEventListener('keydown', (e) => this.keyboardInput(e));
+    }
+    namenotset() {
+        for (let i = 0; i < 3; i++) {
+            let letter = document.createElement("highname");
+            this.middle.appendChild(letter);
+            letter.innerHTML = this.alphabet[0];
+            letter.id = i.toString();
+            this.eindletters.push(this.alphabet[0]);
+            this.alphabetwhere.push(0);
+        }
+    }
+    letterup() {
+        let elm = document.getElementById(this.letteractive.toString());
+        if (this.alphabetwhere[this.letteractive] >= (this.alphabet.length - 1)) {
+            this.alphabetwhere[this.letteractive] = 0;
+        }
+        else {
+            this.alphabetwhere[this.letteractive]++;
+        }
+        this.eindletters[this.letteractive] = this.alphabet[this.alphabetwhere[this.letteractive]];
+        if (elm != undefined) {
+            elm.innerHTML = this.eindletters[this.letteractive];
+        }
+    }
+    letterdown() {
+        let elm = document.getElementById(this.letteractive.toString());
+        if (this.alphabetwhere[this.letteractive] <= 0) {
+            this.alphabetwhere[this.letteractive] = 35;
+        }
+        else {
+            this.alphabetwhere[this.letteractive]--;
+        }
+        this.eindletters[this.letteractive] = this.alphabet[this.alphabetwhere[this.letteractive]];
+        if (elm != undefined) {
+            elm.innerHTML = this.eindletters[this.letteractive];
+        }
+    }
+    addletter() {
+        this.letteractive++;
+        if (this.alphabetwhere.length <= this.letteractive) {
+            let letter = document.createElement("highname");
+            this.middle.appendChild(letter);
+            letter.innerHTML = this.alphabet[0];
+            letter.id = this.letteractive.toString();
+            this.eindletters.push(this.alphabet[0]);
+            this.alphabetwhere.push(0);
+        }
+    }
+    letterback() {
+        this.letteractive--;
+    }
+    settingname() {
+        this.eventlistneractive = false;
+        for (let i = 0; i < 6; i++) {
+            document.addEventListener(`joystick0button${i}`, this.callbackname);
+        }
+        for (let i = 0; i < this.eindletters.length; i++) {
+            let elm = document.getElementById(i.toString());
+            if (elm != undefined) {
+                elm.remove();
+            }
+        }
+        if (this.game.difficulty == 1) {
+            let y = this.eindletters.join("");
+            localStorage.setItem("nameHighScoreEasy", y);
+            this.nameset();
+        }
+        else if (this.game.difficulty == 2) {
+            let y = this.eindletters.join("");
+            localStorage.setItem("nameHighScoreMedium", y);
+            this.nameset();
+        }
+        else if (this.game.difficulty == 3) {
+            let y = this.eindletters.join("");
+            localStorage.setItem("nameHighScoreHard", y);
+            this.nameset();
+        }
+    }
+    nameset() {
+        let darken = document.createElement("rectangle");
+        document.body.appendChild(darken);
+        if (this.game.difficulty == 1) {
+            this.highScoresLijst = document.createElement("hoogsteHighscore");
+            document.body.append(this.highScoresLijst);
+            let y = localStorage.getItem("nameHighScoreEasy");
+            let y2 = localStorage.getItem("opgeslagenHighScoreEasy");
+            this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2 + " by " + y;
+        }
+        else if (this.game.difficulty == 2) {
+            this.highScoresLijst = document.createElement("hoogsteHighscore");
+            document.body.append(this.highScoresLijst);
+            let y = localStorage.getItem("nameHighScoreMedium");
+            let y2 = localStorage.getItem("opgeslagenHighScoreMedium");
+            this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2 + " by " + y;
+        }
+        else if (this.game.difficulty == 3) {
+            this.highScoresLijst = document.createElement("hoogsteHighscore");
+            document.body.append(this.highScoresLijst);
+            let y = localStorage.getItem("nameHighScoreHard");
+            let y2 = localStorage.getItem("opgeslagenHighScoreHard");
+            this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2 + " by " + y;
+        }
+        let eyes = new Eyes(280, 150, 1);
+        this.newGame = document.createElement("newGame");
+        document.body.appendChild(this.newGame);
+        this.newGame.innerHTML = "NEW GAME";
+        this.newGame.id = "newgame";
+        this.game.score = 0;
+        this.newGame.addEventListener("click", () => this.game.startScreen());
+        this.callbackstart = () => this.startscreen();
+        for (let i = 0; i < 6; i++) {
+            document.addEventListener(`joystick0button${i}`, this.callbackstart);
+        }
+    }
+    startscreen() {
+        for (let i = 0; i < 6; i++) {
+            document.removeEventListener(`joystick0button${i}`, this.callbackstart);
+        }
+        let elm = document.getElementById("newgame");
+        if (elm != undefined) {
+            elm.remove();
+        }
+        this.game.startScreen();
+    }
+    keyboardInput(event) {
+        if (this.eventlistneractive) {
+            if (event.keyCode == 38) {
+                this.letterup();
+            }
+            else if (event.keyCode == 40) {
+                this.letterdown();
+            }
+            else if (event.keyCode == 39) {
+                this.addletter();
+            }
+            else if (event.keyCode == 37) {
+                this.letterback();
+            }
+            else if (event.keyCode == 32) {
+                this.settingname();
+            }
+        }
+    }
+    update() {
+        for (const joystick of this.game.Arcade.Joysticks) {
+            if (this.eventlistneractive) {
+                if (joystick.Up) {
+                    this.letterup();
+                }
+                else if (joystick.Down) {
+                    this.letterdown();
+                }
+                else if (joystick.Right) {
+                    this.addletter();
+                }
+                else if (joystick.Left) {
+                    this.letterback();
+                }
+            }
+        }
+        let elm = document.getElementById(this.letteractive.toString());
+        if (elm != undefined) {
+            if (this.last != elm && this.last != undefined) {
+                console.log("dit is last " + this.last + ". dit is elm " + elm);
+                this.last.style.color = "white";
+            }
+            elm.style.color = "red";
+        }
+        this.last = elm;
+    }
+}
 class DiffScreen {
     constructor(g) {
         this.game = g;
@@ -208,6 +402,13 @@ class Game {
         this.healthMaken();
         this.powerMaken();
         this.currentscreen = new playscreen(this);
+    }
+    diescreen(h) {
+        document.body.innerHTML = "";
+        this.scorenMaken();
+        this.healthMaken();
+        this.powerMaken();
+        this.currentscreen = new Diescreen(this, h);
     }
     scorenMaken() {
         this.scoreElement = document.createElement("scoreElement");
@@ -637,6 +838,7 @@ class playscreen {
         this.naardeshop = false;
         this.rightcooldown = 0;
         this.upcooldown = 0;
+        this.highscorebroken = false;
         this.game = g;
         let background = document.createElement("backdrak");
         document.body.appendChild(background);
@@ -667,6 +869,7 @@ class playscreen {
         }
     }
     die() {
+        this.highscorebroken = false;
         if (this.player.die == false) {
             if (this.game.health == 1) {
                 this.game.health = 0;
@@ -683,36 +886,27 @@ class playscreen {
                 this.eindScore = this.game.score;
                 if (this.game.difficulty == 1) {
                     if (this.eindScore > this.game.hoogsteHighScoreEasy) {
+                        this.highscorebroken = true;
                         this.game.hoogsteHighScoreEasy = this.eindScore;
                         let y = this.game.hoogsteHighScoreEasy.toString();
                         localStorage.setItem("opgeslagenHighScoreEasy", y);
                     }
-                    this.highScoresLijst = document.createElement("hoogsteHighscore");
-                    document.body.append(this.highScoresLijst);
-                    let y2 = localStorage.getItem("opgeslagenHighScoreEasy");
-                    this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2;
                 }
                 else if (this.game.difficulty == 2) {
                     if (this.eindScore > this.game.hoogsteHighScoreMedium) {
+                        this.highscorebroken = true;
                         this.game.hoogsteHighScoreMedium = this.eindScore;
                         let y = this.game.hoogsteHighScoreMedium.toString();
                         localStorage.setItem("opgeslagenHighScoreMedium", y);
                     }
-                    this.highScoresLijst = document.createElement("hoogsteHighscore");
-                    document.body.append(this.highScoresLijst);
-                    let y2 = localStorage.getItem("opgeslagenHighScoreMedium");
-                    this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2;
                 }
                 else if (this.game.difficulty == 3) {
                     if (this.eindScore > this.game.hoogsteHighScoreHard) {
+                        this.highscorebroken = true;
                         this.game.hoogsteHighScoreHard = this.eindScore;
                         let y = this.game.hoogsteHighScoreHard.toString();
                         localStorage.setItem("opgeslagenHighScoreHard", y);
                     }
-                    this.highScoresLijst = document.createElement("hoogsteHighscore");
-                    document.body.append(this.highScoresLijst);
-                    let y2 = localStorage.getItem("opgeslagenHighScoreHard");
-                    this.highScoresLijst.innerHTML = "HIGHSCORE: " + y2;
                 }
                 this.dragon.delete();
                 this.player.delete();
@@ -720,29 +914,9 @@ class playscreen {
                 this.text.delete();
                 this.player.nummerdelete();
                 this.game.dragonslayed = 0;
-                let eyes = new Eyes(280, 150, 1);
-                this.newGame = document.createElement("newGame");
-                document.body.appendChild(this.newGame);
-                this.newGame.innerHTML = "NEW GAME";
-                this.newGame.id = "newgame";
-                this.game.score = 0;
-                this.newGame.addEventListener("click", () => this.game.startScreen());
-                this.callbackstart = () => this.startscreen();
-                for (let i = 0; i < 6; i++) {
-                    document.addEventListener(`joystick0button${i}`, this.callbackstart);
-                }
+                this.game.diescreen(this.highscorebroken);
             }
         }
-    }
-    startscreen() {
-        for (let i = 0; i < 6; i++) {
-            document.removeEventListener(`joystick0button${i}`, this.callbackstart);
-        }
-        let elm = document.getElementById("newgame");
-        if (elm != undefined) {
-            elm.remove();
-        }
-        this.game.startScreen();
     }
     naarDeShop() {
         document.removeEventListener("joystick0button0", this.callback1);
