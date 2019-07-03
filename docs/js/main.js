@@ -204,19 +204,19 @@ class Diescreen {
     update() {
         for (const joystick of this.game.Arcade.Joysticks) {
             if (this.eventlistneractive) {
-                if (joystick.Up && this.timeoutup == 0) {
+                if (joystick.Up && this.timeoutup <= 0) {
                     this.letterup();
                     this.timeoutup = 30;
                 }
-                else if (joystick.Down && this.timeoutdown == 0) {
+                else if (joystick.Down && this.timeoutdown <= 0) {
                     this.letterdown();
                     this.timeoutdown = 30;
                 }
-                else if (joystick.Right && this.timeoutright == 0) {
+                else if (joystick.Right && this.timeoutright <= 0) {
                     this.addletter();
                     this.timeoutright = 30;
                 }
-                else if (joystick.Left && this.timeoutleft == 0) {
+                else if (joystick.Left && this.timeoutleft <= 0) {
                     this.letterback();
                     this.timeoutleft = 30;
                 }
