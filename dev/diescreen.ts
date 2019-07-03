@@ -12,10 +12,10 @@ class Diescreen {
     private letteractive : number = 0
     private eventlistneractive : boolean = true
     private background: HTMLElement;
-    private timeoutup: number;
-    private timeoutdown: number;
-    private timeoutright: number;
-    private timeoutleft: number;
+    private timeoutup: number = 0
+    private timeoutdown: number = 0
+    private timeoutright: number = 0
+    private timeoutleft: number = 0
     
     constructor(g:Game, h:boolean) {
         this.game = g        

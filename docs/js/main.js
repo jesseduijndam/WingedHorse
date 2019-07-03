@@ -41,6 +41,10 @@ class Diescreen {
         this.eindletters = [];
         this.letteractive = 0;
         this.eventlistneractive = true;
+        this.timeoutup = 0;
+        this.timeoutdown = 0;
+        this.timeoutright = 0;
+        this.timeoutleft = 0;
         this.game = g;
         this.callbackname = () => this.settingname();
         this.background = document.createElement("backdrak");
