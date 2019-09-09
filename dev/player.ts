@@ -1,7 +1,7 @@
 class Player {
 
   player: HTMLElement
-  action: string
+  
   buttons = new Array<number>(2)
   check : boolean = false
   AND : number
@@ -56,7 +56,7 @@ class Player {
     // PRESS UP ARROW attack
     else if (event.keyCode == 38) {
       this.timer = 0
-        if (this.action == "attack" && this.die == false && this.check == true) {
+        if (this.game.action == "attack" && this.die == false && this.check == true) {
           this.check = false
           let one = this.buttons[0]
           let two = this.buttons[1]
@@ -72,9 +72,9 @@ class Player {
           this.AND = 0
         }else{
           // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
-          if (this.action != "test" && this.die == false) {
+          if (this.game.action != "test" && this.die == false) {
             this.playscreen.die()
-            this.action = "test"
+            this.game.action = "test"
           }
           
         }
@@ -90,12 +90,12 @@ class Player {
           this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
           this.check = true
           // console.log("move choise making")
-          this.action = this.playscreen.dragon.moveChoice(this.game)
+          this.game.action = this.playscreen.dragon.moveChoice(this.game)
         }else{
           this.playscreen.die()
-          this.action = "test"
+          this.game.action = "test"
         }
-        if (this.action == "attack") {
+        if (this.game.action == "attack") {
           let number = 0
           let arr: number[] = [1, 2, 3, 4, 5, 6]
           let buttons = new Array<number>(2)
@@ -116,10 +116,10 @@ class Player {
     // PRESS DOWN ARROW tame
     else if (event.keyCode == 40) {
       this.timer = 0
-      if (this.action == "tame" && this.die == false && this.check == true) {
+      if (this.game.action == "tame" && this.die == false && this.check == true) {
           this.playscreen.dragon.onTame(this.game)
           this.canrun = false
-          this.action = "test"
+          this.game.action = "test"
           this.check = false
           this.playscreen.naarDeShop()
           //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
@@ -131,7 +131,7 @@ class Player {
           this.playscreen.die()
 
           this.nummerdelete()
-          this.action = "test"
+          this.game.action = "test"
         }
       }
     }
@@ -206,11 +206,11 @@ class Player {
   }
   
   up(){
-    // console.log(this.action);
+    // console.log(this.game.action);
     // console.log(this.die);
     // console.log(this.check);
     this.timer = 0
-    if (this.action == "attack" && this.die == false && this.check == true) {
+    if (this.game.action == "attack" && this.die == false && this.check == true) {
       this.check = false
       let one = this.buttons[0]
       let two = this.buttons[1]
@@ -228,7 +228,7 @@ class Player {
       // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
       if ( this.die == false) {
         this.playscreen.die()
-        this.action = "test"
+        this.game.action = "test"
       }
       
     }
@@ -236,10 +236,10 @@ class Player {
   
   down(){
     this.timer = 0
-    if (this.action == "tame" && this.die == false && this.check == true) {
+    if (this.game.action == "tame" && this.die == false && this.check == true) {
       this.playscreen.dragon.onTame(this.game)
       this.canrun = false
-      this.action = "test"
+      this.game.action = "test"
       this.check = false
       this.playscreen.naarDeShop()
       //WORD EEN ANIMATIE OF ANDER PLAATJE NU NOG NIET
@@ -249,7 +249,7 @@ class Player {
     // draak vermoord je wilde getemd worden kan mooier maar voor nu nr de die scene
       if (this.die == false) {
         this.playscreen.die()
-        this.action = "test"
+        this.game.action = "test"
       }
     }
   }
@@ -262,12 +262,12 @@ class Player {
         this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`
         this.check = true
         // console.log("move choise making")
-        this.action = this.playscreen.dragon.moveChoice(this.game)
+        this.game.action = this.playscreen.dragon.moveChoice(this.game)
       }else{
         this.playscreen.die()
-        this.action = "test"
+        this.game.action = "test"
       }
-      if (this.action == "attack") {
+      if (this.game.action == "attack") {
         let number = 0
         let arr: number[] = [1, 2, 3, 4, 5, 6]
         let buttons = new Array<number>(2)

@@ -621,7 +621,7 @@ class Player {
         }
         else if (event.keyCode == 38) {
             this.timer = 0;
-            if (this.action == "attack" && this.die == false && this.check == true) {
+            if (this.game.action == "attack" && this.die == false && this.check == true) {
                 this.check = false;
                 let one = this.buttons[0];
                 let two = this.buttons[1];
@@ -635,9 +635,9 @@ class Player {
                 this.AND = 0;
             }
             else {
-                if (this.action != "test" && this.die == false) {
+                if (this.game.action != "test" && this.die == false) {
                     this.playscreen.die();
-                    this.action = "test";
+                    this.game.action = "test";
                 }
             }
         }
@@ -648,13 +648,13 @@ class Player {
                     x += 10;
                     this.player.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
                     this.check = true;
-                    this.action = this.playscreen.dragon.moveChoice(this.game);
+                    this.game.action = this.playscreen.dragon.moveChoice(this.game);
                 }
                 else {
                     this.playscreen.die();
-                    this.action = "test";
+                    this.game.action = "test";
                 }
-                if (this.action == "attack") {
+                if (this.game.action == "attack") {
                     let number = 0;
                     let arr = [1, 2, 3, 4, 5, 6];
                     let buttons = new Array(2);
@@ -671,10 +671,10 @@ class Player {
         }
         else if (event.keyCode == 40) {
             this.timer = 0;
-            if (this.action == "tame" && this.die == false && this.check == true) {
+            if (this.game.action == "tame" && this.die == false && this.check == true) {
                 this.playscreen.dragon.onTame(this.game);
                 this.canrun = false;
-                this.action = "test";
+                this.game.action = "test";
                 this.check = false;
                 this.playscreen.naarDeShop();
                 y += 10;
@@ -684,7 +684,7 @@ class Player {
                 if (this.die == false) {
                     this.playscreen.die();
                     this.nummerdelete();
-                    this.action = "test";
+                    this.game.action = "test";
                 }
             }
         }
@@ -747,7 +747,7 @@ class Player {
     }
     up() {
         this.timer = 0;
-        if (this.action == "attack" && this.die == false && this.check == true) {
+        if (this.game.action == "attack" && this.die == false && this.check == true) {
             this.check = false;
             let one = this.buttons[0];
             let two = this.buttons[1];
@@ -763,16 +763,16 @@ class Player {
         else {
             if (this.die == false) {
                 this.playscreen.die();
-                this.action = "test";
+                this.game.action = "test";
             }
         }
     }
     down() {
         this.timer = 0;
-        if (this.action == "tame" && this.die == false && this.check == true) {
+        if (this.game.action == "tame" && this.die == false && this.check == true) {
             this.playscreen.dragon.onTame(this.game);
             this.canrun = false;
-            this.action = "test";
+            this.game.action = "test";
             this.check = false;
             this.playscreen.naarDeShop();
             this.y += 10;
@@ -781,7 +781,7 @@ class Player {
         else {
             if (this.die == false) {
                 this.playscreen.die();
-                this.action = "test";
+                this.game.action = "test";
             }
         }
     }
@@ -792,13 +792,13 @@ class Player {
                 this.x += 10;
                 this.player.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.scale})`;
                 this.check = true;
-                this.action = this.playscreen.dragon.moveChoice(this.game);
+                this.game.action = this.playscreen.dragon.moveChoice(this.game);
             }
             else {
                 this.playscreen.die();
-                this.action = "test";
+                this.game.action = "test";
             }
-            if (this.action == "attack") {
+            if (this.game.action == "attack") {
                 let number = 0;
                 let arr = [1, 2, 3, 4, 5, 6];
                 let buttons = new Array(2);
