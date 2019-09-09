@@ -1,6 +1,8 @@
 class Game {
 
     public currentscreen : any
+    //death
+    public action: string
     //dragon
     public randommax: number
     public attackmax: number
