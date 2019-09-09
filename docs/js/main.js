@@ -52,15 +52,15 @@ class Diescreen {
         this.middle = document.createElement("middle");
         document.body.appendChild(this.middle);
         if (h == true) {
+            for (let i = 0; i < 6; i++) {
+                document.addEventListener(`joystick0button${i}`, this.callbackname);
+            }
+            document.addEventListener('keydown', (e) => this.keyboardInput(e));
             this.namenotset();
         }
         else {
             this.nameset();
         }
-        for (let i = 0; i < 6; i++) {
-            document.addEventListener(`joystick0button${i}`, this.callbackname);
-        }
-        document.addEventListener('keydown', (e) => this.keyboardInput(e));
     }
     namenotset() {
         for (let i = 0; i < 3; i++) {
